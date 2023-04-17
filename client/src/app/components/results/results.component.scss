@@ -1,0 +1,11 @@
+:host ::ng-deep {
+  .p-breadcrumb {
+    border: 0;
+    background: #ffffff00;
+    width: max-content;
+  }
+
+  .p-breadcrumb .p-menuitem-text {
+    font-size: small;
+  }
+}

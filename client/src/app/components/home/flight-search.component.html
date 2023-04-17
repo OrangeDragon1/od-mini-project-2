@@ -1,0 +1,90 @@
+<div>
+  <form [formGroup]="request" (ngSubmit)="processOfferRequest()">
+    <table>
+      <tr>
+        <td>Origin: </td>
+        <td>
+          <input type="text" formControlName="origin" size="30">
+        </td>
+      </tr>
+      <tr>
+        <td>Destination: </td>
+        <td>
+          <input type="text" formControlName="destination" size="30">
+        </td>
+      </tr>
+      <tr>
+        <td>Departure Date: </td>
+        <td>
+          <input type="date" formControlName="departureDate" size="30">
+        </td>
+      </tr>
+      <tr>
+        <td>Passengers: </td>
+        <td>
+          <tr>
+            <td></td>
+            <td>Total: </td>
+            <td>{{ adultPassengers.length + agePassengers.length }}</td>
+          </tr>
+          <tr>
+            <td><button type="button" (click)="addAdultPassenger()">+</button></td>
+            <td>Adults: </td>
+            <td>{{ adultPassengers.length }}</td>
+            <td><button type="button" (click)="removeAdultPassenger()">-</button></td>
+          </tr>
+          <tr>
+            <td><button type="button" (click)="addAgePassenger()">+</button></td>
+            <td>Below 18:</td>
+            <td>{{ agePassengers.length }}</td>
+            <td></td>
+          </tr>
+        </td>
+      </tr>
+      <!-- <tr>
+        <td>Max Connections: </td>
+        <td>
+          <input type="number" formControlName="maxConnections" size="30">
+        </td>
+      </tr> -->
+      <tr>
+        <td>Cabin Class</td>
+        <td>
+          <select formControlName="cabinClass">
+            <option *ngFor="let c of cabinClassOptions" [value]="c">{{ c }}</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button type="submit">GET</button>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <table formArrayName="agePassengers">
+            <tr *ngFor="let ap of agePassengers.controls; let i = index" [formGroupName]="i">
+              <td><input type="number" size="30" min="1" formControlName="age"></td>
+              <td><button type="button" (click)="removeAgePassenger(i)">X</button></td>
+            </tr>
+            <!-- <tr *ngFor="let li of lineItems.controls; let i = index" [formGroupName]="i">
+              <td>
+                <input type="text" size="20" placeholder="Item" formControlName="item">
+              </td>
+              <td>
+                <input type="number" size="10" placeholder="Quantity" min="1" formControlName="quantity">
+              </td>
+              <td>
+              <input type="number" size="10" placeholder="Price" min="0.1" step=".1" formControlName="unitPrice">
+              </td>
+              <td>
+                <button type="button" (click)="removeLineItem(i)">X</button>
+              </td>
+            </tr> -->
+          </table>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>

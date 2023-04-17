@@ -1,0 +1,173 @@
+<p-accordion p-accordion expandIcon = "" collapseIcon= "" styleClass="white-header">
+  <div class="mb-2 w-max" *ngFor="let o of partialOfferOffer">
+    <p-accordionTab>
+        <ng-template pTemplate="header">
+          <div class="flex flex-column flex-wrap">
+            <div class="flex flex-row gap-4 h-3rem">
+              <div class="flex">
+                <div class="flex align-items-center h-3rem w-3rem" *ngIf="o?.owner.logoSymbolUrl; else Lockup">
+                  <img [src]="o.owner.logoSymbolUrl" style="max-width: 100%; max-height: 100%;">
+                </div>
+                <ng-template #Lockup>
+                  <div class="flex align-items-center h-3rem w-3rem">
+                    <img [src]="o?.owner.logoLockupUrl" style="max-width: 100%; max-height: 100%;">
+                  </div>
+                </ng-template>
+              </div>
+
+              <div class="flex flex-column align-items-left justify-content-center w-22rem">
+                <div class="">
+                  {{ o.slices[0]?.segments[0].departingAt | date: "HH:mm" }} - 
+                  {{ o.slices[0]?.segments[o.slices[0]?.segments.length - 1].arrivingAt | date: "HH:mm"}}
+                  <sub class="vertical-align-super" *ngIf="o.slices[0].plusDays > 0" >
+                    +{{ o.slices[0].plusDays }}
+                  </sub>
+                </div>
+                <div class="font-light text-sm">
+                  {{ o.owner.name }} · 
+                  <span *ngFor="let seg of o.slices[0].segments">
+                    {{ seg.marketingCarrier.iataCode + seg.marketingCarrierFlightNumber }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex flex-column align-items-left justify-content-center w-7rem">
+                <div>
+                  {{ o.slices[0]?.duration | duration }}
+                </div>
+                <div class="font-light text-sm">
+                  {{ o.slices[0]?.originIataCode }} - {{ o.slices[0]?.destinationIataCode }}
+                </div>
+              </div>
+
+              <div class="flex flex-row justify-content-center">
+                <div class="flex flex-column align-items-left justify-content-center w-max">
+                  <div>
+                    <span *ngIf="o.slices[0]?.segments.length > 1; else nonStop">
+                      {{ o.slices[0]?.segments.length - 1 }} stop
+                    </span>
+                    <ng-template #nonStop>
+                      Direct
+                    </ng-template>
+                  </div>
+                  <div>
+                    <!-- for stops -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <p-divider class="mr-2" type="solid"></p-divider>
+            <div class="flex flex-row gap-5 h-2rem">
+              <div class="flex bg-gray-300 border-round-xl w-max mr-2">
+                <div class="flex flex-column justify-content-center w-30rem ml-3">
+                  <div class="flex flex-row align-items-left gap-1">
+                    <span class="font-light text-xs">
+                      From
+                    </span>
+                    <span class="font-bold text-xl">
+                      {{ o.totalCurrency }} {{ o.totalAmount | currency: o.totalCurrency }}
+                    </span>
+                  </div>
+                </div>
+                <div class="flex flex-column justify-content-center ml-8 ">
+                  <div>
+                    <button pButton class="p-button-secondary" type="button" (click)="onSelect(o.id)">
+                      <span class="font-medium text-lg">Select</span>
+                    </button>
+                    <!-- <button type="button" (click)="onSelect(o.id)">select</button> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="content">
+          <div class="flex flex-column" *ngFor="let seg of o.slices[0]?.segments; let idx = index">
+            <div class="flex flex-row">
+              <div class="flex flex-column justify-content-center">
+              </div>
+
+              <div class="flex flex-column">
+                <div class="flex flex-column m-2" >
+                  <div class="flex flex-row gap-3">
+                    <div class="flex flex-column justify-content-center">
+                      <i class="pi pi-circle"></i>
+                    </div>
+                    <div class="flex flex-column justify-content-center font-bold w-13rem">
+                      {{ seg.departingAt | date: "EEE, dd MMM YYYY, HH:mm" }} 
+                    </div>
+                    <div class="flex flex-column justify-content-center w-25rem">
+                      Depart from {{ seg.originName }} ({{ seg.originIataCode }})
+                    </div>
+                  </div>
+
+                  <div class="flex flex-row">
+                    <div class="flex flex-column justify-content-center">
+                      <i class="pi pi-ellipsis-v"></i>
+                      <i class="pi pi-angle-double-down"></i>
+                    </div>
+                    <div class="flex flex-column justify-content-center m-3 ml-4 font-normal text-sm">
+                      Flight duration: {{ seg.duration | duration }}
+                    </div>
+                  </div>
+
+                  <div class="flex flex-row gap-3">
+                    <div class="flex flex-column justify-content-center">
+                      <i class="pi pi-circle-fill"></i>
+                    </div>
+                    <div class="flex flex-column justify-content-center font-bold w-13rem">
+                      {{ seg.arrivingAt | date: "EEE, dd MMM YYYY, HH:mm" }} 
+                    </div>
+                    <div class="flex flex-column justify-content-center w-25rem">
+                      Arrive at {{ seg.destinationName }} ({{ seg.destinationIataCode }})
+                    </div>
+                  </div>
+
+                  <div class="flex flex-row gap-3 mt-3">
+                    <div class="flex flex-column justify-content-center">
+                      <i class="pi pi-info"></i>
+                    </div>
+                    <div class="flex flex-column justify-content-center capitalize font-light text-xs">
+                      {{ seg.passengers[0]?.cabinClass }}
+                    </div>
+                    <div class="flex flex-column justify-content-center">
+                      <div *ngIf="seg.operatingCarrier?.name === o.owner.name; else operatedBy">
+                        <div class="capitalize font-light text-xs">
+                          {{ seg.operatingCarrier?.name }}
+                        </div>
+                      </div>
+                    </div>
+                    <div class="flex flex-column justify-content-center">
+                      <ng-template #operatedBy>
+                        <div class="flex flex-row font-light text-xs">
+                          <span>Operated by 
+                            <span class="capitalize">
+                              {{ seg.operatingCarrier?.name }}
+                            </span>
+                          </span>
+                        </div>
+                      </ng-template>
+                    </div>
+                    <div class="flex flex-column justify-content-center">
+                      <div class="flex flex-row font-light text-xs">
+                        {{ seg.aircraft?.name }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-column">
+              </div>
+            </div>
+            
+            <div class="flex flex-column bg-gray-300 border-round-xl w-max my-3" *ngIf="o.slices[0]?.layovers[idx]?.duration">
+              <div class="text-sm p-1 ml-2 mr-2">
+                {{ o.slices[0]?.layovers[idx]?.duration | duration }} layover at {{ o.slices[0]?.layovers[idx]?.layoverName }} ({{ o.slices[0]?.layovers[idx]?.layoverIataCode }})
+              </div>
+            </div>
+          </div>
+        </ng-template>
+    </p-accordionTab>
+  </div>
+</p-accordion>

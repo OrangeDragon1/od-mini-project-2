@@ -1,0 +1,62 @@
+:host ::ng-deep {
+  // .p-card {
+  //   box-shadow: none !important;
+  //   border: gray solid;
+  // }
+
+  // .p-card .p-card-content {
+  //   padding: 0;
+  // }
+
+  .p-panel .p-panel-header {
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    background: white;
+  }
+  
+  .p-carousel {
+    flex-direction: row;
+    width: 900px;
+    .p-carousel-indicators .p-carousel-indicator.p-highlight button {
+    background-color: #343434;
+    }
+  }
+
+  .p-radiobutton .p-radiobutton-box.p-highlight {
+    border-color: #343434;
+    background: #343434;
+  }
+
+  .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
+    border-color: #343434;
+    background: #343434;
+    color: #ffffff;
+}
+}
+
+.straight-line {
+  height: 2px;
+  background: gray;
+  width: 100%;
+  margin-right: 2px;
+  position: relative;
+}
+
+.stop {
+  background: black;
+  border-radius: 100%;
+  border: 2px solid #fff;
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  top: -3px;
+  box-sizing: content-box;
+}
+
+.help {
+  transition: box-shadow .3s;
+}
+
+.help:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.2); 
+}

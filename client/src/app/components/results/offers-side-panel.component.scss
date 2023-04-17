@@ -1,0 +1,22 @@
+:host ::ng-deep {
+//   .p-accordion .p-accordion-header .p-accordion-header-link:focus {
+//     box-shadow: none !important;
+//   }
+
+//   .p-accordion .p-accordion-header-link {
+//     background-color: white;
+//   }
+
+  .p-button {
+    padding: 0.35rem 0.8rem;
+    background-color: #484848;
+    border: #131313;
+  }
+
+  .p-panel .p-panel-header {
+    background: white !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+}
