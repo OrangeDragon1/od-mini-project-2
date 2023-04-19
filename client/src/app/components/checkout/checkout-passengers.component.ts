@@ -3,7 +3,7 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FlightSearchService } from 'src/app/services/flight-search.service';
-import { PartialOfferOffer, PartialOfferPassenger } from 'src/app/models/partial-offer.models'
+import { PartialOffer, PartialOfferOffer, PartialOfferPassenger } from 'src/app/models/partial-offer.models'
 import { MenuItem } from 'primeng/api';
 import { nameLengthValidator } from 'src/app/utils';
 
@@ -15,13 +15,12 @@ import { nameLengthValidator } from 'src/app/utils';
 export class CheckoutPassengersComponent implements OnInit {
 
   sub$!: Subscription
-  requestPassengers?: PartialOfferPassenger[] = [];
   selectedOffer?: PartialOfferOffer
   
   items: MenuItem[] = [];
   passengers!: FormArray;
   order!: FormGroup;
-  identityDocuments!: FormGroup;
+  identityDocuments!: FormArray;
   
   titles: any[] = [];
   genders: any[] = [];
@@ -71,35 +70,53 @@ export class CheckoutPassengersComponent implements OnInit {
     this.flightSvc.getFullFare(data)
     .then(results => {
       this.selectedOffer = results.offers.find(offer => offer.id === off);
-      this.requestPassengers = results.passengers;
-      this.order = this.createOrder(results.passengers.length);        
+      this.order = this.createOrder(results, off);        
     })
-    this.order = this.createOrder(0);
+    this.order = this.createOrder();
   }
 
   processOrder() {
     console.log(this.order.value['passengers']);
   }
 
-  createOrder(num: number): FormGroup {
+  createOrder(results?: PartialOffer, off?: any): FormGroup {
+
+    if (!results) {
+      return this.fb.group([])
+    }
+
+    let numPassengers = results?.passengers.length ?? 0;
+    let selectedOffer = results?.offers.find(offer => offer.id === off) as PartialOfferOffer;
+
     this.passengers = this.fb.array([]);
-    for(let i = 0; i < num; i++) {
-      this.passengers.push(this.createPassenger())
+    for(let i = 0; i < numPassengers; i++) {
+      this.passengers.push(this.createPassenger(selectedOffer, i));
     }
     return this.fb.group({
       passengers: this.passengers
     })
   }
 
-  createPassenger(): FormGroup {
-    this.identityDocuments = this.createIdentityDocuments();
+  createPassenger(selectedOffer: PartialOfferOffer, idx: number): FormGroup {
+
+    if (selectedOffer.passengerIdentityDocumentsRequired && selectedOffer.allowedPassengerIdentityDocumentTypes.length > 0) {
+      this.identityDocuments = this.fb.array([]);
+      for(let i = 0; i < selectedOffer.allowedPassengerIdentityDocumentTypes.length; i++) {
+        this.identityDocuments.push(
+          this.createIdentityDocument(selectedOffer.allowedPassengerIdentityDocumentTypes[i])
+          );
+      }
+    } 
+
+    let type = selectedOffer.passengers[idx].type;
+    let id = selectedOffer.passengers[idx].id;
+
     return this.fb.group({
-      type: '',
+      type: type,
       title: this.fb.control(''),
       phoneNumber: this.fb.control('', [ Validators.required, Validators.minLength(15) ]),
-      infantPassengerId: '',
       identityDocuments: this.identityDocuments,
-      id: '',
+      id: id,
       givenName: this.fb.control('', [ Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-z\- 'À-ÖØ-öø-ÿ]+$/) ]),
       gender: this.fb.control(''),
       familyName: this.fb.control('', [ Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-z\- 'À-ÖØ-öø-ÿ]+$/) ]),
@@ -108,12 +125,12 @@ export class CheckoutPassengersComponent implements OnInit {
     }, { validators: nameLengthValidator });
   }
 
-  createIdentityDocuments(): FormGroup {
+  createIdentityDocument(type: string): FormGroup {
     return this.fb.group({
-      uniqueIdentifier: '',
-      type: '',
-      issuingCountryCode: '',
-      expiresOn: '',
+      uniqueIdentifier: this.fb.control('', [ Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/) ]),
+      type: type,
+      issuingCountryCode: this.fb.control('', [ Validators.required, Validators.minLength(2), Validators.maxLength(2), Validators.pattern(/^[a-zA-Z]+$/) ]),
+      expiresOn: this.fb.control('', [ Validators.required ])
     })
   }
 

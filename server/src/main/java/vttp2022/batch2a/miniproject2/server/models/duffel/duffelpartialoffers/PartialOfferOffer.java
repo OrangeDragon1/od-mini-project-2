@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import jakarta.json.Json;
-import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonString;
@@ -19,12 +18,13 @@ public class PartialOfferOffer {
   private String taxCurrency; // nullable
   private String taxAmount; // nullable
   private List<PartialOfferOfferSlice> slices;
+  private List<PartialOfferOfferPassenger> passengers;
   private boolean passengerIdentityDocumentsRequired;
   private Carrier owner;
   private String id;
   private PartialOfferOfferConditions conditions;
   private List<String> allowedPassengerIdentityDocumentTypes;
-
+  
   public String getTotalEmissionsKg() { return totalEmissionsKg; }
   public void setTotalEmissionsKg(String totalEmissionsKg) { this.totalEmissionsKg = totalEmissionsKg; }
   public String getTotalCurrency() { return totalCurrency; }
@@ -37,6 +37,8 @@ public class PartialOfferOffer {
   public void setTaxAmount(String taxAmount) { this.taxAmount = taxAmount; }
   public List<PartialOfferOfferSlice> getSlices() { return slices; }
   public void setSlices(List<PartialOfferOfferSlice> slices) { this.slices = slices; }
+  public List<PartialOfferOfferPassenger> getPassengers() { return passengers; }
+  public void setPassengers(List<PartialOfferOfferPassenger> passengers) { this.passengers = passengers; }
   public boolean isPassengerIdentityDocumentsRequired() { return passengerIdentityDocumentsRequired; }
   public void setPassengerIdentityDocumentsRequired(boolean passengerIdentityDocumentsRequired) { this.passengerIdentityDocumentsRequired = passengerIdentityDocumentsRequired; }
   public Carrier getOwner() { return owner; }
@@ -65,6 +67,10 @@ public class PartialOfferOffer {
         .map(v -> PartialOfferOfferSlice.create(v.asJsonObject()))
         .collect(Collectors.toList())
     );
+    o.setPassengers(jo.getJsonArray("passengers").stream()
+        .map(v -> PartialOfferOfferPassenger.create(v.asJsonObject()))
+        .collect(Collectors.toList())
+    );
     o.setPassengerIdentityDocumentsRequired(jo.getBoolean("passenger_identity_documents_required"));
     o.setOwner(Carrier.create(jo.getJsonObject("owner")));
     o.setId(jo.getString("id"));
@@ -75,14 +81,18 @@ public class PartialOfferOffer {
         .collect(Collectors.toList())
     );
     
-    o.setPassengerIdentityDocumentsRequired(true);
-    JsonArray arr = Json.createArrayBuilder().add("passport").add("tax_id").build();
+    // Test Codes
+    // o.setPassengerIdentityDocumentsRequired(true);
+    // JsonArray arr = Json.createArrayBuilder()
+    //     .add("passport")
+    //     .add("tax_id")
+    //     .build();
 
-    o.setAllowedPassengerIdentityDocumentTypes(arr.getValuesAs(JsonString.class)
-        .stream()
-        .map(JsonString::getString)
-        .collect(Collectors.toList())
-    );
+    // o.setAllowedPassengerIdentityDocumentTypes(arr.getValuesAs(JsonString.class)
+    //     .stream()
+    //     .map(JsonString::getString)
+    //     .collect(Collectors.toList())
+    // );
 
     return o;
   }
@@ -103,8 +113,12 @@ public class PartialOfferOffer {
 
     objBuilder
         .add("slices", getSlices().stream()
-        .map(v -> v.toJson())
-        .collect(JsonCollectors.toJsonArray())
+            .map(v -> v.toJson())
+            .collect(JsonCollectors.toJsonArray())
+        )
+        .add("passengers", getPassengers().stream()
+            .map(v -> v.toJson())
+            .collect(JsonCollectors.toJsonArray())
         )
         .add("passengerIdentityDocumentsRequired", isPassengerIdentityDocumentsRequired())
         .add("owner", getOwner().toJson())

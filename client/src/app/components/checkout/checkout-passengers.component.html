@@ -424,203 +424,256 @@
         Passengers
       </div>
       <div class="mt-2">
-        <form [formGroup]="order" (ngSubmit)="processOrder()">
-          <div class="flex flex-column">
-            <div formArrayName="passengers">
-              <div *ngFor="let p of passengers.controls; let idx = index" [formGroupName]="idx">
-                <div class="bg-gray-300 border-round-xl w-max my-3">
-                  <div class="flex flex-column justify-content-center text-sm p-1 mx-2 capitalize">
-                    {{ requestPassengers[idx]?.type }} - Passenger {{ idx + 1}}
+        <div *ngIf="selectedOffer">
+          <form [formGroup]="order" (ngSubmit)="processOrder()">
+            <div class="flex flex-column">
+              <div formArrayName="passengers">
+                <div *ngFor="let p of passengers.controls; let idx = index" [formGroupName]="idx">
+                  <input type="hidden" [value]="selectedOffer?.passengers[idx]?.type" formControlName="type">
+                  <input type="hidden" [value]="selectedOffer?.passengers[idx]?.id" formControlName="id">
+                  <div class="bg-gray-300 border-round-xl w-max my-3">
+                    <div class="flex flex-column justify-content-center text-sm p-1 mx-2 capitalize">
+                      {{ selectedOffer?.passengers[idx]?.type }} - Passenger {{ idx + 1}}
+                    </div>
                   </div>
-                </div>
-                <div class="flex flex-row justify-content-start gap-2 h-5rem">
-                  <div class="flex flex-column justify-content-start gap-1">
-                    <div class="text-sm font-medium">
-                      Title *
-                    </div>
-                    <p-dropdown [options]="titles"  optionLabel="title" optionValue="value" [(ngModel)]="t" formControlName="title">
-                    </p-dropdown>
-                  </div>
-                  
-                  <div class="flex flex-column justify-content-start gap-1">
-                    <div class="text-sm font-medium">
-                      Given name *
-                    </div>
-                    <div>
-                      <input type="text" pInputText [style]="{ width:'30rem' }" formControlName="givenName"/>
-                    </div>
-                    <div *ngIf="p.get('givenName')?.dirty && p.get('givenName')?.invalid">
-                      <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
-                        <div class="flex flex-column justify-content-center">
-                          <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
-                        </div>
-                        <div class="flex flex-column justify-content-center">
-                          Passenger given name is required
-                        </div>
+                  <div class="flex flex-row justify-content-start gap-2 h-5rem">
+                    <div class="flex flex-column justify-content-start gap-1">
+                      <div class="text-sm font-medium">
+                        Title *
                       </div>
+                      <p-dropdown [options]="titles"  optionLabel="title" optionValue="value" [(ngModel)]="t" formControlName="title">
+                      </p-dropdown>
                     </div>
-                  </div>
-                  
-                  <div class="flex flex-column justify-content-start gap-1">
-                    <div class="text-sm font-medium">
-                      Family name *
-                    </div>
-                    <div>
-                      <input type="text" pInputText [style]="{ width:'292px' }" formControlName="familyName"/>
-                    </div>
-                    <div *ngIf="p.get('familyName')?.dirty && p.get('familyName')?.invalid">
-                      <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
-                        <div class="flex flex-column justify-content-center">
-                          <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
-                        </div>
-                        <div class="flex flex-column justify-content-center">
-                          Passenger family name is required
-                        </div>
+                    
+                    <div class="flex flex-column justify-content-start gap-1">
+                      <div class="text-sm font-medium">
+                        Given name *
                       </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div class="flex flex-row justify-content-start gap-2 h-5rem">
-                  <div class="flex flex-column justify-content-start gap-1">
-                    <div class="text-sm font-medium">
-                      Date of birth *
-                    </div>
-                    <div>
-                      <p-calendar readonlyInput="true" showOnFocus="false" dateFormat="yy-mm-dd" [maxDate]="maxDate" [minDate]="minDate" datatype="string" formControlName="bornOn" [style]="{ width:'20rem' }"></p-calendar>
-                    </div>
-                    <div *ngIf="p.get('bornOn')?.dirty && p.get('bornOn')?.invalid">
-                      <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
-                        <div class="flex flex-column justify-content-center">
-                          <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
-                        </div>
-                        <div class="flex flex-column justify-content-center">
-                          Passenger date of birth is required
-                        </div>
+                      <div>
+                        <input type="text" pInputText [style]="{ width:'30rem' }" formControlName="givenName"/>
                       </div>
-                    </div>
-                  </div>
-                  
-                  <div class="flex flex-column justify-content-start gap-1">
-                    <div class="text-sm font-medium">
-                      Gender *
-                    </div>
-                    <p-dropdown [style]="{ width: '120px'}" [options]="genders" optionLabel="gender" optionValue="value" formControlName="gender" [(ngModel)]="g">
-                    </p-dropdown>
-                  </div>
-
-                  <div class="flex flex-column justify-content-start gap-1">
-                    <div class="text-sm font-medium">
-                      Phone Number *
-                    </div>
-                    <div>
-                      <p-inputMask formControlName="phoneNumber" mask="(+99) 9999999999"  slotChar="" [style]="{ width:'433px'}"></p-inputMask>
-                    </div>
-                    <div *ngIf="p.get('phoneNumber')?.dirty && p.get('phoneNumber')?.invalid">
-                      <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
-                        <div class="flex flex-column justify-content-center">
-                          <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
-                        </div>
-                        <div class="flex flex-column justify-content-center">
-                          Passenger contact number is required
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex flex-row justify-content-start gap-2 h-5rem">
-                  <div class="flex flex-column justify-content-start gap-1">
-                    <div class="text-sm font-medium">
-                      Email *
-                    </div>
-                    <div>
-                      <input type="email" pInputText [style]="{ width:'890px' }" formControlName="email" />
-                    </div>
-                    <div *ngIf="p.get('email')?.dirty && p.get('email')?.invalid">
-                      <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
-                        <div class="flex flex-column justify-content-center">
-                          <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
-                        </div>
-                        <div class="flex flex-column justify-content-center">
-                          Passenger email is required
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {{ selectedOffer.passengerIdentityDocumentsRequired }}
-                <div *ngIf="selectedOffer.passengerIdentityDocumentsRequired">
-                  <!-- only if identity documents are required -->
-                  <div formGroupName="identityDocuments">
-                    <div class="flex flex-row justify-content-start gap-2 h-5rem">
-                      <div class="flex flex-column justify-content-start gap-1">
-                        <div class="text-sm font-medium">
-                          Passport number or Tax id*
-                        </div>
-                        <div>
-                          <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="uniqueIdentifier" />
-                        </div>
-                        <!-- <div *ngIf="p.get('email')?.dirty && p.get('email')?.invalid">
-                          <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
-                            <div class="flex flex-column justify-content-center">
-                              <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
-                            </div>
-                            <div class="flex flex-column justify-content-center">
-                              Passenger email is required
-                            </div>
+                      <div *ngIf="p.get('givenName')?.dirty && p.get('givenName')?.invalid">
+                        <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                          <div class="flex flex-column justify-content-center">
+                            <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
                           </div>
-                        </div> -->
+                          <div class="flex flex-column justify-content-center">
+                            Passenger given name is required
+                          </div>
+                        </div>
                       </div>
+                    </div>
+                    
+                    <div class="flex flex-column justify-content-start gap-1">
+                      <div class="text-sm font-medium">
+                        Family name *
+                      </div>
+                      <div>
+                        <input type="text" pInputText [style]="{ width:'293px' }" formControlName="familyName"/>
+                      </div>
+                      <div *ngIf="p.get('familyName')?.dirty && p.get('familyName')?.invalid">
+                        <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                          <div class="flex flex-column justify-content-center">
+                            <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                          </div>
+                          <div class="flex flex-column justify-content-center">
+                            Passenger family name is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex flex-row justify-content-start gap-2 h-5rem">
+                    <div class="flex flex-column justify-content-start gap-1">
+                      <div class="text-sm font-medium">
+                        Date of birth *
+                      </div>
+                      <div>
+                        <p-calendar readonlyInput="true" showOnFocus="false" dateFormat="yy-mm-dd" [maxDate]="maxDate" [minDate]="minDate" datatype="string" formControlName="bornOn" [style]="{ width:'20rem' }"></p-calendar>
+                      </div>
+                      <div *ngIf="p.get('bornOn')?.dirty && p.get('bornOn')?.invalid">
+                        <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                          <div class="flex flex-column justify-content-center">
+                            <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                          </div>
+                          <div class="flex flex-column justify-content-center">
+                            Passenger date of birth is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="flex flex-column justify-content-start gap-1">
+                      <div class="text-sm font-medium">
+                        Gender *
+                      </div>
+                      <p-dropdown [style]="{ width: '120px'}" [options]="genders" optionLabel="gender" optionValue="value" formControlName="gender" [(ngModel)]="g">
+                      </p-dropdown>
+                    </div>
   
-                      <div class="flex flex-column justify-content-start gap-1">
-                        <div class="text-sm font-medium">
-                          Issuing country code * (2-char)
-                        </div>
-                        <div>
-                          <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="issuingCountryCode" />
-                        </div>
-                        <!-- <div *ngIf="p.get('email')?.dirty && p.get('email')?.invalid">
-                          <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
-                            <div class="flex flex-column justify-content-center">
-                              <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
-                            </div>
-                            <div class="flex flex-column justify-content-center">
-                              Passenger email is required
-                            </div>
-                          </div>
-                        </div> -->
+                    <div class="flex flex-column justify-content-start gap-1">
+                      <div class="text-sm font-medium">
+                        Phone number *
                       </div>
-  
-                      <div class="flex flex-column justify-content-start gap-1">
-                        <div class="text-sm font-medium">
-                          Expiry date
-                        </div>
-                        <div>
-                          <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="issuingCountryCode" />
-                        </div>
-                        <!-- <div *ngIf="p.get('email')?.dirty && p.get('email')?.invalid">
-                          <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
-                            <div class="flex flex-column justify-content-center">
-                              <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
-                            </div>
-                            <div class="flex flex-column justify-content-center">
-                              Passenger email is required
-                            </div>
+                      <div>
+                        <p-inputMask formControlName="phoneNumber" mask="(+99) 9999999999"  slotChar="" [style]="{ width:'433px'}"></p-inputMask>
+                      </div>
+                      <div *ngIf="p.get('phoneNumber')?.dirty && p.get('phoneNumber')?.invalid">
+                        <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                          <div class="flex flex-column justify-content-center">
+                            <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
                           </div>
-                        </div> -->
+                          <div class="flex flex-column justify-content-center">
+                            Passenger contact number is required
+                          </div>
+                        </div>
                       </div>
                     </div>
+                  </div>
+                  
+                  <div class="flex flex-row justify-content-start gap-2 h-5rem">
+                    <div class="flex flex-column justify-content-start gap-1">
+                      <div class="text-sm font-medium">
+                        Email *
+                      </div>
+                      <div>
+                        <input type="email" pInputText [style]="{ width:'889px' }" formControlName="email" />
+                      </div>
+                      <div *ngIf="p.get('email')?.dirty && p.get('email')?.invalid">
+                        <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                          <div class="flex flex-column justify-content-center">
+                            <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                          </div>
+                          <div class="flex flex-column justify-content-center">
+                            Passenger email is required
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div *ngIf="selectedOffer?.passengerIdentityDocumentsRequired && selectedOffer?.allowedPassengerIdentityDocumentTypes.length > 0">
+                    <!-- only if identity documents are required -->
+                    <div formArrayName="identityDocuments">
+                      <div *ngFor="let id of identityDocuments.controls; let i = index" [formGroupName]="i">
+                        <div class="flex flex-row justify-content-start gap-2 h-5rem">
+                          <div class="flex flex-column justify-content-start gap-1">
+                            <div class="text-sm font-medium">
+                              <div *ngIf="id.get('type').value == 'passport'">
+                                Passport number *
+                              </div>
+                              <div *ngIf="id.get('type').value == 'tax_id'">
+                                Tax id *
+                              </div>
+                            </div>
+                            <div>
+                              <input type="text" pInputText [style]="{ width:'20rem' }" formControlName="uniqueIdentifier" />
+                            </div>
+                            <div *ngIf="id.get('uniqueIdentifier')?.dirty && id.get('uniqueIdentifier')?.invalid">
+                              <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                                <div class="flex flex-column justify-content-center">
+                                  <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                                </div>
+                                <div class="flex flex-column justify-content-center">
+                                  <div *ngIf="id.get('type').value == 'passport'">
+                                    Passport number is required
+                                  </div>
+                                  <div *ngIf="id.get('type').value == 'tax_id'">
+                                    Tax id is required
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+      
+                          <div class="flex flex-column justify-content-start gap-1">
+                            <div class="text-sm font-medium">
+                              Issuing country code * (2-char)
+                            </div>
+                            <div>
+                              <input type="text" pInputText [style]="{ width:'15rem' }" formControlName="issuingCountryCode" style="text-transform:uppercase" [maxlength]="2"/>
+                            </div>
+                            <div *ngIf="id.get('issuingCountryCode')?.dirty && id.get('issuingCountryCode')?.invalid">
+                              <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                                <div class="flex flex-column justify-content-center">
+                                  <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                                </div>
+                                <div class="flex flex-column justify-content-center">
+                                  Issuing country code is required
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+      
+                          <div class="flex flex-column justify-content-start gap-1">
+                            <div class="text-sm font-medium">
+                              Expiry date
+                            </div>
+                            <div>
+                              <p-calendar readonlyInput="true" showOnFocus="false" dateFormat="yy-mm-dd" [minDate]="maxDate" datatype="string" formControlName="expiresOn" [style]="{ width:'313px' }"></p-calendar>
+                            </div>
+                            <div *ngIf="id.get('expiresOn')?.dirty && id.get('expiresOn')?.invalid">
+                              <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                                <div class="flex flex-column justify-content-center">
+                                  <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                                </div>
+                                <div class="flex flex-column justify-content-center">
+                                  <div *ngIf="id.get('type').value == 'passport'">
+                                    Passport expiry date is required
+                                  </div>
+                                  <div *ngIf="id.get('type').value == 'tax_id'">
+                                    Tax id expiry date is required
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- <div formGroupName="identityDocuments">
+                      <div class="flex flex-row justify-content-start gap-2 h-5rem">
+                        <div class="flex flex-column justify-content-start gap-1">
+                          <div class="text-sm font-medium">
+                            Passport number or Tax id*
+                          </div>
+                          <div>
+                            <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="uniqueIdentifier" />
+                          </div>
+                        </div>
+    
+                        <div class="flex flex-column justify-content-start gap-1">
+                          <div class="text-sm font-medium">
+                            Issuing country code * (2-char)
+                          </div>
+                          <div>
+                            <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="issuingCountryCode" />
+                          </div>
+                        </div>
+    
+                        <div class="flex flex-column justify-content-start gap-1">
+                          <div class="text-sm font-medium">
+                            Expiry date
+                          </div>
+                          <div>
+                            <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="issuingCountryCode" />
+                          </div>
+                        </div>
+                      </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        <div> valid: {{ order.valid }}, invalid: {{ order.invalid }} </div>
-        <div> pristine: {{ order.pristine }}, dirty: {{ order.dirty }} </div>
-        <div> email: {{ order.get('passengers')?.valid }} </div>
-        <div> phone: {{ order.get('phoneNum')?.valid }} </div>
-          <button type="submit" [disabled]="order.invalid">submit</button>
-        </form>
+          <div class="mt-5"> valid: {{ order.valid }}, invalid: {{ order.invalid }} </div>
+          <div> pristine: {{ order.pristine }}, dirty: {{ order.dirty }} </div>
+          <div> email: {{ order.get('passengers')?.valid }} </div>
+          <div> phone: {{ order.get('phoneNum')?.valid }} </div>
+            <button type="submit" [disabled]="order.invalid">submit</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

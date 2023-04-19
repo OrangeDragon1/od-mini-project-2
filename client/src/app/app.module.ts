@@ -14,7 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ResultsComponent } from './components/results/results.component';
 import { OffersComponent } from './components/results/offers.component';
 import { FullFareOffersComponent } from './components/results/full-fare-offers.component';
-import { DurationPipe } from './duration.pipe';
+import { DurationPipe } from './utils.pipe';
 import { FullFareOffersTotalComponent } from './components/results/full-fare-offers-total.component';
 import { CheckoutPassengersComponent } from './components/checkout/checkout-passengers.component';
 import { OffersSidePanelComponent } from './components/results/offers-side-panel.component';
