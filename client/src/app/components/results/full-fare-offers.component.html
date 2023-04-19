@@ -1,6 +1,6 @@
 <div class="flex flex-column">
   <div *ngFor="let s of first?.slices; let idx = index">
-    <div class="flex mb-2" style="margin-left: 52px;">
+    <div class="flex mb-2" style="margin-left: 67px;">
       <p-panel>
           <ng-template pTemplate="header">
             <div class="flex flex-row gap-2 justify-content-center w-max">
@@ -91,7 +91,7 @@
         </ng-template>
       </p-panel>
     </div>
-    <div>
+    <div style="margin-left: 15px;">
       <!-- Selections -->
       <div>
         <p-carousel [value]="partialOfferOffer" [numVisible]="3" [numScroll]="1">
@@ -100,7 +100,7 @@
               <div class="w-16rem">
                 <p-panel>
                   <ng-template pTemplate="header">
-                    <div class="flex flex-column justify-content-center">
+                    <div class="flex flex-column justify-content-center h-3rem">
                       <div class="flex font-light text-xs">
                         {{ poo.slices[idx]?.segments[0]?.passengers[0]?.cabinClassMarketingName }}
                       </div>
@@ -127,7 +127,7 @@
                                   </span>
                                   <ng-template #changeNotFree>
                                     {{ poo.conditions.changeBeforeDeparture.penaltyCurrency }}
-                                    {{ poo.conditions.changeBeforeDeparture.penaltyAmount }}
+                                    {{ poo.conditions.changeBeforeDeparture.penaltyAmount | currency: poo.conditions.changeBeforeDeparture.penaltyCurrency }}
                                   </ng-template>
                                 </div>
                               </div>
@@ -173,7 +173,7 @@
                                   </span>
                                   <ng-template #refundNotFree>
                                     {{ poo.conditions.refundBeforeDeparture.penaltyCurrency }}
-                                    {{ poo.conditions.refundBeforeDeparture.penaltyAmount }}
+                                    {{ poo.conditions.refundBeforeDeparture.penaltyAmount | currency: poo.conditions.refundBeforeDeparture.penaltyCurrency }}
                                   </ng-template>
                                 </div>
                               </div>
@@ -242,14 +242,19 @@
                     <div>
                       <p-divider type="solid"></p-divider>
                     </div>
-                    <div class="h-2rem">
+                    <div class="h-3rem">
                       <div class="flex flex-row justify-content-between">
                         <div class="flex flex-column justify-content-center">
                           <div class="text-xs"> 
                             total amount from
                           </div>
                           <div class="text-xl font-bold">
-                            {{ poo.totalCurrency }} {{ poo.totalAmount }}
+                            {{ poo.totalCurrency }} {{ poo.totalAmount / poo.slices[0]?.segments[0]?.passengers.length | currency: poo.totalCurrency }}
+                          </div>
+                          <div class="flex flex-row justify-content-end">
+                            <div class="text-xs"> 
+                              per pax
+                            </div>
                           </div>
                         </div>
                         <div class="flex flex-column justify-content-center">

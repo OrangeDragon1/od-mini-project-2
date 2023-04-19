@@ -1,4 +1,4 @@
-<div style="margin-right: 52px;">
+<div style="margin-right: 67px;">
   <p-card [style]="{ width: '250px'}">
     <ng-template pTemplate="content">
       <div class="flex flex-column">
@@ -37,7 +37,11 @@
                   <i class="pi pi-dollar" style="font-size: 0.8rem"></i>
                 </div>
                 <div class="flex flex-column justify-content-center text-xs">
-                  Airport taxes, fuel surcharges and service fees: {{ selectedOffer?.taxCurrency }} {{ selectedOffer?.taxAmount | currency: selectedOffer?.taxCurrency }}
+                  Airport taxes, fuel surcharges and service fees: {{ selectedOffer?.taxCurrency }} {{ selectedOffer?.taxAmount | currency: selectedOffer?.taxCurrency }} 
+                  <div>
+                    ({{ selectedOffer?.taxCurrency }} {{ selectedOffer?.taxAmount / selectedOffer?.slices[0]?.segments[0]?.passengers.length | currency: selectedOffer?.taxCurrency }}
+                    x {{ selectedOffer?.slices[0]?.segments[0]?.passengers.length }})
+                  </div>
                 </div>
               </div>
             </div>
@@ -48,7 +52,11 @@
                   <i class="pi pi-dollar" style="font-size: 0.8rem"></i>
                 </div>
                 <div class="flex flex-column justify-content-center text-xs">
-                  Fare: {{ selectedOffer?.totalCurrency }} {{ (selectedOffer?.totalAmount - selectedOffer?.taxAmount) | currency: selectedOffer?.totalCurrency }}
+                  Fare: {{ selectedOffer?.totalCurrency }} {{ (selectedOffer?.totalAmount - selectedOffer?.taxAmount) | currency: selectedOffer?.totalCurrency }} 
+                  <div>
+                    ({{ selectedOffer?.totalCurrency }} {{ (selectedOffer?.totalAmount - selectedOffer?.taxAmount) / selectedOffer?.slices[0]?.segments[0]?.passengers.length | currency: selectedOffer?.totalCurrency }}
+                    x {{ selectedOffer?.slices[0]?.segments[0]?.passengers.length }})
+                  </div>
                 </div>
               </div>
             </div>

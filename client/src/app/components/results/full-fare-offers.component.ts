@@ -10,7 +10,8 @@ import { FlightSearchService } from 'src/app/services/flight-search.service';
 })
 export class FullFareOffersComponent implements OnInit, OnDestroy {
 
-  @Output() onSelectedOffer = new Subject<PartialOfferOffer>();
+  @Output() onSelectedOffer = new Subject<any>();
+  @Output() onSelectedOfferPRQ = new Subject<String | undefined>();
   selectedOffer: any;
 
   sub$!: Subscription;
@@ -55,7 +56,11 @@ export class FullFareOffersComponent implements OnInit, OnDestroy {
   }
   
   onRadioClick() {
-    this.onSelectedOffer.next(this.selectedOffer)
+    const selectedOffer = {
+      prq: this.partialOffer?.id,
+      off: this.selectedOffer
+    }
+    this.onSelectedOffer.next(selectedOffer);
   }
 
   private sameDay(departure: any, arrival: any): number {
@@ -65,10 +70,5 @@ export class FullFareOffersComponent implements OnInit, OnDestroy {
         / (24 * 60 * 60 * 1000);
     return dayDiff;
   }
-
-  // onSelect(event: PartialOfferOffer) {
-  //   this.selectedPOO.next(event);
-  //   console.log(event)
-  // }
 
 }

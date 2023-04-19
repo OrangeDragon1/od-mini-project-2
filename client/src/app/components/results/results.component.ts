@@ -21,6 +21,7 @@ export class ResultsComponent implements OnInit {
   }
 
   selectedOffer?: PartialOfferOffer;
+  selectedOfferPRQ?: string;
 
   partialOffer?: PartialOffer;
   partialOfferSlice?: PartialOfferSlice[] = [];
@@ -40,7 +41,6 @@ export class ResultsComponent implements OnInit {
     if (this.activatedRoute.snapshot.queryParams['po']) {
       const partialOfferOfferId = this.activatedRoute.snapshot.queryParams['po'];
       this.offerSelected(partialOfferOfferId);
-      console.log('testing')
     } else if (this.activatedRoute.snapshot.queryParams['prq']) {  
       const prq = this.activatedRoute.snapshot.queryParams['prq'];
       this.flightSvc.postOffers({ prq: prq });
@@ -59,7 +59,7 @@ export class ResultsComponent implements OnInit {
       {label:'Outbound'},
       {label:'Fare options', style: {'font-weight': 'bold'}}
       // {label:'Lionel Messi', url: 'https://en.wikipedia.org/wiki/Lionel_Messi'}
-  ];
+    ];
    
   }
 
@@ -74,12 +74,12 @@ export class ResultsComponent implements OnInit {
       selectedPartialOffer: partialOfferOfferId
     };
     this.flightSvc.getFullFare(data);
-    console.log(data);
-    this.router.navigate([], { queryParams: newParams });
+     this.router.navigate([], { queryParams: newParams });
   }
 
-  onSelectedOffer(po: PartialOfferOffer) {
-    this.selectedOffer = po;
+  onSelectedOffer(selectedOffer: any) {
+    this.selectedOffer = selectedOffer['off'];
+    this.selectedOfferPRQ = selectedOffer['prq'];
   }
 
 }

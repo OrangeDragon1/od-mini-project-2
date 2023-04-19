@@ -22,10 +22,13 @@
 <div *ngIf="selected; else notSelected">
   <div class="flex flex-row justify-content-between">
     <div>
-      <app-full-fare-offers (onSelectedOffer)="onSelectedOffer($event)"></app-full-fare-offers>
+      <app-full-fare-offers 
+      (onSelectedOffer)="onSelectedOffer($event)"></app-full-fare-offers>
     </div>
     <div>
-      <app-full-fare-offers-total [selectedOffer]="selectedOffer"></app-full-fare-offers-total>
+      <app-full-fare-offers-total 
+      [selectedOffer]="selectedOffer"
+      [selectedOfferPRQ]="selectedOfferPRQ"></app-full-fare-offers-total>
     </div>
   </div>
 </div>  

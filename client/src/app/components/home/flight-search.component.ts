@@ -12,7 +12,7 @@ import { enumValidator } from 'src/app/utils';
   templateUrl: './flight-search.component.html',
   styleUrls: ['./flight-search.component.css']
 })
-export class SearchflightComponent implements OnInit {
+export class FlightSearchComponent implements OnInit {
 
   cabinClassOptions = Object.values(CabinClass);
   request!: FormGroup;

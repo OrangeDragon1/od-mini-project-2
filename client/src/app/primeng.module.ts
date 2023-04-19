@@ -12,6 +12,11 @@ import { DividerModule } from 'primeng/divider';
 import { CarouselModule } from 'primeng/carousel';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { ChipModule } from 'primeng/chip';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
+import { CalendarModule } from 'primeng/calendar';
 
 const primengModules: any[] = [
   MenubarModule,
@@ -25,7 +30,12 @@ const primengModules: any[] = [
   DividerModule,
   CarouselModule,
   RadioButtonModule,
-  BreadcrumbModule
+  BreadcrumbModule,
+  ChipModule,
+  DropdownModule,
+  InputTextModule,
+  InputMaskModule,
+  CalendarModule
 ]
 
 @NgModule({

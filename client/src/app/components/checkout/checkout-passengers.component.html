@@ -1,0 +1,628 @@
+<div class="flex flex-column justify-content-start">
+  <div class="flex flex-row justify-content-start">
+    <div class="mb-3">
+      <p-breadcrumb [model]="items">
+      </p-breadcrumb>
+    </div>
+  </div>
+  <div class="flex flex-column justify-content-start">
+    <div class="flex flex-row gap-1">
+      <!-- badges -->
+      <div *ngIf="selectedOffer?.slices?.length == 1; else notOneWay">
+        <div class="bg-gray-300 border-round-xl w-max">
+          <div class="flex flex-column justify-content-center text-sm p-1 mx-2">
+            One-way
+          </div>
+        </div>
+      </div>
+      <ng-template #notOneWay>
+        <div *ngIf="selectedOffer?.slices[0]?.originIataCode == selectedOffer?.slices[1]?.destinationIataCode; else multiCity">
+          <div class="bg-gray-300 border-round-xl w-max">
+            <div class="flex flex-column justify-content-center text-sm p-1 mx-2">
+              Return
+            </div>
+          </div>
+        </div>
+        <ng-template #multiCity>
+          <div class="bg-gray-300 border-round-xl w-max">
+            <div class="flex flex-column justify-content-center text-sm p-1 mx-2">
+              Multi-city
+            </div>
+          </div>
+        </ng-template>
+      </ng-template>
+      <div *ngIf="selectedOffer?.slices?.length == 1; else notOneWayDate">
+        <div class="bg-gray-300 border-round-xl w-max">
+          <div class="flex flex-column justify-content-center text-sm p-1 mx-2">
+            {{ selectedOffer?.slices[0]?.segments[0]?.departingAt | date: 'EEE, dd MMM yyyy' }}
+          </div>
+        </div>
+      </div>
+      <ng-template #notOneWayDate>
+        <div *ngIf="selectedOffer?.slices[0]?.originIataCode == selectedOffer?.slices[1]?.destinationIataCode; else multiCityDate">
+          <div class="bg-gray-300 border-round-xl w-max">
+            <div class="flex flex-column justify-content-center text-sm p-1 mx-2">
+              {{ selectedOffer?.slices[0]?.segments[0]?.departingAt | date: 'EEE, dd MMM yyyy' }} - 
+              {{ selectedOffer?.slices[1]?.segments[0]?.departingAt | date: 'EEE, dd MMM yyyy' }}
+            </div>
+          </div>
+        </div>
+        <ng-template #multiCityDate>
+          <div class="bg-gray-300 border-round-xl w-max">
+            <div class="flex flex-column justify-content-center text-sm p-1 mx-2">
+              <!-- placeholder -->
+            </div>
+          </div>
+        </ng-template>
+      </ng-template>
+      <div>
+        <div *ngIf="selectedOffer?.slices[0]?.segments[0]?.passengers.length == 1">
+          <div class="bg-gray-300 border-round-xl w-max">
+            <div class="flex flex-column justify-content-center text-sm p-1 mx-2">
+              {{ selectedOffer?.slices[0]?.segments[0]?.passengers.length }} Passenger
+            </div>
+          </div>
+        </div>
+        <div *ngIf="selectedOffer?.slices[0]?.segments[0]?.passengers.length > 1">
+          <div class="bg-gray-300 border-round-xl w-max">
+            <div class="flex flex-column justify-content-center text-sm p-1 mx-2">
+              {{ selectedOffer?.slices[0]?.segments[0]?.passengers.length }} Passengers
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="bg-gray-300 border-round-xl w-max">
+          <div class="flex flex-column justify-content-center text-sm p-1 mx-2">
+            {{ selectedOffer?.slices[0]?.segments[0]?.passengers[0]?.cabinClassMarketingName }}
+          </div>
+        </div>
+      </div>
+      <!-- badges-end -->
+    </div>
+    <div>
+      <div class="mt-4">
+        <div *ngIf="selectedOffer?.slices?.length == 1; else notOneWay">
+          <div class="flex flex-row justify-content-start gap-2">
+            <div class="flex flex-column justify-content-center font-semibold text-3xl">
+              {{ selectedOffer?.slices[0]?.originIataCode }}
+            </div>
+            <div class="flex flex-column justify-content-center">
+              <i class="pi pi-chevron-right" style="font-size: 1.2rem"></i>
+            </div>
+            <div class="flex flex-column justify-content-center font-semibold text-3xl">
+              {{ selectedOffer?.slices[0]?.destinationIataCode }}
+            </div>
+          </div>
+        </div>
+        <ng-template #notOneWay>
+        </ng-template>
+      </div>
+    </div>
+
+    <div>
+      <p-divider type="solid"></p-divider>
+    </div>
+
+    <div>
+      <div class="flex flex-row justify-content-start font-light text-2xl">
+        Selected flights
+      </div>
+    </div>
+
+    <div class="bg-white border-round-xl p-4 mt-2" style="border: 2px solid #dee2e6; border-radius: 0.75rem; padding: 1rem;">
+      <!-- slices or selectedOffers -->
+      <div class="mt-2">
+        <div class="flex flex-column flex-wrap">
+          <div class="flex flex-row gap-4 h-3rem">
+            <div class="flex">
+              <div class="flex align-items-center h-3rem w-3rem" *ngIf="selectedOffer?.owner?.logoSymbolUrl; else Lockup">
+                <img [src]="selectedOffer?.owner?.logoSymbolUrl" style="max-width: 100%; max-height: 100%;">
+              </div>
+              <ng-template #Lockup>
+                <div class="flex align-items-center h-3rem w-3rem">
+                  <img [src]="selectedOffer?.owner?.logoLockupUrl" style="max-width: 100%; max-height: 100%;">
+                </div>
+              </ng-template>
+            </div>
+            
+            <div class="flex flex-column align-items-left justify-content-center" style="width: 480px;">
+              <div class="text-lg font-bold">
+                {{ selectedOffer?.slices[0]?.segments[0]?.departingAt | date: "HH:mm" }} - 
+                {{ selectedOffer?.slices[0]?.segments[selectedOffer?.slices[0]?.segments.length - 1]?.arrivingAt | date: "HH:mm"}}
+                <sub class="vertical-align-super" *ngIf="selectedOffer?.slices[0]?.plusDays > 0" >
+                  +{{ selectedOffer?.slices[0]?.plusDays }}
+                </sub>
+              </div>
+              <div class="font-light text-sm">
+                {{ selectedOffer?.owner?.name }} · 
+                <span *ngFor="let seg of selectedOffer?.slices[0]?.segments">
+                  {{ seg?.marketingCarrier?.iataCode + seg?.marketingCarrierFlightNumber }}
+                </span>
+                <span class="capitalize">
+                  · {{ selectedOffer?.slices[0]?.fareBrandName.toLowerCase() }}
+                </span>
+              </div>
+            </div>
+            
+            <div class="flex flex-column align-items-left justify-content-center w-8rem">
+              <div class="text-lg font-bold">
+                <div *ngIf="selectedOffer?.slices[0]?.duration">
+                  {{ selectedOffer?.slices[0]?.duration | duration }}
+                </div>
+              </div>
+              <div class="font-light text-sm">
+                {{ selectedOffer?.slices[0]?.originIataCode }} - {{ selectedOffer?.slices[0]?.destinationIataCode }}
+              </div>
+            </div>
+            
+            <div class="flex flex-row justify-content-center">
+              <div class="flex flex-column align-items-left justify-content-center w-max">
+                <div class="text-lg font-bold">
+                  <span *ngIf="selectedOffer?.slices[0]?.segments?.length > 1; else nonStop">
+                    {{ selectedOffer?.slices[0]?.segments?.length - 1 }} stop
+                  </span>
+                  <ng-template #nonStop>
+                    Direct
+                  </ng-template>
+                </div>
+                <div>
+                  <!-- for stops -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-3 mb-2">
+        <div class="flex flex-column" *ngFor="let seg of selectedOffer?.slices[0]?.segments; let idx = index">
+          <div class="flex flex-row">
+            <!-- <div class="flex flex-column justify-content-center">
+            </div> -->
+            <div class="flex flex-column">
+              <div class="flex flex-column m-2" >
+                <div class="flex flex-row gap-3">
+                  <div class="flex flex-column justify-content-center mr-4">
+                    <i class="pi pi-circle"></i>
+                  </div>
+                  <div class="flex flex-column justify-content-center font-bold w-13rem">
+                    {{ seg.departingAt | date: "EEE, dd MMM YYYY, HH:mm" }} 
+                  </div>
+                  <div class="flex flex-column justify-content-center w-29rem">
+                    Depart from {{ seg.originName }} ({{ seg.originIataCode }})
+                  </div>
+                </div>
+                
+                <div class="flex flex-row">
+                  <div class="flex flex-column justify-content-center  mr-4">
+                    <i class="pi pi-ellipsis-v"></i>
+                    <i class="pi pi-angle-double-down"></i>
+                  </div>
+                  <div class="flex flex-column justify-content-center m-3 ml-4 font-normal text-sm">
+                    Flight duration: {{ seg.duration | duration }}
+                  </div>
+                </div>
+                
+                <div class="flex flex-row gap-3">
+                  <div class="flex flex-column justify-content-center  mr-4">
+                    <i class="pi pi-circle-fill"></i>
+                  </div>
+                  <div class="flex flex-column justify-content-center font-bold w-13rem">
+                    {{ seg.arrivingAt | date: "EEE, dd MMM YYYY, HH:mm" }} 
+                  </div>
+                  <div class="flex flex-column justify-content-center w-29rem">
+                    Arrive at {{ seg.destinationName }} ({{ seg.destinationIataCode }})
+                  </div>
+                </div>
+                
+                <div class="flex flex-row gap-3 mt-3">
+                  <div class="flex flex-column justify-content-center  mr-4">
+                    <i class="pi pi-info"></i>
+                  </div>
+
+                  <div class="flex flex-column justify-content-center capitalize font-light text-xs">
+                    {{ seg.passengers[0]?.cabinClass }}
+                  </div>
+
+                  <div class="flex flex-column justify-content-center">
+                    <div *ngIf="seg.operatingCarrier?.name === selectedOffer.owner.name; else operatedBy">
+                      <div class="capitalize font-light text-xs">
+                        {{ seg.operatingCarrier?.name }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="flex flex-column justify-content-center">
+                    <ng-template #operatedBy>
+                      <div class="flex flex-row font-light text-xs">
+                        <span>Operated by 
+                          <span class="capitalize">
+                            {{ seg.operatingCarrier?.name }}
+                          </span>
+                        </span>
+                      </div>
+                    </ng-template>
+                  </div>
+
+                  <div class="flex flex-column justify-content-center">
+                    <div class="flex flex-row font-light text-xs">
+                      {{ seg.aircraft?.name }}
+                    </div>
+                  </div>
+
+                  <div class="flex flex-column justify-content-center">
+                    <div class="flex flex-row font-light text-xs gap-4" *ngIf="selectedOffer?.slices[idx]?.segments[0]?.passengers[0].baggages">
+                      <div *ngFor="let b of selectedOffer.slices[idx]?.segments[0]?.passengers[0].baggages"> 
+                        <div class="flex flex-row gap-1" *ngIf="b.quantity > 0" >
+                          <div class="flex flex-column justify-content-center">
+                            <i class="pi pi-briefcase" style="font-size: 0.8rem"></i>
+                          </div>
+                          <div class="flex flex-column justify-content-center">
+                            <span *ngIf="b.type == 'checked'">
+                              <span *ngIf="b.quantity == 1">
+                                Includes {{ b.quantity }} checked bag
+                              </span>
+                              <span *ngIf="b.quantity > 1">
+                                Includes {{ b.quantity }} checked bags
+                              </span>
+                            </span>
+                            
+                            <span *ngIf="b.type == 'carry_on'">
+                              <span *ngIf="b.quantity == 1">
+                                Includes {{ b.quantity }} carry-on bag
+                              </span>
+                              <span *ngIf="b.quantity > 1">
+                                Includes {{ b.quantity }} carry-on bags
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex flex-column bg-gray-300 border-round-xl w-max my-3" *ngIf="selectedOffer?.slices[0]?.layovers[idx]?.duration">
+            <div class="text-sm p-1 ml-2 mr-2">
+              {{ selectedOffer?.slices[0]?.layovers[idx]?.duration | duration }} layover at {{ selectedOffer?.slices[0]?.layovers[idx]?.layoverName }} ({{ selectedOffer?.slices[0]?.layovers[idx]?.layoverIataCode }})
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end of slices or selectedOffers -->
+    </div>
+
+    <div>
+      <p-divider type="solid"></p-divider>
+    </div>
+
+    <div>
+      <div class="flex flex-row justify-content-start font-light text-2xl">
+        Fare rules
+      </div>
+    </div>
+
+    <div class="flex flex-row justify-content-center gap-8 mt-2">
+      <div *ngIf="selectedOffer?.conditions?.changeBeforeDeparture; else noChangeData">
+        <div *ngIf="selectedOffer?.conditions?.changeBeforeDeparture?.allowed; else changeNotAllowed">
+          <div *ngIf="selectedOffer?.conditions?.changeBeforeDeparture?.penaltyAmount == '0' || selectedOffer?.conditions?.changeBeforeDeparture?.penaltyAmount == undefined; else changeNotFree">
+            <div class="flex flex-column bg-white w-20rem h-8rem" style="border: 2px solid #009c05; border-radius: 0.75rem; padding: 1rem;">
+              <div class="font-bold text-lg">
+                Changes
+              </div>
+              <div class="flex justify-content-center font-medium text-sm p-3">
+                Changes are allowed up till departure date
+              </div>
+            </div>
+          </div>
+          <ng-template #changeNotFree>
+            <div class="flex flex-column bg-white w-20rem h-8rem" style="border: 2px solid #c50000; border-radius: 0.75rem; padding: 1rem;">
+              <div class="font-bold text-lg">
+                Changes
+              </div>
+              <div class="flex justify-content-center font-medium text-sm p-3">
+                Changes are allowed up till departure date for a fee
+                (
+                  {{ selectedOffer?.conditions?.changeBeforeDeparture?.penaltyCurrency }}
+                  {{ selectedOffer?.conditions?.changeBeforeDeparture?.penaltyAmount | currency: selectedOffer?.conditions?.changeBeforeDeparture?.penaltyCurrency }}
+                  )
+              </div>
+            </div>   
+          </ng-template>
+        </div>
+        <ng-template #changeNotAllowed>
+          <div class="flex flex-column bg-white w-20rem h-8rem" style="border: 2px solid #c50000; border-radius: 0.75rem; padding: 1rem;">
+            <div class="font-bold text-lg">
+              Changes
+            </div>
+            <div class="flex justify-content-center font-medium text-sm p-3">
+              No changes allowed upon confirmation
+            </div>
+          </div>
+        </ng-template>    
+      </div>
+      <ng-template #noChangeData>
+        <div class="flex flex-column bg-white w-20rem h-8rem" style="border: 2px solid #dee2e6; border-radius: 0.75rem; padding: 1rem;">
+          <div class="font-bold text-lg">
+            Refunds
+          </div>
+          <div class="flex justify-content-center font-medium text-sm p-3">
+            Information not available
+          </div>
+        </div>
+      </ng-template>
+      <div *ngIf="selectedOffer?.conditions?.refundBeforeDeparture; else noRefundData">
+        <div *ngIf="selectedOffer?.conditions?.refundBeforeDeparture?.allowed; else refundNotAllowed">
+          <div *ngIf="selectedOffer?.conditions?.refundBeforeDeparture?.penaltyAmount == '0' || selectedOffer?.conditions?.refundBeforeDeparture?.penaltyAmount == undefined; else refundNotFree">
+            <div class="flex flex-column bg-white w-20rem h-8rem" style="border: 2px solid #009c05; border-radius: 0.75rem; padding: 1rem;">
+              <div class="font-bold text-lg">
+                Refunds
+              </div>
+              <div class="flex justify-content-center font-medium text-sm p-3">
+                Refunds are allowed up till departure date
+              </div>
+            </div>
+          </div>
+          <ng-template #refundNotFree>
+            <div class="flex flex-column bg-white w-20rem h-8rem" style="border: 2px solid #c50000; border-radius: 0.75rem; padding: 1rem;">
+              <div class="font-bold text-lg">
+                Refunds
+              </div>
+              <div class="flex justify-content-center font-medium text-sm p-3">
+                Refunds are allowed up till departure date with a penalty
+                (
+                  {{ selectedOffer?.conditions?.refundBeforeDeparture?.penaltyCurrency }}
+                  {{ selectedOffer?.conditions?.refundBeforeDeparture?.penaltyAmount | currency: selectedOffer?.conditions?.refundBeforeDeparture?.penaltyCurrency }}
+                  )
+              </div>
+            </div>   
+          </ng-template>
+        </div>
+        <ng-template #refundNotAllowed>
+          <div class="flex flex-column bg-white w-20rem h-8rem" style="border: 2px solid #c50000; border-radius: 0.75rem; padding: 1rem;">
+            <div class="font-bold text-lg">
+              Refunds
+            </div>
+            <div class="flex justify-content-center font-medium text-sm p-3">
+              No refunds allowed upon confirmation
+            </div>
+          </div>
+        </ng-template>    
+      </div>
+      <ng-template #noRefundData>
+        <div class="flex flex-column bg-white w-20rem h-8rem" style="border: 2px solid #dee2e6; border-radius: 0.75rem; padding: 1rem;">
+          <div class="font-bold text-lg">
+            Refunds
+          </div>
+          <div class="flex justify-content-center font-medium text-sm p-3">
+            Information not available
+          </div>
+        </div>
+      </ng-template>
+    </div>
+
+    <div>
+      <p-divider type="solid"></p-divider>
+    </div>
+
+    <div>
+      <div class="flex flex-row justify-content-start font-light text-2xl">
+        Contact details
+      </div>
+    </div>
+
+    <div>
+      <p-divider type="solid"></p-divider>
+    </div>
+
+    <div>
+      <div class="flex flex-row justify-content-start font-light text-2xl">
+        Passengers
+      </div>
+      <div class="mt-2">
+        <form [formGroup]="order" (ngSubmit)="processOrder()">
+          <div class="flex flex-column">
+            <div formArrayName="passengers">
+              <div *ngFor="let p of passengers.controls; let idx = index" [formGroupName]="idx">
+                <div class="bg-gray-300 border-round-xl w-max my-3">
+                  <div class="flex flex-column justify-content-center text-sm p-1 mx-2 capitalize">
+                    {{ requestPassengers[idx]?.type }} - Passenger {{ idx + 1}}
+                  </div>
+                </div>
+                <div class="flex flex-row justify-content-start gap-2 h-5rem">
+                  <div class="flex flex-column justify-content-start gap-1">
+                    <div class="text-sm font-medium">
+                      Title *
+                    </div>
+                    <p-dropdown [options]="titles"  optionLabel="title" optionValue="value" [(ngModel)]="t" formControlName="title">
+                    </p-dropdown>
+                  </div>
+                  
+                  <div class="flex flex-column justify-content-start gap-1">
+                    <div class="text-sm font-medium">
+                      Given name *
+                    </div>
+                    <div>
+                      <input type="text" pInputText [style]="{ width:'30rem' }" formControlName="givenName"/>
+                    </div>
+                    <div *ngIf="p.get('givenName')?.dirty && p.get('givenName')?.invalid">
+                      <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                        <div class="flex flex-column justify-content-center">
+                          <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                        </div>
+                        <div class="flex flex-column justify-content-center">
+                          Passenger given name is required
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex flex-column justify-content-start gap-1">
+                    <div class="text-sm font-medium">
+                      Family name *
+                    </div>
+                    <div>
+                      <input type="text" pInputText [style]="{ width:'292px' }" formControlName="familyName"/>
+                    </div>
+                    <div *ngIf="p.get('familyName')?.dirty && p.get('familyName')?.invalid">
+                      <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                        <div class="flex flex-column justify-content-center">
+                          <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                        </div>
+                        <div class="flex flex-column justify-content-center">
+                          Passenger family name is required
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="flex flex-row justify-content-start gap-2 h-5rem">
+                  <div class="flex flex-column justify-content-start gap-1">
+                    <div class="text-sm font-medium">
+                      Date of birth *
+                    </div>
+                    <div>
+                      <p-calendar readonlyInput="true" showOnFocus="false" dateFormat="yy-mm-dd" [maxDate]="maxDate" [minDate]="minDate" datatype="string" formControlName="bornOn" [style]="{ width:'20rem' }"></p-calendar>
+                    </div>
+                    <div *ngIf="p.get('bornOn')?.dirty && p.get('bornOn')?.invalid">
+                      <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                        <div class="flex flex-column justify-content-center">
+                          <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                        </div>
+                        <div class="flex flex-column justify-content-center">
+                          Passenger date of birth is required
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex flex-column justify-content-start gap-1">
+                    <div class="text-sm font-medium">
+                      Gender *
+                    </div>
+                    <p-dropdown [style]="{ width: '120px'}" [options]="genders" optionLabel="gender" optionValue="value" formControlName="gender" [(ngModel)]="g">
+                    </p-dropdown>
+                  </div>
+
+                  <div class="flex flex-column justify-content-start gap-1">
+                    <div class="text-sm font-medium">
+                      Phone Number *
+                    </div>
+                    <div>
+                      <p-inputMask formControlName="phoneNumber" mask="(+99) 9999999999"  slotChar="" [style]="{ width:'433px'}"></p-inputMask>
+                    </div>
+                    <div *ngIf="p.get('phoneNumber')?.dirty && p.get('phoneNumber')?.invalid">
+                      <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                        <div class="flex flex-column justify-content-center">
+                          <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                        </div>
+                        <div class="flex flex-column justify-content-center">
+                          Passenger contact number is required
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-row justify-content-start gap-2 h-5rem">
+                  <div class="flex flex-column justify-content-start gap-1">
+                    <div class="text-sm font-medium">
+                      Email *
+                    </div>
+                    <div>
+                      <input type="email" pInputText [style]="{ width:'890px' }" formControlName="email" />
+                    </div>
+                    <div *ngIf="p.get('email')?.dirty && p.get('email')?.invalid">
+                      <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                        <div class="flex flex-column justify-content-center">
+                          <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                        </div>
+                        <div class="flex flex-column justify-content-center">
+                          Passenger email is required
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {{ selectedOffer.passengerIdentityDocumentsRequired }}
+                <div *ngIf="selectedOffer.passengerIdentityDocumentsRequired">
+                  <!-- only if identity documents are required -->
+                  <div formGroupName="identityDocuments">
+                    <div class="flex flex-row justify-content-start gap-2 h-5rem">
+                      <div class="flex flex-column justify-content-start gap-1">
+                        <div class="text-sm font-medium">
+                          Passport number or Tax id*
+                        </div>
+                        <div>
+                          <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="uniqueIdentifier" />
+                        </div>
+                        <!-- <div *ngIf="p.get('email')?.dirty && p.get('email')?.invalid">
+                          <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                            <div class="flex flex-column justify-content-center">
+                              <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                            </div>
+                            <div class="flex flex-column justify-content-center">
+                              Passenger email is required
+                            </div>
+                          </div>
+                        </div> -->
+                      </div>
+  
+                      <div class="flex flex-column justify-content-start gap-1">
+                        <div class="text-sm font-medium">
+                          Issuing country code * (2-char)
+                        </div>
+                        <div>
+                          <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="issuingCountryCode" />
+                        </div>
+                        <!-- <div *ngIf="p.get('email')?.dirty && p.get('email')?.invalid">
+                          <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                            <div class="flex flex-column justify-content-center">
+                              <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                            </div>
+                            <div class="flex flex-column justify-content-center">
+                              Passenger email is required
+                            </div>
+                          </div>
+                        </div> -->
+                      </div>
+  
+                      <div class="flex flex-column justify-content-start gap-1">
+                        <div class="text-sm font-medium">
+                          Expiry date
+                        </div>
+                        <div>
+                          <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="issuingCountryCode" />
+                        </div>
+                        <!-- <div *ngIf="p.get('email')?.dirty && p.get('email')?.invalid">
+                          <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                            <div class="flex flex-column justify-content-center">
+                              <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                            </div>
+                            <div class="flex flex-column justify-content-center">
+                              Passenger email is required
+                            </div>
+                          </div>
+                        </div> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div> valid: {{ order.valid }}, invalid: {{ order.invalid }} </div>
+        <div> pristine: {{ order.pristine }}, dirty: {{ order.dirty }} </div>
+        <div> email: {{ order.get('passengers')?.valid }} </div>
+        <div> phone: {{ order.get('phoneNum')?.valid }} </div>
+          <button type="submit" [disabled]="order.invalid">submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  

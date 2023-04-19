@@ -15,9 +15,11 @@ export interface PartialOfferOffer {
   taxCurrency: string
   taxAmount: string
   slices: PartialOfferOfferSlice[]
+  passengerIdentityDocumentsRequired: boolean
   owner: Carrier
   id: string
   conditions: PartialOfferOfferConditions
+  allowedPassengerIdentityDocumentTypes: string[]
 }
 
 export interface PartialOfferOfferConditions {

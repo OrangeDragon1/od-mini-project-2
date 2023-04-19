@@ -2,13 +2,15 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { firstValueFrom, Subject } from "rxjs";
 import { OfferRequest } from "../models/offer-request.models";
-import { PartialOffer } from "../models/partial-offer.models";
+import { PartialOffer, PartialOfferOffer } from "../models/partial-offer.models";
 
 @Injectable()
 export class FlightSearchService {
 
   onSearchResults = new Subject<PartialOffer>();
   onFullFareOfferResults = new Subject<PartialOffer>();
+  selectedOffer = new Subject<PartialOfferOffer | undefined>();
+  selectedPO = new Subject<string | undefined>();
 
   constructor(private http: HttpClient) { }
 

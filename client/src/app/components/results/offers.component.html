@@ -1,12 +1,12 @@
 <p-accordion p-accordion expandIcon = "" collapseIcon= "" styleClass="white-header">
-  <div class="mb-2 w-max" *ngFor="let o of partialOfferOffer">
+  <div class="mb-2" style="width: 850px;" *ngFor="let o of partialOfferOffer">
     <p-accordionTab>
         <ng-template pTemplate="header">
           <div class="flex flex-column flex-wrap">
             <div class="flex flex-row gap-4 h-3rem">
               <div class="flex">
                 <div class="flex align-items-center h-3rem w-3rem" *ngIf="o?.owner.logoSymbolUrl; else Lockup">
-                  <img [src]="o.owner.logoSymbolUrl" style="max-width: 100%; max-height: 100%;">
+                  <img [src]="o?.owner.logoSymbolUrl" style="max-width: 100%; max-height: 100%;">
                 </div>
                 <ng-template #Lockup>
                   <div class="flex align-items-center h-3rem w-3rem">
@@ -15,10 +15,10 @@
                 </ng-template>
               </div>
 
-              <div class="flex flex-column align-items-left justify-content-center w-22rem">
-                <div class="">
-                  {{ o.slices[0]?.segments[0].departingAt | date: "HH:mm" }} - 
-                  {{ o.slices[0]?.segments[o.slices[0]?.segments.length - 1].arrivingAt | date: "HH:mm"}}
+              <div class="flex flex-column align-items-left justify-content-center" style="width: 480px;">
+                <div class="text-lg">
+                  {{ o.slices[0]?.segments[0]?.departingAt | date: "HH:mm" }} - 
+                  {{ o.slices[0]?.segments[o.slices[0]?.segments?.length - 1]?.arrivingAt | date: "HH:mm"}}
                   <sub class="vertical-align-super" *ngIf="o.slices[0].plusDays > 0" >
                     +{{ o.slices[0].plusDays }}
                   </sub>
@@ -31,8 +31,8 @@
                 </div>
               </div>
 
-              <div class="flex flex-column align-items-left justify-content-center w-7rem">
-                <div>
+              <div class="flex flex-column align-items-left justify-content-center w-8rem">
+                <div class="text-lg">
                   {{ o.slices[0]?.duration | duration }}
                 </div>
                 <div class="font-light text-sm">
@@ -42,7 +42,7 @@
 
               <div class="flex flex-row justify-content-center">
                 <div class="flex flex-column align-items-left justify-content-center w-max">
-                  <div>
+                  <div class="text-lg">
                     <span *ngIf="o.slices[0]?.segments.length > 1; else nonStop">
                       {{ o.slices[0]?.segments.length - 1 }} stop
                     </span>
@@ -57,24 +57,26 @@
               </div>
             </div>
             <p-divider class="mr-2" type="solid"></p-divider>
-            <div class="flex flex-row gap-5 h-2rem">
-              <div class="flex bg-gray-300 border-round-xl w-max mr-2">
+            <div class="flex flex-row justify-content-between gap-5 h-2rem">
+              <div class="flex bg-gray-300 border-round-xl mr-2" style="width: 795px;">
                 <div class="flex flex-column justify-content-center w-30rem ml-3">
                   <div class="flex flex-row align-items-left gap-1">
                     <span class="font-light text-xs">
                       From
                     </span>
                     <span class="font-bold text-xl">
-                      {{ o.totalCurrency }} {{ o.totalAmount | currency: o.totalCurrency }}
+                      {{ o.totalCurrency }} {{ o.totalAmount / o.slices[0]?.segments[0]?.passengers.length | currency: o.totalCurrency }}
+                      <span class="font-light text-xs">
+                        Per pax
+                      </span>
                     </span>
                   </div>
                 </div>
-                <div class="flex flex-column justify-content-center ml-8 ">
+                <div class="flex flex-column justify-content-center" style="margin-left: 220px;">
                   <div>
                     <button pButton class="p-button-secondary" type="button" (click)="onSelect(o.id)">
                       <span class="font-medium text-lg">Select</span>
                     </button>
-                    <!-- <button type="button" (click)="onSelect(o.id)">select</button> -->
                   </div>
                 </div>
               </div>
@@ -90,19 +92,19 @@
               <div class="flex flex-column">
                 <div class="flex flex-column m-2" >
                   <div class="flex flex-row gap-3">
-                    <div class="flex flex-column justify-content-center">
+                    <div class="flex flex-column justify-content-center mr-4">
                       <i class="pi pi-circle"></i>
                     </div>
                     <div class="flex flex-column justify-content-center font-bold w-13rem">
                       {{ seg.departingAt | date: "EEE, dd MMM YYYY, HH:mm" }} 
                     </div>
-                    <div class="flex flex-column justify-content-center w-25rem">
+                    <div class="flex flex-column justify-content-center w-29rem">
                       Depart from {{ seg.originName }} ({{ seg.originIataCode }})
                     </div>
                   </div>
 
                   <div class="flex flex-row">
-                    <div class="flex flex-column justify-content-center">
+                    <div class="flex flex-column justify-content-center mr-4">
                       <i class="pi pi-ellipsis-v"></i>
                       <i class="pi pi-angle-double-down"></i>
                     </div>
@@ -112,19 +114,19 @@
                   </div>
 
                   <div class="flex flex-row gap-3">
-                    <div class="flex flex-column justify-content-center">
+                    <div class="flex flex-column justify-content-center mr-4">
                       <i class="pi pi-circle-fill"></i>
                     </div>
                     <div class="flex flex-column justify-content-center font-bold w-13rem">
                       {{ seg.arrivingAt | date: "EEE, dd MMM YYYY, HH:mm" }} 
                     </div>
-                    <div class="flex flex-column justify-content-center w-25rem">
+                    <div class="flex flex-column justify-content-center w-29rem">
                       Arrive at {{ seg.destinationName }} ({{ seg.destinationIataCode }})
                     </div>
                   </div>
 
                   <div class="flex flex-row gap-3 mt-3">
-                    <div class="flex flex-column justify-content-center">
+                    <div class="flex flex-column justify-content-center mr-4">
                       <i class="pi pi-info"></i>
                     </div>
                     <div class="flex flex-column justify-content-center capitalize font-light text-xs">
