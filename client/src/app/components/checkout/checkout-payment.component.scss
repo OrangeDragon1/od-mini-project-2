@@ -1,0 +1,23 @@
+:host ::ng-deep {
+
+  .p-button {
+    padding: 0.5rem 0.8rem;
+    background-color: #484848;
+    border: #131313;
+  }
+
+  .p-inputtext {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .p-inputtext:enabled:hover {
+    border-color: black;
+  }
+
+  .p-inputtext:enabled:focus {
+    box-shadow: 0 0 0 0.2rem #c8c8c8;
+    border-color: black;
+  }
+  
+}

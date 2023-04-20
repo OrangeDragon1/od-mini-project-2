@@ -19,12 +19,21 @@ import { FullFareOffersTotalComponent } from './components/results/full-fare-off
 import { CheckoutPassengersComponent } from './components/checkout/checkout-passengers.component';
 import { OffersSidePanelComponent } from './components/results/offers-side-panel.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
+import { CheckoutPaymentComponent } from './components/checkout/checkout-payment.component';
+import { CheckoutSuccessComponent } from './components/checkout/checkout-success.component';
+import { MytripsUpcomingComponent } from './components/mytrips/mytrips-upcoming.component';
+import { MytripsUpcomingEticketComponent } from './components/mytrips/mytrips-upcoming-eticket.component';
+import { CheckoutService } from './services/checkout.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   // { path: 'results/:offerRequest', component: ResultsComponent },
   { path: 'results', component: ResultsComponent },
-  { path: 'checkout/:prq/:po/:off', component: CheckoutComponent },
+  { path: 'checkout/:prq/:po/:off', component: CheckoutComponent, children: [
+    { path: 'passengers', component: CheckoutPassengersComponent },
+    { path: 'payment', component: CheckoutPaymentComponent },
+    { path: 'confirmation', component: CheckoutSuccessComponent }
+  ] },
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
@@ -41,7 +50,11 @@ const appRoutes: Routes = [
     FullFareOffersTotalComponent,
     CheckoutPassengersComponent,
     OffersSidePanelComponent,
-    CheckoutComponent
+    CheckoutComponent,
+    CheckoutPaymentComponent,
+    CheckoutSuccessComponent,
+    MytripsUpcomingComponent,
+    MytripsUpcomingEticketComponent
   ],
   imports: [
     BrowserModule,
@@ -54,6 +67,7 @@ const appRoutes: Routes = [
   ],
   providers: [
     FlightSearchService,
+    CheckoutService
   ],
   bootstrap: [AppComponent]
 })

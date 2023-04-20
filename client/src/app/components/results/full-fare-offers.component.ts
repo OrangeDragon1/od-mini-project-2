@@ -1,4 +1,5 @@
 import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { PartialOffer, PartialOfferOffer, PartialOfferOfferSlice, PartialOfferOfferSliceSegment, PartialOfferOfferSliceSegmentPassenger, PartialOfferPassenger, PartialOfferSlice } from 'src/app/models/partial-offer.models';
 import { FlightSearchService } from 'src/app/services/flight-search.service';
@@ -29,9 +30,20 @@ export class FullFareOffersComponent implements OnInit, OnDestroy {
   dayDiff: number = 0;
   str: string = ''
 
-  constructor(private flightSvc: FlightSearchService) {}
+  constructor(
+    private flightSvc: FlightSearchService,
+    private activatedRoute: ActivatedRoute
+  ) { }
   
   ngOnInit(): void {
+    let prq = this.activatedRoute.snapshot.queryParams['prq'];
+    let po = this.activatedRoute.snapshot.queryParams['po'];
+    
+    const data = {
+      partialOfferRequestId: prq,
+      selectedPartialOffer: po
+    }
+    this.flightSvc.getFullFare(data);
     this.sub$ = this.flightSvc.onFullFareOfferResults.subscribe(
       partialOffer => {
         this.partialOffer = partialOffer;
@@ -52,7 +64,7 @@ export class FullFareOffersComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    console.log("full-fare-offers destroyed");
+    
   }
   
   onRadioClick() {

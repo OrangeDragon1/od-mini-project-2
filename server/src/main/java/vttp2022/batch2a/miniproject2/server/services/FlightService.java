@@ -149,8 +149,6 @@ public class FlightService {
           .build()
           .toString();
   
-      System.out.println(url);
-  
       RequestEntity<Void> requestEntity = RequestEntity.get(url)
           .header(HttpHeaders.ACCEPT_ENCODING, "*/*")
           .header(HttpHeaders.ACCEPT, "application/json")

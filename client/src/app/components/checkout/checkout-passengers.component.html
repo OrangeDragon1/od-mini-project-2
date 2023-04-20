@@ -1,10 +1,4 @@
 <div class="flex flex-column justify-content-start">
-  <div class="flex flex-row justify-content-start">
-    <div class="mb-3">
-      <p-breadcrumb [model]="items">
-      </p-breadcrumb>
-    </div>
-  </div>
   <div class="flex flex-column justify-content-start">
     <div class="flex flex-row gap-1">
       <!-- badges -->
@@ -517,7 +511,7 @@
                         Phone number *
                       </div>
                       <div>
-                        <p-inputMask formControlName="phoneNumber" mask="(+99) 9999999999"  slotChar="" [style]="{ width:'433px'}"></p-inputMask>
+                        <p-inputMask formControlName="phoneNumber" mask="(+99) 99999999?99" autoClear="false"  slotChar="" [style]="{ width:'433px'}"></p-inputMask>
                       </div>
                       <div *ngIf="p.get('phoneNumber')?.dirty && p.get('phoneNumber')?.invalid">
                         <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
@@ -632,50 +626,25 @@
                         </div>
                       </div>
                     </div>
-                    
-                    <!-- <div formGroupName="identityDocuments">
-                      <div class="flex flex-row justify-content-start gap-2 h-5rem">
-                        <div class="flex flex-column justify-content-start gap-1">
-                          <div class="text-sm font-medium">
-                            Passport number or Tax id*
-                          </div>
-                          <div>
-                            <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="uniqueIdentifier" />
-                          </div>
-                        </div>
-    
-                        <div class="flex flex-column justify-content-start gap-1">
-                          <div class="text-sm font-medium">
-                            Issuing country code * (2-char)
-                          </div>
-                          <div>
-                            <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="issuingCountryCode" />
-                          </div>
-                        </div>
-    
-                        <div class="flex flex-column justify-content-start gap-1">
-                          <div class="text-sm font-medium">
-                            Expiry date
-                          </div>
-                          <div>
-                            <input type="email" pInputText [style]="{ width:'10rem' }" formControlName="issuingCountryCode" />
-                          </div>
-                        </div>
-                      </div>
-                    </div> -->
                   </div>
                 </div>
               </div>
+              <div class="flex flex-row justify-content-center">
+                <button pButton pRipple class="p-button-secondary" type="submit" [disabled]="order.invalid">
+                  <div class="font-semibold text-base w-30rem">
+                    Proceed to payment
+                  </div>
+                </button>
+              </div>
             </div>
-          <div class="mt-5"> valid: {{ order.valid }}, invalid: {{ order.invalid }} </div>
-          <div> pristine: {{ order.pristine }}, dirty: {{ order.dirty }} </div>
-          <div> email: {{ order.get('passengers')?.valid }} </div>
-          <div> phone: {{ order.get('phoneNum')?.valid }} </div>
-            <button type="submit" [disabled]="order.invalid">submit</button>
           </form>
         </div>
       </div>
     </div>
   </div>
 </div>
-  
+
+<!-- <div class="mt-5"> valid: {{ order.valid }}, invalid: {{ order.invalid }} </div>
+<div> pristine: {{ order.pristine }}, dirty: {{ order.dirty }} </div>
+<div> email: {{ order.get('passengers')?.valid }} </div>
+<div> phone: {{ order.get('phoneNum')?.valid }} </div> -->

@@ -29,7 +29,7 @@ public class PartialOfferOfferPassenger {
     objBuilder.add("id", getId());
     return objBuilder.build();
   }
-  
+
   @Override
   public String toString() {
     return "PartialOfferOfferPassenger [type=" + type + ", id=" + id + "]";

@@ -17,6 +17,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { CalendarModule } from 'primeng/calendar';
+import { StepsModule } from 'primeng/steps';
+import { ToastModule } from 'primeng/toast';
+import { SkeletonModule } from 'primeng/skeleton';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 const primengModules: any[] = [
   MenubarModule,
@@ -35,7 +39,11 @@ const primengModules: any[] = [
   DropdownModule,
   InputTextModule,
   InputMaskModule,
-  CalendarModule
+  CalendarModule,
+  StepsModule,
+  ToastModule,
+  SkeletonModule,
+  ProgressSpinnerModule
 ]
 
 @NgModule({

@@ -1,3 +1,4 @@
+
 <p-accordion p-accordion expandIcon = "" collapseIcon= "" styleClass="white-header">
   <div class="mb-2" style="width: 850px;" *ngFor="let o of partialOfferOffer">
     <p-accordionTab>
@@ -62,12 +63,12 @@
                 <div class="flex flex-column justify-content-center w-30rem ml-3">
                   <div class="flex flex-row align-items-left gap-1">
                     <span class="font-light text-xs">
-                      From
+                      from
                     </span>
                     <span class="font-bold text-xl">
                       {{ o.totalCurrency }} {{ o.totalAmount / o.slices[0]?.segments[0]?.passengers.length | currency: o.totalCurrency }}
                       <span class="font-light text-xs">
-                        Per pax
+                        per pax
                       </span>
                     </span>
                   </div>
@@ -173,3 +174,4 @@
     </p-accordionTab>
   </div>
 </p-accordion>
+

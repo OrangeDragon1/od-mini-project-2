@@ -1,6 +1,7 @@
 import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PartialOfferOffer } from 'src/app/models/partial-offer.models';
+import { Subscription } from 'rxjs';
+import { PartialOffer, PartialOfferOffer } from 'src/app/models/partial-offer.models';
 import { FlightSearchService } from 'src/app/services/flight-search.service';
 
 @Component({
@@ -12,6 +13,8 @@ export class FullFareOffersTotalComponent implements OnInit, OnChanges {
 
   @Input() selectedOffer?: PartialOfferOffer;
   @Input() selectedOfferPRQ?: string;
+
+  partialOffer?: PartialOffer;
   checkout = false;
 
   constructor(
@@ -23,6 +26,20 @@ export class FullFareOffersTotalComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.selectedOffer = undefined;
     this.selectedOfferPRQ = undefined;
+
+    let prq = this.activatedRoute.snapshot.queryParams['prq'];
+    let po = this.activatedRoute.snapshot.queryParams['po'];
+
+    const data = {
+      partialOfferRequestId: prq,
+      selectedPartialOffer: po
+    }
+
+    this.flightSvc.getFullFare(data)
+    .then(results => {
+        this.partialOffer = results;
+      }
+    )
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -37,6 +54,6 @@ export class FullFareOffersTotalComponent implements OnInit, OnChanges {
     console.log('onCheckout called!')
     this.flightSvc.selectedOffer.next(this.selectedOffer);
     let po = this.activatedRoute.snapshot.queryParams['po']
-    this.router.navigate(['/checkout', this.selectedOfferPRQ, po ,this.selectedOffer?.id]);
+    this.router.navigate(['/checkout', this.selectedOfferPRQ, po ,this.selectedOffer?.id, 'passengers']);
   }
 }

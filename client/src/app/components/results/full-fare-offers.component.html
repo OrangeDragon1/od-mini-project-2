@@ -1,3 +1,4 @@
+
 <div class="flex flex-column">
   <div *ngFor="let s of first?.slices; let idx = index">
     <div class="flex mb-2" style="margin-left: 67px;">
@@ -121,8 +122,8 @@
                                   <i class="pi pi-ticket" style="font-size: 0.8rem"></i>
                                 </div>
                                 <div>
-                                  Refundable before departure: 
-                                  <span *ngIf="poo.conditions.changeBeforeDeparture.penaltyAmount == '0'; else changeNotFree">
+                                  Changeable before departure: 
+                                  <span *ngIf="poo.conditions.changeBeforeDeparture.penaltyAmount == '0' || poo?.conditions?.changeBeforeDeparture?.penaltyAmount == undefined; else changeNotFree">
                                     Free
                                   </span>
                                   <ng-template #changeNotFree>
@@ -168,7 +169,7 @@
                                 </div>
                                 <div>
                                   Refundable before departure: 
-                                  <span *ngIf="poo.conditions.refundBeforeDeparture.penaltyAmount == '0'; else refundNotFree">
+                                  <span *ngIf="poo.conditions.refundBeforeDeparture.penaltyAmount == '0' || poo?.conditions?.refundBeforeDeparture?.penaltyAmount == undefined; else refundNotFree">
                                     Free
                                   </span>
                                   <ng-template #refundNotFree>
@@ -274,84 +275,3 @@
   </div>
 </div>
 
-
-
-<!-- 
-<div *ngFor="let s of partialOfferSlice">
-  Flight to {{ s.destination }} {{ s.departureDate | date: 'dd MMM yyyy'}}
-</div>
-
-<table>
-  <tr>
-    <td>
-      <div>
-        <div style="width: 50px; height: 50px;"  *ngIf="first?.owner.logoSymbolUrl; else Lockup">
-          <img [src]="first?.owner.logoSymbolUrl" style="max-width: 100%; max-height: 100%;">
-        </div>
-        
-        <ng-template #Lockup>
-          <div style="width: 50px; height: 50px;">
-            <img [src]="first?.owner.logoLockupUrl" style="max-width: 100%; max-height: 100%;">
-          </div>
-        </ng-template>
-      </div>
-    </td>
-    <td>
-      <div>
-        {{ firstSliceSegment?.departingAt | date: 'HH:mm' }}
-      </div>
-      <div>
-        {{ firstSliceSegment?.originIataCode }}
-      </div>      
-    </td>
-    <td>
-      <div *ngIf="firstSlice?.duration">
-        {{ firstSlice?.duration | duration }}
-      </div>
-      <div>----------------</div>
-      <div *ngIf="firstSlice?.segments.length > 1; else Direct">
-        {{ firstSlice?.segments.length - 1 }} Stop
-      </div>
-      <ng-template #Direct>
-        <div>
-          Direct
-        </div>
-      </ng-template>
-    </td>
-    <td>
-      <div>
-        {{ firstSliceSegment?.arrivingAt | date: 'HH:mm' }}
-        <sup *ngIf="dayDiff > 0">+{{ dayDiff }}</sup>
-      </div>
-      <div>
-        {{ firstSliceSegment?.destinationIataCode }}
-      </div>
-    </td>
-  </tr>
-</table>
-
-
-<table>
-  <tr>
-    <td *ngFor="let o of partialOfferOffer; let i = idx">
-      <tr *ngFor="let s of o.slices">
-        <div>
-          <strong>
-            {{ s?.segments[0]?.passengers[0]?.cabinClassMarketingName }}
-          </strong>
-        </div>
-        <div>
-          {{ s?.fareBrandName }}
-        </div>
-      </tr>
-      <tr>
-        <td>
-          <button type="button" (click)="onSelect(o)">SELECT</button>
-        </td>
-        <td>
-          {{ o.totalCurrency  }} {{ o.totalAmount }}
-        </td>
-      </tr>
-    </td>
-  </tr>
-</table> -->

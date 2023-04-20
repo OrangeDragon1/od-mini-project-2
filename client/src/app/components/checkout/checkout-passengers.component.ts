@@ -6,6 +6,7 @@ import { FlightSearchService } from 'src/app/services/flight-search.service';
 import { PartialOffer, PartialOfferOffer, PartialOfferPassenger } from 'src/app/models/partial-offer.models'
 import { MenuItem } from 'primeng/api';
 import { nameLengthValidator } from 'src/app/utils';
+import { CheckoutService } from 'src/app/services/checkout.service';
 
 @Component({
   selector: 'app-checkout-passengers',
@@ -14,10 +15,11 @@ import { nameLengthValidator } from 'src/app/utils';
 })
 export class CheckoutPassengersComponent implements OnInit {
 
-  sub$!: Subscription
-  selectedOffer?: PartialOfferOffer
+  sub$!: Subscription;
+  selectedOffer?: PartialOfferOffer;
   
-  items: MenuItem[] = [];
+  breadcrumbItems: MenuItem[] = [];
+  stepsItems: MenuItem[] = [];
   passengers!: FormArray;
   order!: FormGroup;
   identityDocuments!: FormArray;
@@ -31,42 +33,29 @@ export class CheckoutPassengersComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private flightSvc: FlightSearchService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private checkoutSvc: CheckoutService
   ) {
-
-    this.items = [
-      {label:'Home'},
-      {label:'Flights selection'},
-      {label:'Checkout', style: {'font-weight': 'bold'}}
-      // {label:'Lionel Messi', url: 'https://en.wikipedia.org/wiki/Lionel_Messi'}
-    ];
-
     this.titles = [
       {title:'Mr.', value:'mr'}, 
       {title:'Ms.', value:'ms'},
       {title:'Mrs.', value:'mrs'},
       {title:'Miss', value:'miss'}
     ];
-
     this.genders = [
       {gender: 'Male', value:'m'},
       {gender: 'Female', value:'f'}
-    ]
-
-    let date = new Date();
-    console.log(date.toISOString().substring(0, 10));
+    ];
   }
 
   ngOnInit(): void {
-    let prq = this.activatedRoute.snapshot.params['prq']
-    let po = this.activatedRoute.snapshot.params['po']
-    let off = this.activatedRoute.snapshot.params['off']
-
+    let prq = this.activatedRoute.parent?.snapshot.params['prq']
+    let po = this.activatedRoute.parent?.snapshot.params['po']
+    let off = this.activatedRoute.parent?.snapshot.params['off']
     const data = {
       partialOfferRequestId: prq,
       selectedPartialOffer: po
     }
-
     this.flightSvc.getFullFare(data)
     .then(results => {
       this.selectedOffer = results.offers.find(offer => offer.id === off);
@@ -76,18 +65,16 @@ export class CheckoutPassengersComponent implements OnInit {
   }
 
   processOrder() {
-    console.log(this.order.value['passengers']);
+    this.checkoutSvc.data.next(this.passengers);
+    this.router.navigate(['../payment'], { relativeTo: this.activatedRoute });
   }
 
   createOrder(results?: PartialOffer, off?: any): FormGroup {
-
     if (!results) {
       return this.fb.group([])
     }
-
     let numPassengers = results?.passengers.length ?? 0;
     let selectedOffer = results?.offers.find(offer => offer.id === off) as PartialOfferOffer;
-
     this.passengers = this.fb.array([]);
     for(let i = 0; i < numPassengers; i++) {
       this.passengers.push(this.createPassenger(selectedOffer, i));
@@ -98,7 +85,6 @@ export class CheckoutPassengersComponent implements OnInit {
   }
 
   createPassenger(selectedOffer: PartialOfferOffer, idx: number): FormGroup {
-
     if (selectedOffer.passengerIdentityDocumentsRequired && selectedOffer.allowedPassengerIdentityDocumentTypes.length > 0) {
       this.identityDocuments = this.fb.array([]);
       for(let i = 0; i < selectedOffer.allowedPassengerIdentityDocumentTypes.length; i++) {
@@ -107,14 +93,12 @@ export class CheckoutPassengersComponent implements OnInit {
           );
       }
     } 
-
     let type = selectedOffer.passengers[idx].type;
     let id = selectedOffer.passengers[idx].id;
-
     return this.fb.group({
       type: type,
       title: this.fb.control(''),
-      phoneNumber: this.fb.control('', [ Validators.required, Validators.minLength(15) ]),
+      phoneNumber: this.fb.control('', [ Validators.required, Validators.minLength(14) ]),
       identityDocuments: this.identityDocuments,
       id: id,
       givenName: this.fb.control('', [ Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-z\- 'À-ÖØ-öø-ÿ]+$/) ]),

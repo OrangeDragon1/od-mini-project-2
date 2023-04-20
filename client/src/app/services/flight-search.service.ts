@@ -50,6 +50,16 @@ export class FlightSearchService {
     });
   }
 
+  postOrderCreate(data: any): Promise<any> {
+    const headers = new HttpHeaders()
+        .set('Content-Type','application/json')
+        .set('Accept','application/json');
+
+    return firstValueFrom<any>(
+      this.http.post<any>('/api/v1/order/create', data, { headers })
+    );
+  }
+
 }
 
 

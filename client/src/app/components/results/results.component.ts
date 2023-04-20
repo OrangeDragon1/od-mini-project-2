@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnChanges, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { OfferRequest } from 'src/app/models/offer-request.models';
 import { PartialOffer, PartialOfferOffer, PartialOfferPassenger, PartialOfferSlice } from 'src/app/models/partial-offer.models';
@@ -14,11 +14,11 @@ import { MenuItem } from 'primeng/api';
 })
 export class ResultsComponent implements OnInit {
 
-  @HostListener('window:popstate', ['$event'])
-  onPopState(event: any) {
-    console.log('Back button pressed');
-    this.selected = false;
-  }
+  // @HostListener('window:popstate', ['$event'])
+  // onPopState(event: any) {
+  //   console.log('Back button pressed');
+  //   this.selected = false;
+  // }
 
   selectedOffer?: PartialOfferOffer;
   selectedOfferPRQ?: string;
@@ -31,6 +31,8 @@ export class ResultsComponent implements OnInit {
   selected = false;
   items: MenuItem[] = [];
 
+  private history: string[] = [];
+
   constructor(
     private flightSvc: FlightSearchService,
     private activatedRoute: ActivatedRoute,
@@ -38,6 +40,15 @@ export class ResultsComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params['po']) {
+        this.selected = true;
+      } else {
+        this.selected = false;
+      }
+    });
+
+    console.log('results.component ngOnInit called!')
     if (this.activatedRoute.snapshot.queryParams['po']) {
       const partialOfferOfferId = this.activatedRoute.snapshot.queryParams['po'];
       this.offerSelected(partialOfferOfferId);
@@ -74,7 +85,7 @@ export class ResultsComponent implements OnInit {
       selectedPartialOffer: partialOfferOfferId
     };
     this.flightSvc.getFullFare(data);
-     this.router.navigate([], { queryParams: newParams });
+    this.router.navigate([], { queryParams: newParams });
   }
 
   onSelectedOffer(selectedOffer: any) {
