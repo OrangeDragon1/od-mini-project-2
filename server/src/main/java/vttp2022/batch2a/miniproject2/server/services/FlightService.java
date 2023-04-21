@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.server.PathContainer.PathSegment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -171,4 +170,12 @@ public class FlightService {
     
     return PartialOffer.create(dataObject).toJson();
   }
+
+  /*
+   * Create order
+   */
+
+   public JsonObject createOrder() {
+    return null;
+   }
 }
