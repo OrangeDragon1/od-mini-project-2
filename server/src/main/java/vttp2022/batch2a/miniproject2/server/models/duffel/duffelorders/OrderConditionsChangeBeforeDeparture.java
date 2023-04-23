@@ -1,5 +1,7 @@
 package vttp2022.batch2a.miniproject2.server.models.duffel.duffelorders;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
@@ -30,12 +32,24 @@ public class OrderConditionsChangeBeforeDeparture {
     return c;
   }
 
+  public static OrderConditionsChangeBeforeDeparture create(SqlRowSet rs) {
+    OrderConditionsChangeBeforeDeparture c = new OrderConditionsChangeBeforeDeparture();
+    c.setPenaltyCurrency(rs.getString("penalty_currency"));
+    c.setPenaltyAmount(rs.getString("penalty_amount"));
+    c.setAllowed(rs.getBoolean("allowed"));
+    return c;
+  }
+
   public JsonObject toJson() {
     JsonObjectBuilder objBuilder = Json.createObjectBuilder();
     if (null != penaltyCurrency)
       objBuilder.add("penaltyCurrency", getPenaltyCurrency());
+    else
+      objBuilder.addNull("penaltyCurrency");
     if (null != penaltyAmount)
       objBuilder.add("penaltyAmount", getPenaltyAmount());
+    else
+      objBuilder.addNull("penaltyAmount");
     objBuilder.add("allowed", getAllowed());
     return objBuilder.build();
   }

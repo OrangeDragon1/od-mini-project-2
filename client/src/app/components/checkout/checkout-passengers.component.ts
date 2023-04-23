@@ -27,6 +27,7 @@ export class CheckoutPassengersComponent implements OnInit {
   titles: any[] = [];
   genders: any[] = [];
   maxDate = new Date();
+  maxAdultDate = new Date(new Date().setFullYear(new Date().getFullYear() - 18));
   minDate = new Date(new Date().setFullYear(new Date().getFullYear() - 130));
 
   constructor(

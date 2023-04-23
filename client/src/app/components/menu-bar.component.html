@@ -1,2 +1,21 @@
-<p-menubar [model]="items"></p-menubar>
 
+<div class="flex flex-row justify-content-between full-width">
+  <div class="flex flex-column justify-content-center ml-3">
+    <img src="assets/logo.png" height="30px">
+  </div>
+  <div class="flex flex-column justify-content-center h-3rem">
+    <div class="mr-2">
+      <button type="button" label=" "  pButton icon="pi pi-user" (click)="menu.toggle($event)">
+        <div class="ml-2 font-semibold">
+          <div *ngIf="user; else notLoggedIn">
+            Logged in as: {{ user.email }}
+          </div>
+          <ng-template #notLoggedIn>
+            Login
+          </ng-template>
+        </div>
+      </button>
+      <p-menu #menu [popup]="true" [model]="items"></p-menu>
+    </div>
+  </div>
+</div>

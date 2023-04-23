@@ -3,6 +3,8 @@ package vttp2022.batch2a.miniproject2.server.models.duffel.duffelorders;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
@@ -14,7 +16,7 @@ public class OrderSlice {
   private String originIataCountryCode;
   private String originIataCode;
   private String id;
-  private String fareBrandName;
+  private String fareBrandName; // nullable
   private String duration;
   private String destinationName;
   private String destinationIataCountryCode;
@@ -51,11 +53,27 @@ public class OrderSlice {
     s.setOriginIataCountryCode(jo.getJsonObject("origin").getString("iata_country_code"));
     s.setOriginIataCode(jo.getJsonObject("origin").getString("iata_code"));
     s.setId(jo.getString("id"));
-    s.setFareBrandName(jo.getString("fare_brand_name"));
+    if (!jo.isNull("fare_brand_name"))
+      s.setFareBrandName(jo.getString("fare_brand_name"));
     s.setDuration(jo.getString("duration"));
     s.setDestinationName(jo.getJsonObject("destination").getString("name"));
     s.setDestinationIataCountryCode(jo.getJsonObject("destination").getString("iata_country_code"));
     s.setDestinationIataCode(jo.getJsonObject("destination").getString("iata_code"));
+
+    return s;
+  }
+
+  public static OrderSlice create(SqlRowSet rs) {
+    OrderSlice s = new OrderSlice();
+    s.setOriginName(rs.getString("origin_name"));
+    s.setOriginIataCountryCode(rs.getString("origin_iata_country_code"));
+    s.setOriginIataCode(rs.getString("origin_iata_code"));
+    s.setId(rs.getString("id"));
+    s.setFareBrandName(rs.getString("fare_brand_name"));
+    s.setDuration(rs.getString("duration"));
+    s.setDestinationName(rs.getString("destination_name"));
+    s.setDestinationIataCountryCode(rs.getString("destination_iata_country_code"));
+    s.setDestinationIataCode(rs.getString("destination_iata_code"));
 
     return s;
   }
@@ -70,8 +88,14 @@ public class OrderSlice {
         .add("originName", getOriginName())
         .add("originIataCountryCode", getOriginIataCountryCode())
         .add("originIataCode", getOriginIataCode())
-        .add("id", getId())
-        .add("fareBrandName", getFareBrandName())
+        .add("id", getId());
+        
+    if (null != fareBrandName)
+      objBuilder.add("fareBrandName", getFareBrandName());
+    else
+      objBuilder.addNull("fareBrandName");
+
+    objBuilder
         .add("duration", getDuration())
         .add("destinationName", getDestinationName())
         .add("destinationIataCountryCode", getDestinationIataCountryCode())

@@ -22,7 +22,7 @@ public class OrderRequestPassengerIdentityDocuments {
     OrderRequestPassengerIdentityDocuments r = new OrderRequestPassengerIdentityDocuments();
     r.setUniqueIdentifier(jo.getString("uniqueIdentifier").trim());
     r.setType(jo.getString("type"));
-    r.setIssuingCountryCode(jo.getString("issuingCountryCode"));
+    r.setIssuingCountryCode(jo.getString("issuingCountryCode").toUpperCase());
     r.setExpiresOn(jo.getString("expiresOn").substring(0, 10));
     return r;
   }

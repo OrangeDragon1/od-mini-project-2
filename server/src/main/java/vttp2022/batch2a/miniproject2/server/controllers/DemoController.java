@@ -13,7 +13,7 @@ import vttp2022.batch2a.miniproject2.server.Utils;
 import vttp2022.batch2a.miniproject2.server.services.AuthenticationService;
 
 @RestController
-@RequestMapping(path="/api/v1/demo-controller")
+@RequestMapping(path = "/api/v1/demo-controller")
 public class DemoController {
 
   @Autowired private AuthenticationService authSvc;

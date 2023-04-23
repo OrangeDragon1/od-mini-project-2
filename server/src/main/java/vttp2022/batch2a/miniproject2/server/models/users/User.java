@@ -9,7 +9,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
 
 public class User implements UserDetails {
 
@@ -57,14 +59,14 @@ public class User implements UserDetails {
   public static User createUser(SqlRowSet rs) {
     User u = new User();
     u.setId(rs.getString("id"));
-    u.setFirstName(rs.getString("firstName"));
-    u.setLastName(rs.getString("lastName"));
+    u.setFirstName(rs.getString("first_name"));
+    u.setLastName(rs.getString("last_name"));
     u.setEmail(rs.getString("email"));
     u.setPassword(rs.getString("password"));
     u.setRole(Role.valueOf(rs.getString("role")));
     u.setVerified(rs.getBoolean("verified"));
-    u.setVerificationString(rs.getString("verificationString"));
-    u.setResetPwdString(rs.getString("resetPwdString"));
+    u.setVerificationString(rs.getString("verification_string"));
+    u.setResetPwdString(rs.getString("reset_pwd_string"));
     return u;
   }
 
@@ -84,6 +86,35 @@ public class User implements UserDetails {
       u.setResetPwdString(jo.getString("resetPwdString"));
     }
     return u;
+  }
+
+  public JsonObject toJson() {
+    JsonObjectBuilder objBuilder = Json.createObjectBuilder();
+    if (null != id) objBuilder.add("id", id);
+    else objBuilder.addNull("id");
+
+    if (null != firstName)objBuilder.add("firstName", firstName);
+    else objBuilder.addNull("firstName");
+
+    if (null != lastName)objBuilder.add("lastName", lastName);
+    else objBuilder.addNull("lastName");
+
+    if (null != email)objBuilder.add("email", email);
+    else objBuilder.addNull("email");
+
+    if (null != role)objBuilder.add("role", role.name());
+    else objBuilder.addNull("role");
+
+    if (null != verified)objBuilder.add("verified", verified);
+    else objBuilder.addNull("verified");
+
+    if (null != verificationString)objBuilder.add("verificationString", verificationString);
+    else objBuilder.addNull("verificationString");
+
+    if (null != resetPwdString)objBuilder.add("resetPwdString", resetPwdString);
+    else objBuilder.addNull("resetPwdString");
+
+    return objBuilder.build();
   }
   
   @Override

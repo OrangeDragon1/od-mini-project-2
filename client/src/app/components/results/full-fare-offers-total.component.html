@@ -108,7 +108,7 @@
         </div>
         <div class="mt-2">
           <button pButton pRipple class="p-button-secondary" type="button" 
-          icon="pi pi-angle-double-right" iconPos="left" (click)="onCheckout()" [disabled]="!checkout">
+          icon="pi pi-angle-double-right" iconPos="left" (click)="onCheckout()" [disabled]="!checkout || !user">
             <div class="font-semibold text-base mx-6">
               Checkout
             </div>

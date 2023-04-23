@@ -3,6 +3,8 @@ package vttp2022.batch2a.miniproject2.server.models.duffel.duffelorders;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
@@ -12,24 +14,24 @@ import vttp2022.batch2a.miniproject2.server.models.duffel.Carrier;
 
 public class OrderSliceSegment {
   private List<OrderSliceSegmentPassenger> passengers;
-  private String originTerminal;
-  private String originName;
-  private String originIataCountryCode;
+  private String originTerminal; // document says required, turns out to be nullable
+  private String originName; 
+  private String originIataCountryCode; 
   private String originIataCode;
-  private String operatingCarrierFlightNumber;
-  private Carrier operatingCarrier;
+  private String operatingCarrierFlightNumber; // document says required but may not be present?? 
+  private Carrier operatingCarrier; // document says required but may not be present??
   private String marketingCarrierFlightNumber;
   private Carrier marketingCarrier;
   private String id;
   private String duration;
-  private String distance; // in kilometers
-  private String destinationTerminal;
+  private String distance; // in kilometers // document says required, turns out to be nullable
+  private String destinationTerminal; // document says required, turns out to be nullable
   private String destinationName;
   private String destinationIataCountryCode;
   private String destinationIataCode;
   private String departingAt;
   private String arrivingAt;
-  private Aircraft aircraft;
+  private Aircraft aircraft; // document says required, turns out to be nullable
 
   public List<OrderSliceSegmentPassenger> getPassengers() { return passengers; }
   public void setPassengers(List<OrderSliceSegmentPassenger> passengers) { this.passengers = passengers; }
@@ -76,24 +78,50 @@ public class OrderSliceSegment {
         .map(v -> OrderSliceSegmentPassenger.create(v.asJsonObject()))
         .collect(Collectors.toList())
     );
-    s.setOriginTerminal(jo.getString("origin_terminal"));
+    if (!jo.isNull("origin_terminal"))
+      s.setOriginTerminal(jo.getString("origin_terminal"));
     s.setOriginName(jo.getJsonObject("origin").getString("name"));
     s.setOriginIataCountryCode(jo.getJsonObject("origin").getString("iata_country_code"));
     s.setOriginIataCode(jo.getJsonObject("origin").getString("iata_code"));
-    s.setOperatingCarrierFlightNumber("operating_carrier_flight_number");
-    s.setOperatingCarrier(Carrier.create(jo.getJsonObject("operating_carrier")));
+    if (!jo.isNull("operating_carrier_flight_number"))
+      s.setOperatingCarrierFlightNumber(jo.getString("operating_carrier_flight_number"));
+    if (!jo.isNull("operating_carrier"))
+      s.setOperatingCarrier(Carrier.create(jo.getJsonObject("operating_carrier")));
     s.setMarketingCarrierFlightNumber(jo.getString("marketing_carrier_flight_number"));
     s.setMarketingCarrier(Carrier.create(jo.getJsonObject("marketing_carrier")));
     s.setId(jo.getString("id"));
     s.setDuration(jo.getString("duration"));
-    s.setDistance(jo.getString("distance"));
+    if (!jo.isNull("distance"))
+      s.setDistance(jo.getString("distance"));
+    if (!jo.isNull("destination_terminal"))
     s.setDestinationTerminal(jo.getString("destination_terminal"));
     s.setDestinationName(jo.getJsonObject("destination").getString("name"));
     s.setDestinationIataCountryCode(jo.getJsonObject("destination").getString("iata_country_code"));
     s.setDestinationIataCode(jo.getJsonObject("destination").getString("iata_code"));
     s.setDepartingAt(jo.getString("departing_at"));
     s.setArrivingAt(jo.getString("arriving_at"));
-    s.setAircraft(Aircraft.create(jo.getJsonObject("aircraft")));
+    if (!jo.isNull("aircraft"))
+      s.setAircraft(Aircraft.create(jo.getJsonObject("aircraft")));
+    return s;
+  }
+
+  public static OrderSliceSegment create(SqlRowSet rs) {
+    OrderSliceSegment s = new OrderSliceSegment();
+    s.setOriginTerminal(rs.getString("origin_terminal"));
+    s.setOriginName(rs.getString("origin_name"));
+    s.setOriginIataCountryCode(rs.getString("origin_iata_country_code"));
+    s.setOriginIataCode(rs.getString("origin_iata_code"));
+    s.setOperatingCarrierFlightNumber(rs.getString("operating_carrier_flight_number"));
+    s.setMarketingCarrierFlightNumber(rs.getString("marketing_carrier_flight_number"));
+    s.setId(rs.getString("id"));
+    s.setDuration(rs.getString("duration"));
+    s.setDistance(rs.getString("distance"));
+    s.setDestinationTerminal(rs.getString("destination_terminal"));
+    s.setDestinationName(rs.getString("destination_name"));
+    s.setDestinationIataCountryCode(rs.getString("destination_iata_country_code"));
+    s.setDestinationIataCode(rs.getString("destination_iata_code"));
+    s.setDepartingAt(rs.getString("departing_at"));
+    s.setArrivingAt(rs.getString("arriving_at"));
     return s;
   }
   
@@ -103,25 +131,55 @@ public class OrderSliceSegment {
         .add("passengers", getPassengers().stream()
             .map(v -> v.toJson())
             .collect(JsonCollectors.toJsonArray())
-        )
-        .add("originTerminal", getOriginTerminal())
+        );
+
+    if (null != originTerminal)
+      objBuilder.add("originTerminal", getOriginTerminal());
+    else
+      objBuilder.addNull("originTerminal");
+
+    objBuilder
         .add("originName", getOriginName())
         .add("originIataCountryCode", getOriginIataCountryCode())
-        .add("originIataCode", getOriginIataCode())
-        .add("operatingCarrierFlightNumber", getOperatingCarrierFlightNumber())
-        .add("operatingCarrier", getOperatingCarrier().toJson())
+        .add("originIataCode", getOriginIataCode());
+
+    if (null != operatingCarrierFlightNumber)
+      objBuilder.add("operatingCarrierFlightNumber", getOperatingCarrierFlightNumber());
+    else
+      objBuilder.addNull("operatingCarrierFlightNumber");
+
+    if (null != operatingCarrier)
+      objBuilder.add("operatingCarrier", getOperatingCarrier().toJson());
+    else
+      objBuilder.addNull("operatingCarrier");
+
+    objBuilder
         .add("marketingCarrierFlightNumber", getMarketingCarrierFlightNumber())
         .add("marketingCarrier", getMarketingCarrier().toJson())
         .add("id", getId())
-        .add("duration", getDuration())
-        .add("distance", getDistance())
-        .add("destinationTerminal", getDestinationTerminal())
+        .add("duration", getDuration());
+
+    if (null != distance)
+      objBuilder.add("distance", getDistance());
+    else
+      objBuilder.addNull("distance");
+
+    if (null != destinationTerminal)
+      objBuilder.add("destinationTerminal", getDestinationTerminal());
+    else
+      objBuilder.addNull("destinationTerminal");
+
+    objBuilder
         .add("destinationName", getDestinationName())
         .add("destinationIataCountryCode", getDestinationIataCountryCode())
         .add("destinationIataCode", getDestinationIataCode())
         .add("departingAt", getDepartingAt())
-        .add("arrivingAt", getArrivingAt())
-        .add("aircraft", getAircraft().toJson());
+        .add("arrivingAt", getArrivingAt());
+    
+    if (null != aircraft)
+        objBuilder.add("aircraft", getAircraft().toJson());
+    else
+      objBuilder.addNull("aircraft");
         
     return objBuilder.build();
   }

@@ -1,0 +1,140 @@
+<p-toast></p-toast>
+<div class="flex flex-row justify-content-center mt-8">
+  <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+      <div class="text-center mb-3">
+          <div class="text-3xl font-medium mb-1">Register here!</div>
+      </div>
+  
+      <form [formGroup]="registerForm" (ngSubmit)="register()">
+        <div class="flex flex-column gap-1">
+          <div class="flex flex-column gap-1 h-5rem">
+            <div class="text-sm font-medium">
+              Email *
+            </div>
+            <div>
+              <input type="text" pInputText [style]="{ width:'30rem' }" formControlName="email" class="w-full"/>
+            </div>
+            <div *ngIf="registerForm.get('email')?.dirty && registerForm.get('email')?.invalid">
+              <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                <div class="flex flex-column justify-content-center">
+                  <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                </div>
+                <div class="flex flex-column justify-content-center">
+                  Please enter a valid email address
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-column gap-1 h-5rem">
+            <div class="text-sm font-medium">
+              Given name  *
+            </div>
+            <div>
+              <input type="text" pInputText [style]="{ width:'30rem' }" formControlName="firstName" class="w-full"/>
+            </div>
+            <div *ngIf="registerForm.get('firstName')?.dirty && registerForm.get('firstName')?.invalid">
+              <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                <div class="flex flex-column justify-content-center">
+                  <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                </div>
+                <div class="flex flex-column justify-content-center">
+                  Given name is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-column gap-1 h-5rem">
+            <div class="text-sm font-medium">
+              Family name *
+            </div>
+            <div>
+              <input type="text" pInputText [style]="{ width:'30rem' }" formControlName="lastName" class="w-full"/>
+            </div>
+            <div *ngIf="registerForm.get('lastName')?.dirty && registerForm.get('lastName')?.invalid">
+              <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                <div class="flex flex-column justify-content-center">
+                  <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                </div>
+                <div class="flex flex-column justify-content-center">
+                  Family name is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-column gap-1 h-5rem">
+            <div class="text-sm font-medium">
+              Password *
+            </div>
+            <div>
+              <p-password formControlName="password" [toggleMask]="true" [style]="{ width: '100%'}">
+                <ng-template pTemplate="header">
+                  <div class="text-xs font-bold mb-3">Pick a password</div>
+              </ng-template>
+              <ng-template pTemplate="footer">
+                  <p-divider></p-divider>
+                  <p class="text-sm font-medium">Suggestions</p>
+                  <ul class="pl-2 ml-2 mt-0 text-sm font-light" style="line-height: 1.5">
+                      <li>At least one lowercase</li>
+                      <li>At least one uppercase</li>
+                      <li>At least one numeric</li>
+                      <li>Minimum 8 characters</li>
+                  </ul>
+              </ng-template>
+              </p-password>
+            </div>
+            <div *ngIf="registerForm.get('password')?.dirty && registerForm.get('password')?.invalid">
+              <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                <div class="flex flex-column justify-content-center">
+                  <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                </div>
+                <div class="flex flex-column justify-content-center">
+                  Password is required
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-column gap-1 h-5rem">
+            <div class="text-sm font-medium">
+               Confirm password *
+            </div>
+            <div>
+              <p-password [feedback]="false" formControlName="repassword" [toggleMask]="true" [style]="{width:'100%'}"></p-password>
+            </div>
+            <div *ngIf="registerForm.get('repassword')?.dirty && registerForm.getError('passwordMismatch')">
+              <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+                <div class="flex flex-column justify-content-center">
+                  <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+                </div>
+                <div class="flex flex-column justify-content-center">
+                  Passwords do not match
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
+          <button pButton pRipple label="Register" icon="pi pi-user" class="w-full" type="submit" [disabled]="registerForm.invalid" [loading]="loading">
+          </button>
+        </div>
+      </form>
+  </div>
+</div>
+
+<!-- <div class="flex flex-column justify-content-start gap-1">
+  <div class="text-sm font-medium">
+    Given name *
+  </div>
+  <div>
+    <input type="text" pInputText [style]="{ width:'30rem' }" formControlName="givenName"/>
+  </div>
+  <div *ngIf="p.get('givenName')?.dirty && p.get('givenName')?.invalid">
+    <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+      <div class="flex flex-column justify-content-center">
+        <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+      </div>
+      <div class="flex flex-column justify-content-center">
+        Passenger given name is required
+      </div>
+    </div>
+  </div>
+</div> -->

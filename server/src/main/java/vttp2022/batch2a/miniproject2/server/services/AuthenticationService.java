@@ -115,6 +115,13 @@ public class AuthenticationService {
     return Utils.createError("Wrong password");
   }
 
+  public JsonObject getUser() {
+    String email = jwtSvc.extractUsername();
+    Optional<User> opt = userRepo.findUserByEmail(email);
+    User user = opt.get();
+    return user.toJson();
+  }
+
   public JsonObject forgotPassword(JsonObject jo) {
     Optional<User> opt = userRepo.findUserByEmail(jo.getString("email"));
 

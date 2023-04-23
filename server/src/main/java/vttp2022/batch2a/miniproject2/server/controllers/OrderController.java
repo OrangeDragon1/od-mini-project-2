@@ -30,6 +30,7 @@ public class OrderController {
   public ResponseEntity<String> postOrderCreate(@RequestBody String payload) {
 
     JsonObject payloadObj = Utils.payloadToJsonObj(payload);
+    
     System.out.println(payloadObj.toString());
     System.out.println();
     System.out.println("*****************************************************");
@@ -44,7 +45,13 @@ public class OrderController {
     System.out.println();
     JsonObject dataObj = Json.createObjectBuilder().add("data", r.toJson()).build();
     System.out.println(dataObj.toString());
+    System.out.println();
+    System.out.println("*****************************************************");
+    System.out.println();
 
+    // JsonObject orderObj = flightSvc.createOrder(payloadObj);
+    flightSvc.createOrder();
+    
     return null;
   }
 }

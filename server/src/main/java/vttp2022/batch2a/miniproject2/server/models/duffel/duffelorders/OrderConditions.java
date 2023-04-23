@@ -26,8 +26,13 @@ public class OrderConditions {
     JsonObjectBuilder objBuilder = Json.createObjectBuilder();
     if (null != refundBeforeDeparture)
       objBuilder.add("refundBeforeDeparture", getRefundBeforeDeparture().toJson());
+    else
+      objBuilder.addNull("refundBeforeDeparture");
     if (null != changeBeforeDeparture)
       objBuilder.add("changeBeforeDeparture", getChangeBeforeDeparture().toJson());
+    else
+      objBuilder.addNull("changeBeforeDeparture");
+      
     return objBuilder.build();
   }
   

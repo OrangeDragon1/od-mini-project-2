@@ -484,7 +484,7 @@
                         Date of birth *
                       </div>
                       <div>
-                        <p-calendar readonlyInput="true" showOnFocus="false" dateFormat="yy-mm-dd" [maxDate]="maxDate" [minDate]="minDate" datatype="string" formControlName="bornOn" [style]="{ width:'20rem' }"></p-calendar>
+                        <p-calendar readonlyInput="true" showOnFocus="false" dateFormat="yy-mm-dd" [defaultDate]="maxAdultDate" [maxDate]="maxAdultDate" [minDate]="minDate" datatype="string" formControlName="bornOn" [style]="{ width:'20rem' }"></p-calendar>
                       </div>
                       <div *ngIf="p.get('bornOn')?.dirty && p.get('bornOn')?.invalid">
                         <div class="flex flex-row justify-content-start p-error block text-xs gap-1">

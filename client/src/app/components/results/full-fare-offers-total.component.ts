@@ -1,8 +1,10 @@
 import { AfterContentChecked, AfterViewChecked, AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { User } from 'src/app/models/common.models';
 import { PartialOffer, PartialOfferOffer } from 'src/app/models/partial-offer.models';
 import { FlightSearchService } from 'src/app/services/flight-search.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-full-fare-offers-total',
@@ -16,14 +18,24 @@ export class FullFareOffersTotalComponent implements OnInit, OnChanges {
 
   partialOffer?: PartialOffer;
   checkout = false;
+  user?: User;
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private flightSvc: FlightSearchService
+    private flightSvc: FlightSearchService,
+    private userSvc: UserService
   ) { }
 
   ngOnInit(): void {
+    let token = localStorage.getItem('token');
+    if (token) {
+      this.userSvc.getUser(token)
+      .then(results => {
+        this.user = results;
+      })
+    }
+    
     this.selectedOffer = undefined;
     this.selectedOfferPRQ = undefined;
 

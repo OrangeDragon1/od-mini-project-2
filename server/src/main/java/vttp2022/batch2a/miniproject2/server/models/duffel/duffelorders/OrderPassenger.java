@@ -1,5 +1,7 @@
 package vttp2022.batch2a.miniproject2.server.models.duffel.duffelorders;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
@@ -49,11 +51,26 @@ public class OrderPassenger {
     return p;
   }
 
+  public static OrderPassenger create(SqlRowSet rs) {
+    OrderPassenger p = new OrderPassenger();
+    p.setType(rs.getString("type"));
+    p.setTitle(rs.getString("title"));
+    p.setPhoneNumber(rs.getString("phone_number"));
+    p.setId(rs.getString("id"));
+    p.setGivenName(rs.getString("given_name"));
+    p.setGender(rs.getString("gender"));
+    p.setFamilyName(rs.getString("family_name"));
+    p.setEmail(rs.getString("email"));
+    p.setBornOn(rs.getString("born_on"));
+    return p;
+  }
+
   public JsonObject toJson() {
     JsonObjectBuilder objBuilder = Json.createObjectBuilder();
     if (null != type)
       objBuilder.add("type", getType());
-      
+    else
+      objBuilder.addNull("type");
     objBuilder
         .add("title", getTitle())
         .add("phoneNumber", getPhoneNumber())

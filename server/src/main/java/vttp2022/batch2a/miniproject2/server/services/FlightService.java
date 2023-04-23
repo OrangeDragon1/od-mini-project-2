@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -20,19 +21,26 @@ import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
 import vttp2022.batch2a.miniproject2.server.Utils;
 import vttp2022.batch2a.miniproject2.server.models.duffel.duffelairports.Airport;
+import vttp2022.batch2a.miniproject2.server.models.duffel.duffelorderrequests.OrderRequest;
+import vttp2022.batch2a.miniproject2.server.models.duffel.duffelorders.Order;
 import vttp2022.batch2a.miniproject2.server.models.duffel.duffelpartialoffers.PartialOffer;
 import vttp2022.batch2a.miniproject2.server.repositories.AirportCache;
+import vttp2022.batch2a.miniproject2.server.repositories.OrderCache;
+import vttp2022.batch2a.miniproject2.server.repositories.OrderRepository;
 import vttp2022.batch2a.miniproject2.server.repositories.PartialOfferCache;
 
 @Service
 public class FlightService {
 
   @Value("${duffel.api.test.oauth2.token}") private String apiToken;
+  @Autowired private OrderRepository orderRepo;
   @Autowired private AirportCache airportCache;
   @Autowired private PartialOfferCache partialOfferCache;
+  @Autowired private OrderCache orderCache;
 
   private static final String DUFFEL_AIRPORTS = "https://api.duffel.com/air/airports";
   private static final String DUFFEL_PARTIAL_OFFER_REQUESTS = "https://api.duffel.com/air/partial_offer_requests";
+  private static final String DUFFEL_ORDERS = "https://api.duffel.com/air/orders";
 
   /*
    * Get all airports from Duffel API 
@@ -113,7 +121,6 @@ public class FlightService {
     RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<String> respEntity = restTemplate.exchange(requestEntity, String.class);
     String payload = respEntity.getBody();
-    
     JsonObject dataObject =  Utils.payloadToJsonObj(payload).getJsonObject("data");
     partialOfferCache.cache(dataObject.getString("id"), dataObject.toString());
     
@@ -175,7 +182,60 @@ public class FlightService {
    * Create order
    */
 
+   public JsonObject createOrder(JsonObject payloadObj) {
+    OrderRequest r = OrderRequest.create(payloadObj);
+    JsonObject rObj = r.toJson();
+
+    JsonObject data = Json.createObjectBuilder()
+        .add("data", rObj)
+        .build();
+
+    String url = UriComponentsBuilder.fromUriString(DUFFEL_ORDERS)
+        .build()
+        .toString();
+
+    RequestEntity<String> requestEntity = RequestEntity.post(url)
+        .header(HttpHeaders.ACCEPT_ENCODING, "*/*")
+        .header(HttpHeaders.ACCEPT, "application/json")
+        .header(HttpHeaders.CONTENT_TYPE, "application/json")
+        .header("Duffel-Version", "v1")
+        .header(HttpHeaders.AUTHORIZATION, "Bearer %s".formatted(apiToken))
+        .body(data.toString());
+
+    RestTemplate restTemplate = new RestTemplate();
+    ResponseEntity<String> respEntity = restTemplate.exchange(requestEntity, String.class);
+    String payload = respEntity.getBody();
+    System.out.println(payload);
+    orderCache.cache(payload);
+    // JsonObject dataObj = Utils.payloadToJsonObj(payload).getJsonObject("data");
+    // Order o = Order.create(dataObj);
+    // System.out.println(o.toString());
+    return null;
+   }
+
    public JsonObject createOrder() {
+    String payload = orderCache.get();
+    JsonObject dataObj = Utils.payloadToJsonObj(payload).getJsonObject("data");
+    System.out.println(dataObj.toString());
+    System.out.println();
+    System.out.println("*****************************************************");
+    System.out.println();
+    Order o = Order.create(dataObj);
+    System.out.println(o.toString());
+    System.out.println();
+    System.out.println("*****************************************************");
+    System.out.println();
+    System.out.println(o.toJson().toString());
+    System.out.println();
+    System.out.println("*****************************************************");
+    System.out.println();
+    // orderRepo.addOrder(o);
+    orderRepo.getOrdersByUser();
+
+    return null;
+   }
+
+   public JsonObject createOrder(SqlRowSet rs) {
     return null;
    }
 }

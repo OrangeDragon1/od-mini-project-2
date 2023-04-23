@@ -1,0 +1,31 @@
+<p-toast></p-toast>
+<div class="flex flex-row justify-content-center mt-8">
+  <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+    <div *ngIf="validString; else notValid">
+      <div class="flex flex-column">
+        <div class="text-center mb-3">
+            <div class="text-3xl font-medium mb-1">Verified!</div>
+        </div>
+        <div class="text-center">
+          <p>
+            Your email has been verified. You can now login to your account.
+          </p>
+        </div>
+      </div>
+    </div>
+    <ng-template #notValid>
+      <div class="text-center">
+        <div class="flex flex-column">
+          <div class="text-center mb-3">
+              <div class="text-3xl font-medium mb-1">Error!</div>
+          </div>
+          <div class="text-center">
+            <p>
+              {{ errorMessage }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

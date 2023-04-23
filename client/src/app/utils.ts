@@ -19,3 +19,10 @@ export function nameLengthValidator(control: AbstractControl) {
   }
   return null;
 }
+
+export function passwordMatchValidator(control: AbstractControl) {
+  const password = control.get('password')?.value;
+  const repassword = control.get('repassword')?.value;
+
+  return password === repassword ? null : { passwordMismatch: true };
+}

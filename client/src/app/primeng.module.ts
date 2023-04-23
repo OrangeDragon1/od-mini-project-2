@@ -21,6 +21,9 @@ import { StepsModule } from 'primeng/steps';
 import { ToastModule } from 'primeng/toast';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CheckboxModule } from 'primeng/checkbox';
+import { PasswordModule } from 'primeng/password';
+import { MenuModule } from 'primeng/menu';
 
 const primengModules: any[] = [
   MenubarModule,
@@ -43,7 +46,10 @@ const primengModules: any[] = [
   StepsModule,
   ToastModule,
   SkeletonModule,
-  ProgressSpinnerModule
+  ProgressSpinnerModule,
+  CheckboxModule,
+  PasswordModule,
+  MenuModule
 ]
 
 @NgModule({

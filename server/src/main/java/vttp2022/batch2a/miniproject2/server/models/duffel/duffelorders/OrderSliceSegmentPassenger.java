@@ -3,6 +3,8 @@ package vttp2022.batch2a.miniproject2.server.models.duffel.duffelorders;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
@@ -37,13 +39,27 @@ public class OrderSliceSegmentPassenger {
     return p;
   }
 
+  public static OrderSliceSegmentPassenger create(SqlRowSet rs) {
+    OrderSliceSegmentPassenger p = new OrderSliceSegmentPassenger();
+    p.setPassengerId(rs.getString("passenger_id"));
+    p.setCabinClassMarketingName(rs.getString("cabin_class_marketing_name"));
+    p.setCabinClass(rs.getString("cabin_class"));
+    return p;
+  }
+
   public JsonObject toJson() {
     JsonObjectBuilder objBuilder = Json.createObjectBuilder();
     objBuilder.add("passengerId", getPassengerId());
     if (null != cabinClassMarketingName)
       objBuilder.add("cabinClassMarketingName", getCabinClassMarketingName());
+    else
+      objBuilder.addNull("cabinClassMarketingName");
+
     if (null != cabinClass)
       objBuilder.add("cabinClass", getCabinClass());
+    else
+      objBuilder.addNull("cabinClass");
+      
     objBuilder.add("baggages", getBaggages().stream()
         .map(v -> v.toJson())
         .collect(JsonCollectors.toJsonArray())

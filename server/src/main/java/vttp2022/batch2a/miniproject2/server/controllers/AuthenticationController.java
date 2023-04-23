@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +38,8 @@ public class AuthenticationController {
           .toString()
           );
     }
+
+    System.out.println(opt.get());
 
     String payload = opt.get();
     JsonObject payloadObj = Utils.payloadToJsonObj(payload);
@@ -82,7 +85,7 @@ public class AuthenticationController {
     return ResponseEntity.ok(authObj.toString());
   }
 
-  @PostMapping(path = "/verify")
+  @GetMapping(path = "/verify")
   @ResponseBody
   public ResponseEntity<String> postVerify(@RequestParam Optional<String> verificationString) {
   
@@ -106,8 +109,10 @@ public class AuthenticationController {
   @PostMapping(path = "/forgotPassword")
   @ResponseBody
   public ResponseEntity<String> postForgotPassword(@RequestBody Optional<String> opt) {
-    
+
+    System.out.println("running this");
     if (opt.isEmpty()) {
+      System.out.println("running this");
       return ResponseEntity.badRequest()
           .body(Utils.createError("Payload is empty")
           .toString()
@@ -116,6 +121,7 @@ public class AuthenticationController {
 
     String payload = opt.get();
     JsonObject payloadObj = Utils.payloadToJsonObj(payload);
+    System.out.println(payloadObj.toString());
 
     if (!Utils.validateForgotPassword(payloadObj)) {
       return ResponseEntity.badRequest()
@@ -136,7 +142,7 @@ public class AuthenticationController {
   @PutMapping(path = "/resetPassword")
   @ResponseBody
   public ResponseEntity<String> putResetPassword(@RequestParam Optional<String> resetPwdString) {
-
+    
     if (resetPwdString.isEmpty()) {
       return ResponseEntity.badRequest()
           .body(Utils.createError("'resetPwdString' parameter not found")

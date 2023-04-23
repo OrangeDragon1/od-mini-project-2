@@ -1,78 +1,98 @@
 <div *ngIf="partialOffer; else loading">
-  <p-panel [style]="{ width: '250px' }" [showHeader]="true">
-    <ng-template pTemplate="header">
-      <div class="flex flexwrap">
-        <div *ngIf="partialOffer?.slices?.length === 1; else notOneWayHeader">
-          <div class="font-bold text-xl">
-            Flights to {{ partialOffer.slices[0]?.destinationName }}
-          </div>
-        </div>
-        <ng-template #notOneWayHeader>
-          <!-- Round Trip -->
-          <div *ngIf="partialOffer?.slices[0]?.origin === partialOffer?.slices[1]?.destination; else multiCityHeader">
-            Flights to {{ partialOffer?.slices[0]?.destinationName }}
+  <div class="flex flex-row gap-3">
+    <div>
+      <p-panel [style]="{ width: '250px' }" [showHeader]="true">
+        <ng-template pTemplate="header">
+          <div class="flex flexwrap">
+            <div *ngIf="partialOffer?.slices?.length === 1; else notOneWayHeader">
+              <div class="font-bold text-xl">
+                Flights to {{ partialOffer.slices[0]?.destinationName }}
+              </div>
+            </div>
+            <ng-template #notOneWayHeader>
+              <!-- Round Trip -->
+              <div *ngIf="partialOffer?.slices[0]?.origin === partialOffer?.slices[1]?.destination; else multiCityHeader">
+                Flights to {{ partialOffer?.slices[0]?.destinationName }}
+              </div>
+            </ng-template>
           </div>
         </ng-template>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="content">
-      <div class="flex flex-column justify-content-center">
-        <div>
-          <div *ngIf="partialOffer?.slices?.length === 1; else notOneWayContent">
-            <div class="flex flex-row align-content-left text-base font-semibold mb-1">
-              <div class="flex flex-column justify-content-center mr-1">
-                {{ partialOffer?.slices[0]?.origin }}
-              </div>
-  
-              <div class="flex flex-column justify-content-center mx-1 mx-1">
-                <i class="pi pi-chevron-right" style="font-size: 0.7rem"></i>
-              </div>
-  
-              <div class="flex flex-column justify-content-center ml-1">
-                {{ partialOffer?.slices[0]?.destination }}
-              </div>
-  
-              <div class="flex flex-column justify-content-center">
-                <div class="font-normal text-sm">
-                  <span class="flex ml-1">· One way</span>
+        <ng-template pTemplate="content">
+          <div class="flex flex-column justify-content-center">
+            <div>
+              <div *ngIf="partialOffer?.slices?.length === 1; else notOneWayContent">
+                <div class="flex flex-row align-content-left text-base font-semibold mb-1">
+                  <div class="flex flex-column justify-content-center mr-1">
+                    {{ partialOffer?.slices[0]?.origin }}
+                  </div>
+      
+                  <div class="flex flex-column justify-content-center mx-1 mx-1">
+                    <i class="pi pi-chevron-right" style="font-size: 0.7rem"></i>
+                  </div>
+      
+                  <div class="flex flex-column justify-content-center ml-1">
+                    {{ partialOffer?.slices[0]?.destination }}
+                  </div>
+      
+                  <div class="flex flex-column justify-content-center">
+                    <div class="font-normal text-sm">
+                      <span class="flex ml-1">· One way</span>
+                    </div>
+                  </div>
                 </div>
+              </div>
+              <ng-template #notOneWayContent>
+                <!-- <div class="flex flex-row justify-content-center">
+                  <i class="pi pi-chevron-left" style="font-size: 0.7rem"></i>
+                  <i class="pi pi-chevron-right" style="font-size: 0.7rem"></i>
+                </div> -->
+              </ng-template>
+            </div>
+      
+            <div class="flex text-xs font-light mb-1">
+              {{ partialOffer?.slices[0].departureDate | date: 'MMM dd' }} · {{ partialOffer?.passengers.length }}
+              <span *ngIf="partialOffer?.passengers.length == 1; else passengers">
+                <span class="ml-1">Passenger</span>
+              </span>
+              <ng-template #passengers>
+                <span>
+                  <span class="ml-1">Passengers</span>
+                </span>
+              </ng-template>
+            </div>
+      
+            <div class="flex capitalize text-xs font-light">
+              {{ partialOffer?.cabinClass }}
+            </div>
+      
+            <div class="flex flex-column justify-content-center mt-3">
+              <button pButton pRipple class="p-button-secondary" type="button" (click)="onEditSearch(event)">
+                <div class="font-semibold text-base mx-6">
+                  Edit search
+                </div>
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </p-panel>
+    </div>
+    <div *ngIf="partialOffer?.offers?.length == 0">
+      <div class="flex flex-column gap-2">
+        <div class="bg-white" style="border: 1px solid #dee2e6; border-radius: 6px; padding: 1rem; height: 162px; width: 850px;">
+          <div class="flex flex-row justify-content-center my-6">
+            <div class="flex flex-column justify-content-center">
+              <div class="font-light text-2xl">
+                It appears that there are no flights available for your search at the moment.
+              </div> 
+              <div class="font-bold text-xs">
+                We are working on it!
               </div>
             </div>
           </div>
-          <ng-template #notOneWayContent>
-            <!-- <div class="flex flex-row justify-content-center">
-              <i class="pi pi-chevron-left" style="font-size: 0.7rem"></i>
-              <i class="pi pi-chevron-right" style="font-size: 0.7rem"></i>
-            </div> -->
-          </ng-template>
-        </div>
-  
-        <div class="flex text-xs font-light mb-1">
-          {{ partialOffer?.slices[0].departureDate | date: 'MMM dd' }} · {{ partialOffer?.passengers.length }}
-          <span *ngIf="partialOffer?.passengers.length == 1; else passengers">
-            <span class="ml-1">Passenger</span>
-          </span>
-          <ng-template #passengers>
-            <span>
-              <span class="ml-1">Passengers</span>
-            </span>
-          </ng-template>
-        </div>
-  
-        <div class="flex capitalize text-xs font-light">
-          {{ partialOffer?.cabinClass }}
-        </div>
-  
-        <div class="flex flex-column justify-content-center mt-3">
-          <button pButton pRipple class="p-button-secondary" type="button" (click)="onEditSearch(event)">
-            <div class="font-semibold text-base mx-6">
-              Edit search
-            </div>
-          </button>
         </div>
       </div>
-    </ng-template>
-  </p-panel>
+    </div>
+  </div>
 </div>
 <ng-template #loading>
   <div class="flex flex-row gap-3">
@@ -91,8 +111,6 @@
           Searching for flights based on your preference...
         </div>
       </div>
-
     </div>
-
   </div>
 </ng-template>

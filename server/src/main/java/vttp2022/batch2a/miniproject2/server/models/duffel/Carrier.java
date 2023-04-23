@@ -1,5 +1,7 @@
 package vttp2022.batch2a.miniproject2.server.models.duffel;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
@@ -38,6 +40,17 @@ public class Carrier {
       c.setIataCode(jo.getString("iata_code"));
     if (!jo.isNull("conditions_of_carriage_url"))
       c.setConditionsOfCarriageUrl(jo.getString("conditions_of_carriage_url"));
+    return c;
+  }
+
+  public static Carrier create(SqlRowSet rs) {
+    Carrier c = new Carrier();
+    c.setName(rs.getString("name"));
+    c.setLogoSymbolUrl(rs.getString("logo_symbol_url"));
+    c.setLogoLockupUrl(rs.getString("logo_lockup_url"));
+    c.setId(rs.getString("id"));
+    c.setIataCode(rs.getString("iata_code"));
+    c.setConditionsOfCarriageUrl(rs.getString("conditions_of_carriage_url"));
     return c;
   }
 

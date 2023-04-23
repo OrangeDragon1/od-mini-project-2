@@ -24,6 +24,13 @@ import { CheckoutSuccessComponent } from './components/checkout/checkout-success
 import { MytripsUpcomingComponent } from './components/mytrips/mytrips-upcoming.component';
 import { MytripsUpcomingEticketComponent } from './components/mytrips/mytrips-upcoming-eticket.component';
 import { CheckoutService } from './services/checkout.service';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/login/register.component';
+import { UserService } from './services/user.service';
+import { MessageService } from 'primeng/api';
+import { ForgetPasswordComponent } from './components/login/forget-password.component';
+import { RegisterVerifyComponent } from './components/login/register-verify.component';
+import { ForgetPasswordVerifyComponent } from './components/login/forget-password-verify.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -34,6 +41,11 @@ const appRoutes: Routes = [
     { path: 'payment', component: CheckoutPaymentComponent },
     { path: 'confirmation', component: CheckoutSuccessComponent }
   ] },
+  { path: 'register', component: RegisterComponent},
+  { path: 'verify', component: RegisterVerifyComponent},
+  { path: 'forget-password' , component: ForgetPasswordComponent },
+  { path: 'reset-password', component: ForgetPasswordVerifyComponent },
+  { path: 'login', component: LoginComponent },
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
@@ -54,7 +66,12 @@ const appRoutes: Routes = [
     CheckoutPaymentComponent,
     CheckoutSuccessComponent,
     MytripsUpcomingComponent,
-    MytripsUpcomingEticketComponent
+    MytripsUpcomingEticketComponent,
+    LoginComponent,
+    RegisterComponent,
+    ForgetPasswordComponent,
+    RegisterVerifyComponent,
+    ForgetPasswordVerifyComponent
   ],
   imports: [
     BrowserModule,
@@ -67,7 +84,9 @@ const appRoutes: Routes = [
   ],
   providers: [
     FlightSearchService,
-    CheckoutService
+    CheckoutService,
+    UserService,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

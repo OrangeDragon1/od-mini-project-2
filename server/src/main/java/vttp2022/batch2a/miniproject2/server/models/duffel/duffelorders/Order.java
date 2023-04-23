@@ -3,6 +3,8 @@ package vttp2022.batch2a.miniproject2.server.models.duffel.duffelorders;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
@@ -79,6 +81,20 @@ public class Order {
     return o;
   }
 
+  public static Order create(SqlRowSet rs) {
+    Order o = new Order();
+    o.setTotalCurrency(rs.getString("total_currency"));
+    o.setTotalAmount(rs.getString("total_amount"));
+    o.setTaxCurrency(rs.getString("tax_currency"));
+    o.setTaxAmount(rs.getString("tax_amount"));
+    o.setId(rs.getString("id"));
+    o.setCreatedAt(rs.getString("created_at"));
+    o.setBookingReference(rs.getString("booking_reference"));
+    o.setBaseCurrency(rs.getString("base_currency"));
+    o.setBaseAmount(rs.getString("base_amount"));
+    return o;
+  }
+
   public JsonObject toJson() {
     JsonObjectBuilder objBuilder = Json.createObjectBuilder();
     objBuilder
@@ -120,5 +136,13 @@ public class Order {
     else
       objBuilder.addNull("baseAmount");
     return objBuilder.build();
+  }
+  
+  @Override
+  public String toString() {
+    return "Order [totalCurrency=" + totalCurrency + ", totalAmount=" + totalAmount + ", taxCurrency=" + taxCurrency
+        + ", taxAmount=" + taxAmount + ", slices=" + slices + ", passengers=" + passengers + ", owner=" + owner
+        + ", id=" + id + ", createdAt=" + createdAt + ", conditions=" + conditions + ", bookingReference="
+        + bookingReference + ", baseCurrency=" + baseCurrency + ", baseAmount=" + baseAmount + "]";
   }
 }

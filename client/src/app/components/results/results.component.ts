@@ -14,12 +14,6 @@ import { MenuItem } from 'primeng/api';
 })
 export class ResultsComponent implements OnInit {
 
-  // @HostListener('window:popstate', ['$event'])
-  // onPopState(event: any) {
-  //   console.log('Back button pressed');
-  //   this.selected = false;
-  // }
-
   selectedOffer?: PartialOfferOffer;
   selectedOfferPRQ?: string;
 
@@ -58,6 +52,7 @@ export class ResultsComponent implements OnInit {
     } 
     this.sub$ = this.flightSvc.onSearchResults.subscribe(
       partialOffer => {
+        console.log(partialOffer)
         this.partialOffer = partialOffer;
         this.partialOfferSlice = partialOffer.slices;
         this.partialOfferPassenger = partialOffer.passengers;
@@ -69,7 +64,6 @@ export class ResultsComponent implements OnInit {
       {label:'Home'},
       {label:'Outbound'},
       {label:'Fare options', style: {'font-weight': 'bold'}}
-      // {label:'Lionel Messi', url: 'https://en.wikipedia.org/wiki/Lionel_Messi'}
     ];
    
   }

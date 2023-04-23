@@ -1,5 +1,7 @@
 package vttp2022.batch2a.miniproject2.server.models.duffel;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
@@ -21,6 +23,14 @@ public class Aircraft {
     a.setName(jo.getString("name"));
     a.setId(jo.getString("id"));
     a.setIataCode(jo.getString("iata_code"));
+    return a;
+  }
+
+  public static Aircraft create(SqlRowSet rs) {
+    Aircraft a = new Aircraft();
+    a.setName(rs.getString("name"));
+    a.setId(rs.getString("id"));
+    a.setIataCode(rs.getString("iata_code"));
     return a;
   }
 
