@@ -16,7 +16,8 @@ import vttp2022.batch2a.miniproject2.server.services.AuthenticationService;
 @CrossOrigin(origins="*")
 public class UserController {
   
-  @Autowired AuthenticationService authSvc;
+  @Autowired 
+  private AuthenticationService authSvc;
 
   @GetMapping(path = "/getUser")
   @ResponseBody
