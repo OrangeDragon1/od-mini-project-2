@@ -13,7 +13,7 @@ import vttp2022.batch2a.miniproject2.server.services.AuthenticationService;
 
 @Controller
 @RequestMapping(path = "/api/v1/user")
-@CrossOrigin(origins="*")
+// @CrossOrigin(origins="*")
 public class UserController {
   
   @Autowired 

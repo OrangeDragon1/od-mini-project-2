@@ -23,7 +23,7 @@ import vttp2022.batch2a.miniproject2.server.services.AuthenticationService;
 
 @Controller
 @RequestMapping(path = "/api/v1/auth")
-@CrossOrigin(origins="*")
+// @CrossOrigin(origins="*")
 public class AuthenticationController {
 
   @Autowired private AuthenticationService authSvc;

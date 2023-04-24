@@ -24,7 +24,7 @@ import vttp2022.batch2a.miniproject2.server.services.FlightService;
 
 @Controller
 @RequestMapping(path = "/api/v1/order")
-@CrossOrigin(origins="*")
+// @CrossOrigin(origins="*")
 public class OrderController {
   
   @Autowired
