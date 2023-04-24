@@ -18,10 +18,13 @@ export class UserService {
   }
 
   getVerified(data: any): Promise<any>{
+    const headers = new HttpHeaders()
+        .set('Content-Type','application/json')
+        .set('Accept','application/json');
     let params = new HttpParams()
         .set('verificationString', data);
     return firstValueFrom<any>(
-      this.http.get<any>('https://bewildered-stitch-production.up.railway.app/api/v1/auth/verify', { params })
+      this.http.get<any>('https://bewildered-stitch-production.up.railway.app/api/v1/auth/verify', { params, headers })
     )
   }
 
