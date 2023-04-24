@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,8 +24,8 @@ import vttp2022.batch2a.miniproject2.server.models.duffel.duffelofferrequests.Of
 import vttp2022.batch2a.miniproject2.server.services.FlightService;
 
 @Controller
-// @CrossOrigin(origins = "*")
 @RequestMapping(path = "/api/v1/search")
+@CrossOrigin(origins = "*")
 public class FlightController {
 
   @Autowired
