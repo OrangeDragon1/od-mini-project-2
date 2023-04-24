@@ -30,7 +30,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
     const data = this.registerForm.value;
-    console.log(data);
+    // console.log(data);
     this.loading = true;
     this.userSvc.postRegister(data)
     .then(results => {

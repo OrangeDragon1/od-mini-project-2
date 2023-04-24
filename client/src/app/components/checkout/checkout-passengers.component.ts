@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -13,7 +13,7 @@ import { CheckoutService } from 'src/app/services/checkout.service';
   templateUrl: './checkout-passengers.component.html',
   styleUrls: ['./checkout-passengers.component.scss']
 })
-export class CheckoutPassengersComponent implements OnInit {
+export class CheckoutPassengersComponent implements OnInit, OnDestroy{
 
   sub$!: Subscription;
   selectedOffer?: PartialOfferOffer;
@@ -63,6 +63,10 @@ export class CheckoutPassengersComponent implements OnInit {
       this.order = this.createOrder(results, off);        
     })
     this.order = this.createOrder();
+  }
+
+  ngOnDestroy(): void {
+    
   }
 
   processOrder() {

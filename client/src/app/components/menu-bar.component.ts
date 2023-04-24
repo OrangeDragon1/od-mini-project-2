@@ -29,10 +29,19 @@ export class MenubarComponent {
             this.user = results;
             this.items = [
                 {label: 'Home', routerLink: '/'},
-                {label: 'Profile', routerLink: '/profile'},
+                {label: 'Change password', routerLink: '/change-password'},
                 {label: 'My trips', routerLink: '/my-trips'},
                 {label: 'Logout', command: () => this.logout()}
             ]
+        })
+        .catch(error => {
+          if (error.status == 403) {
+            localStorage.removeItem('token');
+            this.router.navigate(['/']);
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
+          }
         })
     } else {
         this.items = [

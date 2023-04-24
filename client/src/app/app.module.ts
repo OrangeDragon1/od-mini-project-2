@@ -21,8 +21,6 @@ import { OffersSidePanelComponent } from './components/results/offers-side-panel
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { CheckoutPaymentComponent } from './components/checkout/checkout-payment.component';
 import { CheckoutSuccessComponent } from './components/checkout/checkout-success.component';
-import { MytripsUpcomingComponent } from './components/mytrips/mytrips-upcoming.component';
-import { MytripsUpcomingEticketComponent } from './components/mytrips/mytrips-upcoming-eticket.component';
 import { CheckoutService } from './services/checkout.service';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/login/register.component';
@@ -31,6 +29,9 @@ import { MessageService } from 'primeng/api';
 import { ForgetPasswordComponent } from './components/login/forget-password.component';
 import { RegisterVerifyComponent } from './components/login/register-verify.component';
 import { ForgetPasswordVerifyComponent } from './components/login/forget-password-verify.component';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { BookingService } from './services/booking.service';
+import { ChangePasswordComponent } from './components/user/change-password.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -46,6 +47,7 @@ const appRoutes: Routes = [
   { path: 'forget-password' , component: ForgetPasswordComponent },
   { path: 'reset-password', component: ForgetPasswordVerifyComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'change-password', component: ChangePasswordComponent },
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
@@ -65,13 +67,12 @@ const appRoutes: Routes = [
     CheckoutComponent,
     CheckoutPaymentComponent,
     CheckoutSuccessComponent,
-    MytripsUpcomingComponent,
-    MytripsUpcomingEticketComponent,
     LoginComponent,
     RegisterComponent,
     ForgetPasswordComponent,
     RegisterVerifyComponent,
-    ForgetPasswordVerifyComponent
+    ForgetPasswordVerifyComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -80,13 +81,15 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes, { useHash: true }),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AutoCompleteModule
   ],
   providers: [
     FlightSearchService,
     CheckoutService,
     UserService,
-    MessageService
+    MessageService,
+    BookingService
   ],
   bootstrap: [AppComponent]
 })

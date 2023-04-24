@@ -26,7 +26,7 @@ public class PartialOfferOfferConditions {
     JsonObjectBuilder objBuilder = Json.createObjectBuilder();
     if (null != changeBeforeDeparture)
       objBuilder.add("changeBeforeDeparture", getChangeBeforeDeparture().toJson());
-    if (null != changeBeforeDeparture)
+    if (null != refundBeforeDeparture)
       objBuilder.add("refundBeforeDeparture", getRefundBeforeDeparture().toJson());
     return objBuilder.build();
   }

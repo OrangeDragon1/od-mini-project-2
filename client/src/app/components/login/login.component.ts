@@ -27,12 +27,12 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    console.log(this.form.value);
+    // console.log(this.form.value);
     const data = this.form.value;
     this.userSvc.postLogin(data)
     .then(results => {
       if(results?.success) {
-        console.log(results.token)
+        // console.log(results.token)
         this.messageService.add({severity:'success', summary: 'Success', detail: 'Welcome back! You will be redirected in 3 seconds.'});
         this.buttonDisabled = true;
         localStorage.setItem('token', results.token);

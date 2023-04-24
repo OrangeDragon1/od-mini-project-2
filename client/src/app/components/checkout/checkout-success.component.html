@@ -1,1 +1,27 @@
-<p>checkout-success works!</p>
+<div class="flex flex-column justify-content-start">
+  <div class="flex flex-row justify-content-center mt-2 gap-4">
+    <div class="flex flex-column justify-content-start w-full mt-2">
+      <p-card [style]="{width:'100%'}">
+        <div>
+          <div class="font-bold text-5xl">
+            Order confirmed!
+          </div>
+          <div>
+            <p-divider type="solid"></p-divider>
+          </div>
+          <div>
+            <div class="font-semibold text-lg">
+              Booking reference: {{ bookingRef }}
+            </div>
+            <div class="font-medium mt-1">
+              Please go to my trips to view your booking.
+            </div>
+            <div class="font-light text-sm mt-4">
+              You will be redirected in 10 seconds.
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

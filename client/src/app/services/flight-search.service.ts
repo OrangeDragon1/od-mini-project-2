@@ -11,6 +11,8 @@ export class FlightSearchService {
   onFullFareOfferResults = new Subject<PartialOffer>();
   selectedOffer = new Subject<PartialOfferOffer | undefined>();
   selectedPO = new Subject<string | undefined>();
+  offerCreated = new Subject<any>();
+  bookingRef = new Subject<any>();
 
   constructor(private http: HttpClient) { }
 
@@ -50,14 +52,32 @@ export class FlightSearchService {
     });
   }
 
-  postOrderCreate(data: any): Promise<any> {
+  postOrderCreate(data: any, token: any): Promise<any> {
     const headers = new HttpHeaders()
         .set('Content-Type','application/json')
-        .set('Accept','application/json');
+        .set('Accept','application/json')
+        .set('Authorization', `Bearer ${token}`);
 
     return firstValueFrom<any>(
       this.http.post<any>('/api/v1/order/create', data, { headers })
-    );
+    )
+    .then(results => {
+      this.offerCreated.next(results);
+      this.bookingRef.next(results);
+      return results;
+    });
+  }
+
+  getAirports(data: any): Promise<any> {
+    const headers = new HttpHeaders()
+        .set('Content-Type','application/json')
+        .set('Accept','application/json');
+    let params = new HttpParams()
+        .set('query', data);
+
+    return firstValueFrom<any>(
+      this.http.get<any>('/api/v1/search/airports', { params, headers })
+    )
   }
 
 }

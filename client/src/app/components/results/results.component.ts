@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnChanges, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { OfferRequest } from 'src/app/models/offer-request.models';
@@ -12,7 +12,7 @@ import { MenuItem } from 'primeng/api';
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.scss']
 })
-export class ResultsComponent implements OnInit {
+export class ResultsComponent implements OnInit, OnDestroy{
 
   selectedOffer?: PartialOfferOffer;
   selectedOfferPRQ?: string;
@@ -42,7 +42,7 @@ export class ResultsComponent implements OnInit {
       }
     });
 
-    console.log('results.component ngOnInit called!')
+    // console.log('results.component ngOnInit called!')
     if (this.activatedRoute.snapshot.queryParams['po']) {
       const partialOfferOfferId = this.activatedRoute.snapshot.queryParams['po'];
       this.offerSelected(partialOfferOfferId);
@@ -52,7 +52,7 @@ export class ResultsComponent implements OnInit {
     } 
     this.sub$ = this.flightSvc.onSearchResults.subscribe(
       partialOffer => {
-        console.log(partialOffer)
+        // console.log(partialOffer)
         this.partialOffer = partialOffer;
         this.partialOfferSlice = partialOffer.slices;
         this.partialOfferPassenger = partialOffer.passengers;
@@ -66,6 +66,10 @@ export class ResultsComponent implements OnInit {
       {label:'Fare options', style: {'font-weight': 'bold'}}
     ];
    
+  }
+
+  ngOnDestroy(): void {
+  
   }
 
   offerSelected(partialOfferOfferId: string) {

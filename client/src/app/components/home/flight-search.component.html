@@ -1,4 +1,132 @@
-<div>
+<div class="w-30rem">
+  <div class="text-6xl text-center mb-4 font-bold">
+    Search flights here!
+  </div>
+  <form [formGroup]="request" (ngSubmit)="processOfferRequest()">
+    <div class="flex flex-column justify-content-start gap-1">
+      <div class="flex flex-column justify-content-start gap-1">
+        <div class="text-sm font-medium">
+          Origin: 
+        </div>
+        <div>
+          <p-autoComplete [suggestions]="airportAutocomplete" (completeMethod)="search($event)" [minLength]="3" field="iataCode" [forceSelection]="true" [style]="{ width:'100%'}" formControlName="origin">
+            <ng-template let-a pTemplate="item">
+              <div>{{ a.iataCountryCode }}, {{ a.name }} ({{ a.iataCode }})</div>
+            </ng-template>
+          </p-autoComplete>
+        </div>
+      </div>
+      <div class="flex flex-column justify-content-start gap-1">
+        <div class="text-sm font-medium">
+          Destination: 
+        </div>
+        <div>
+          <p-autoComplete [suggestions]="airportAutocomplete" (completeMethod)="search($event)" [minLength]="3" field="iataCode" [forceSelection]="true" [style]="{ width:'100%'}" formControlName="destination">
+            <ng-template let-a pTemplate="item">
+              <div>{{ a.iataCountryCode }}, {{ a.name }} ({{ a.iataCode }})</div>
+            </ng-template>
+          </p-autoComplete>
+        </div>
+      </div>
+      <div class="flex flex-column justify-content-start gap-1">
+        <div class="text-sm font-medium">
+          Departure Date: 
+        </div>
+        <div>
+          <p-calendar readonlyInput="true" showOnFocus="false" dateFormat="yy-mm-dd" [defaultDate]="" [maxDate]="" [minDate]="minDate" datatype="string" formControlName="departureDate" [style]="{ width:'100%' }"></p-calendar>
+        </div>
+        <div *ngIf="request.get('bornOn')?.dirty && request.get('bornOn')?.invalid">
+          <div class="flex flex-row justify-content-start p-error block text-xs gap-1">
+            <div class="flex flex-column justify-content-center">
+              <i class="pi pi-exclamation-circle" style="font-size: 0.6rem"></i>
+            </div>
+            <div class="flex flex-column justify-content-center">
+              Passenger date of birth is required
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-column justify-content-start gap-1">
+        <div class="text-sm font-medium">
+          Cabin Class: 
+        </div>
+        <p-dropdown [style]="{ width: '100%'}" [options]="cabinClass" optionLabel="cabinClass" optionValue="value" formControlName="cabinClass">
+        </p-dropdown>
+      </div>
+      <div class="flex flex-column justify-content-start gap-1">
+        <div class="text-sm font-medium">
+          Passengers:
+        </div>
+        <button pButton pRipple type="button" [label]="('Total: ' + (adultPassengers.length + agePassengers.length))" class="p-button-outlined p-button-secondary" (click)="op.toggle($event)">
+        </button>
+      </div>
+
+      <button pButton pRipple class="p-button-secondary" type="submit" label="Search" [disabled]="request.invalid">  </button>
+
+      <p-overlayPanel #op [style]="{width:'35%'}">
+        <ng-template pTemplate>
+            <div class="flex flex-column justify-content-start gap-2">
+              <div class="flex flex-row justify-content-between">
+                <div class="flex flex-column justify-content-center">
+                  <div class="font-bold">Adults</div>
+                  <div class="font-light text-sm">18+</div>
+                </div>
+                <div class="flex flex-row justify-content-even gap-4">
+                  <div>
+                    <button pButton pRipple type="button" icon="pi pi-minus" class="p-button-rounded p-button-secondary p-button-outlined p-button-sm" (click)="removeAdultPassenger()" [disabled]="adultPassengers.length <= 1"></button>
+                  </div>
+                  <div class="flex flex-column justify-content-center text-xl font-bold">
+                    {{ adultPassengers.length }}
+                  </div>
+                  <div>
+                    <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-secondary p-button-outlined p-button-sm" (click)="addAdultPassenger()"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="flex flex-row justify-content-between gap-2">
+                <div class="flex flex-column justify-content-center">
+                  <div class="font-bold">Child</div>
+                  <div class="font-light text-sm">17 & below</div>
+                </div>
+                <div class="flex flex-row justify-content-even gap-4">
+                  <div class="flex flex-column justify-content-center text-xl font-bold">
+                    {{ agePassengers.length }}
+                  </div>
+                  <div>
+                    <button pButton pRipple type="button" icon="pi pi-plus" class="p-button-rounded p-button-secondary p-button-outlined p-button-sm" (click)="addAgePassenger()"></button>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <p-divider type="solid"></p-divider>
+              </div>
+
+              <div formArrayName="agePassengers">
+                <div *ngFor="let ap of agePassengers.controls; let i = index" [formGroupName]="i">
+                  <div class="flex flex-row gap-1 justify-content-between my-2">
+                    <div class="flex flex-column justify-content-center font-semibold text-baseline">
+                      Child {{ i+1 }}
+                    </div>
+                    <div class="flex flex-column justify-content-center">
+                      <p-inputNumber [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="17" formControlName="age">
+                      </p-inputNumber>
+                    </div>
+                    <div>
+                      <button pButton pRipple type="button" icon="pi pi-minus" class="p-button-rounded p-button-secondary p-button-outlined p-button-sm" (click)="removeAgePassenger(i)"></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </ng-template>
+      </p-overlayPanel>
+    </div>
+  </form>
+</div>
+
+
+<!-- <div class="mt-8">
   <form [formGroup]="request" (ngSubmit)="processOfferRequest()">
     <table>
       <tr>
@@ -41,12 +169,12 @@
           </tr>
         </td>
       </tr>
-      <!-- <tr>
+      <tr>
         <td>Max Connections: </td>
         <td>
           <input type="number" formControlName="maxConnections" size="30">
         </td>
-      </tr> -->
+      </tr>
       <tr>
         <td>Cabin Class</td>
         <td>
@@ -68,23 +196,9 @@
               <td><input type="number" size="30" min="1" formControlName="age"></td>
               <td><button type="button" (click)="removeAgePassenger(i)">X</button></td>
             </tr>
-            <!-- <tr *ngFor="let li of lineItems.controls; let i = index" [formGroupName]="i">
-              <td>
-                <input type="text" size="20" placeholder="Item" formControlName="item">
-              </td>
-              <td>
-                <input type="number" size="10" placeholder="Quantity" min="1" formControlName="quantity">
-              </td>
-              <td>
-              <input type="number" size="10" placeholder="Price" min="0.1" step=".1" formControlName="unitPrice">
-              </td>
-              <td>
-                <button type="button" (click)="removeLineItem(i)">X</button>
-              </td>
-            </tr> -->
           </table>
         </td>
       </tr>
     </table>
   </form>
-</div>
+</div> -->

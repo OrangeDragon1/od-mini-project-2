@@ -64,7 +64,6 @@ export class FullFareOffersComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    
   }
   
   onRadioClick() {

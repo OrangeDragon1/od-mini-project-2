@@ -39,8 +39,6 @@ public class AuthenticationController {
           );
     }
 
-    System.out.println(opt.get());
-
     String payload = opt.get();
     JsonObject payloadObj = Utils.payloadToJsonObj(payload);
 
@@ -110,9 +108,7 @@ public class AuthenticationController {
   @ResponseBody
   public ResponseEntity<String> postForgotPassword(@RequestBody Optional<String> opt) {
 
-    System.out.println("running this");
     if (opt.isEmpty()) {
-      System.out.println("running this");
       return ResponseEntity.badRequest()
           .body(Utils.createError("Payload is empty")
           .toString()
@@ -121,7 +117,6 @@ public class AuthenticationController {
 
     String payload = opt.get();
     JsonObject payloadObj = Utils.payloadToJsonObj(payload);
-    System.out.println(payloadObj.toString());
 
     if (!Utils.validateForgotPassword(payloadObj)) {
       return ResponseEntity.badRequest()

@@ -64,21 +64,21 @@ public class Airport {
 
   public JsonObject toJson() {
     JsonObjectBuilder objBuilder = Json.createObjectBuilder()
-        .add("time_zone", getTimeZone())
+        .add("timeZone", getTimeZone())
         .add("name", getName())
         .add("longitude", getLongitude())
         .add("latitude", getLatitude())
         .add("id", getId());
     if (null == getIcaoCode()) {
-      objBuilder.add("icao_code", JsonValue.NULL);
+      objBuilder.add("icaoCode", JsonValue.NULL);
     } else {
-      objBuilder.add("icao_code", getIcaoCode());
+      objBuilder.add("icaoCode", getIcaoCode());
     }
     objBuilder
-        .add("iata_country_code", getIataCountryCode())
-        .add("iata_code", getIataCode())
-        .add("iata_city_code", getIataCityCode())
-        .add("city_name", getCityName());
+        .add("iataCountryCode", getIataCountryCode())
+        .add("iataCode", getIataCode())
+        .add("iataCityCode", getIataCityCode())
+        .add("cityName", getCityName());
     if (null == getCity()) {
       objBuilder.add("city", JsonValue.NULL);
     } else {

@@ -24,6 +24,9 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PasswordModule } from 'primeng/password';
 import { MenuModule } from 'primeng/menu';
+import { BadgeModule } from 'primeng/badge';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 const primengModules: any[] = [
   MenubarModule,
@@ -49,7 +52,10 @@ const primengModules: any[] = [
   ProgressSpinnerModule,
   CheckboxModule,
   PasswordModule,
-  MenuModule
+  MenuModule,
+  BadgeModule,
+  OverlayPanelModule,
+  InputNumberModule
 ]
 
 @NgModule({

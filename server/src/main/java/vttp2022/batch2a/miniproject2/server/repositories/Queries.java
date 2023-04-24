@@ -158,4 +158,7 @@ public class Queries {
     orders ON owners.id = orders.owners_id
     WHERE orders.id = ?
       """;
+  public static final String FIND_ORDER_BY_BOOKING_REFERENCE = """
+    SELECT * FROM orders WHERE booking_reference = ?
+      """;
 }

@@ -63,4 +63,14 @@ export class UserService {
       this.http.get<any>('/api/v1/user/getUser', { headers })
     )
   }
+
+  putChangePassword(data: any, token: any): Promise<any>{
+    const headers = new HttpHeaders()
+        .set('Content-Type','application/json')
+        .set('Accept','application/json')
+        .set('Authorization', `Bearer ${token}`);
+    return firstValueFrom<any>(
+      this.http.put('/api/v1/auth/changePassword', data, { headers })
+    )
+  }
 }

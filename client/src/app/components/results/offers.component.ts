@@ -41,7 +41,7 @@ export class OffersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
+    
   }
 
   onSelect(partialOfferId: string) {

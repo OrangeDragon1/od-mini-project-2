@@ -49,3 +49,24 @@ export interface User {
   verificationString?: string
   resetPwdString?: string
 }
+
+export interface Airport {
+  timeZone: string
+  name: string
+  longitude: number
+  latitude: number
+  id: string
+  icaoCode?: string
+  iataCountryCode?: string
+  iataCode?: string
+  iataCityCode?: string
+  cityName?: string
+  city?: City
+}
+
+export interface City {
+  name: string
+  id: string
+  iataCountryCode?: string
+  iataCode: string
+}

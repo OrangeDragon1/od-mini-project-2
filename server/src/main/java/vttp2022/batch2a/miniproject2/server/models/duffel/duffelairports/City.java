@@ -31,8 +31,8 @@ public class City {
     return Json.createObjectBuilder()
         .add("name", getName())
         .add("id", getId())
-        .add("iata_country_code", getIataCountryCode())
-        .add("iata_code", getIataCode())
+        .add("iataCountryCode", getIataCountryCode())
+        .add("iataCode", getIataCode())
         .build();
   }
   

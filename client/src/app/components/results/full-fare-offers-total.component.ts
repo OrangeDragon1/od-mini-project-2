@@ -63,7 +63,7 @@ export class FullFareOffersTotalComponent implements OnInit, OnChanges {
   }
 
   onCheckout() {
-    console.log('onCheckout called!')
+    // console.log('onCheckout called!')
     this.flightSvc.selectedOffer.next(this.selectedOffer);
     let po = this.activatedRoute.snapshot.queryParams['po']
     this.router.navigate(['/checkout', this.selectedOfferPRQ, po ,this.selectedOffer?.id, 'passengers']);

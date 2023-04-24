@@ -1,0 +1,62 @@
+:host ::ng-deep {
+
+  .p-dropdown {
+    width: 100px;
+  }
+  
+  .p-dropdown .p-dropdown-label {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+
+    font-size: 0.875rem;
+  }
+
+  .p-dropdown:not(.p-disabled):hover {
+    border-color: black;
+  }
+
+  .p-dropdown:not(.p-disabled).p-focus {
+    box-shadow: 0 0 0 0.2rem #c8c8c8;
+    border-color: black;
+  }
+
+  .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+    color: #4f4f4f;
+    background: #dfdfdf;
+  }
+  
+  .p-inputtext {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    width: 100%;
+  }
+
+  .p-inputtext:enabled:hover {
+    border-color: black;
+  }
+
+  .p-inputtext:enabled:focus {
+    box-shadow: 0 0 0 0.2rem #c8c8c8;
+    border-color: black;
+  }
+
+  .p-datepicker table td {
+    padding: 0rem;
+  }
+
+  .p-button {
+    padding: 0.5rem 0.8rem;
+    background-color: #484848;
+    border: #131313;
+  }
+
+  .p-inputnumber-buttons-stacked .p-inputnumber-input {
+    width: 60px !important;
+  }
+  .p-inputnumber-input {
+    width: 60px !important;
+  }
+}

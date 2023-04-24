@@ -12,6 +12,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -182,7 +184,7 @@ public class FlightService {
    * Create order
    */
 
-   public JsonObject createOrder(JsonObject payloadObj) {
+   public JsonObject createOrder(JsonObject payloadObj, String userId) {
     OrderRequest r = OrderRequest.create(payloadObj);
     JsonObject rObj = r.toJson();
 
@@ -202,35 +204,54 @@ public class FlightService {
         .header(HttpHeaders.AUTHORIZATION, "Bearer %s".formatted(apiToken))
         .body(data.toString());
 
-    RestTemplate restTemplate = new RestTemplate();
-    ResponseEntity<String> respEntity = restTemplate.exchange(requestEntity, String.class);
-    String payload = respEntity.getBody();
-    System.out.println(payload);
-    orderCache.cache(payload);
-    // JsonObject dataObj = Utils.payloadToJsonObj(payload).getJsonObject("data");
-    // Order o = Order.create(dataObj);
-    // System.out.println(o.toString());
+    try {
+      RestTemplate restTemplate = new RestTemplate();
+      ResponseEntity<String> respEntity = restTemplate.exchange(requestEntity, String.class);
+      
+      String payload = respEntity.getBody();
+
+      JsonObject dataObj = Utils.payloadToJsonObj(payload).getJsonObject("data");
+      Order o = Order.create(dataObj);
+      orderRepo.addOrder(o, userId);
+
+      JsonObject orderObj = Json.createObjectBuilder()
+          .add("bookingReference", o.getBookingReference())
+          .build();
+      return orderObj;
+
+    } catch (HttpClientErrorException | HttpServerErrorException ex) {
+      Integer statusCode = Integer.parseInt(ex.getStatusCode().toString().substring(0, 3));
+      JsonObject errObj = Utils.payloadToJsonObj(ex.getResponseBodyAsString());
+      JsonArray errArr = errObj.getJsonArray("errors");
+      List<String> errTitles = errArr.stream()
+          .map(v -> v.asJsonObject().getString("title"))
+          .collect(Collectors.toList());
+      
+      StringBuilder strBuilder = new StringBuilder();
+      for (int i = 0; i < errTitles.size(); i++) {
+        strBuilder.append(errTitles.get(i));
+        if ((i+1) < errTitles.size()) {
+          strBuilder.append(", ");
+        }
+      }
+
+      String errStr = strBuilder.toString();
+
+      if (statusCode >= 500) {
+        return Utils.createError(statusCode.toString() + " API client error: " + errStr);
+      } else if (statusCode >= 400) {
+        return Utils.createError(statusCode.toString() + " API server error: " + errStr);
+      }
+      return Utils.createError("Unknown API error");
+    }
+   }
+
+   public JsonArray getOrdersByUserId(String userId) {
+    orderRepo.getOrdersByUserId(userId);
     return null;
    }
 
    public JsonObject createOrder() {
-    String payload = orderCache.get();
-    JsonObject dataObj = Utils.payloadToJsonObj(payload).getJsonObject("data");
-    System.out.println(dataObj.toString());
-    System.out.println();
-    System.out.println("*****************************************************");
-    System.out.println();
-    Order o = Order.create(dataObj);
-    System.out.println(o.toString());
-    System.out.println();
-    System.out.println("*****************************************************");
-    System.out.println();
-    System.out.println(o.toJson().toString());
-    System.out.println();
-    System.out.println("*****************************************************");
-    System.out.println();
-    // orderRepo.addOrder(o);
-    orderRepo.getOrdersByUser();
 
     return null;
    }

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, merge } from 'rxjs';
-import { CabinClass, PassengerType } from 'src/app/models/common.models';
+import { Airport, CabinClass, PassengerType } from 'src/app/models/common.models';
 import { OfferRequest, Passenger, Slice } from 'src/app/models/offer-request.models';
 import { FlightSearchService } from 'src/app/services/flight-search.service';
 import { enumValidator } from 'src/app/utils';
@@ -10,9 +10,9 @@ import { enumValidator } from 'src/app/utils';
 @Component({
   selector: 'app-flight-search',
   templateUrl: './flight-search.component.html',
-  styleUrls: ['./flight-search.component.css']
+  styleUrls: ['./flight-search.component.scss']
 })
-export class FlightSearchComponent implements OnInit {
+export class FlightSearchComponent implements OnInit, OnDestroy {
 
   cabinClassOptions = Object.values(CabinClass);
   request!: FormGroup;
@@ -21,30 +21,51 @@ export class FlightSearchComponent implements OnInit {
   passengers!: FormArray;
   offers$!: Subscription;
 
+  airportAutocomplete: Airport[] = [];
+  minDate = new Date();
+
+  cabinClass: any[] = [];
+
   constructor(
     private fb: FormBuilder, 
     private flightSvc: FlightSearchService, 
     private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.request = this.createRequest();
+    this.cabinClass = [
+      {cabinClass:'Economy', value:'economy'}, 
+      {cabinClass:'Premium Economy', value:'premium_economy'},
+      {cabinClass:'Business', value:'business'},
+      {cabinClass:'First', value:'first'}
+    ];
+  }
+
+  ngOnDestroy(): void {
+    
   }
 
   processOfferRequest() {
-    const { origin, destination, departureDate, adultPassengers, agePassengers } = this.request.value;
+    let origin = this.request.value['origin'].iataCode;
+    let destination = this.request.value['destination'].iataCode;
+    let departureDate = this.request.value['departureDate'].toISOString().split('T')[0];
+    const { adultPassengers, agePassengers } = this.request.value;
     const slice: Slice = { origin, destination, departureDate };
     const passengers = (<Passenger[]>adultPassengers).concat(<Passenger[]>agePassengers);
-    
+
     const offerRequest: OfferRequest = {
       slices: [slice],
       passengers: passengers,
       maxConnections: 2,
       cabinClass: this.request.value['cabinClass']
     };
+    
+    // console.log(offerRequest);
     this.flightSvc.postOffers({offerRequest})
       .catch(error => {
-        console.log(error);
+        // console.log(error);
       });
     this.offers$ = this.flightSvc.onSearchResults.subscribe(
       (o) => {
@@ -53,6 +74,7 @@ export class FlightSearchComponent implements OnInit {
       }
     )
     this.router.navigate(['/results'], { replaceUrl: true });
+    
   }
 
   addAdultPassenger() {
@@ -71,6 +93,15 @@ export class FlightSearchComponent implements OnInit {
     this.agePassengers.removeAt(i);
   }
 
+  search(event: any) {
+    // console.log(event.query);
+    this.flightSvc.getAirports(event.query)
+    .then(results => {
+      // console.log(results);
+      this.airportAutocomplete = results;
+    })
+  }
+ 
   private createRequest(): FormGroup {
     this.adultPassengers = this.fb.array([ this.createAdultPassenger() ]);
     this.agePassengers = this.fb.array([]);

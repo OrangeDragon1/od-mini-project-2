@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="flex flex-column justify-content-start">
   <div class="flex flex-row justify-content-center mt-2 gap-4">
     <div class="flex flex-column justify-content-start w-30rem mt-2">
@@ -12,7 +13,7 @@
       </div>
   
       <div class="flex flex-row justify-content-center">
-        <button pButton pRipple class="p-button-secondary" type="button" (click)="processOrder()">
+        <button pButton pRipple class="p-button-secondary" type="button" (click)="processOrder()" [loading]="loading">
           <div class="font-semibold text-base w-30rem">
             Pay now
           </div>

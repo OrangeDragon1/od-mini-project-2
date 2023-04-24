@@ -32,26 +32,28 @@ public class FlightController {
 
   @GetMapping(path = "/airports")
   @ResponseBody
-  public ResponseEntity<String> getAirports() {
+  public ResponseEntity<String> getAirports(@RequestParam String query) {
 
     List<Airport> airports = flightSvc.getAllAirports();
-    JsonArray jsonArr = airports.stream()
+    List<Airport> filteredAirport = airports.stream()
+        .filter(v -> {
+          String iataCode = v.getIataCode();
+          String name = v.getName();
+          String city = v.getCityName();
+          String country = v.getIataCountryCode();
+          String fullName = name + " " + city + " " + country;
+          return iataCode.toLowerCase().contains(query.toLowerCase())
+            || name.toLowerCase().contains(query.toLowerCase())
+            || city.toLowerCase().contains(query.toLowerCase())
+            || country.toLowerCase().contains(query.toLowerCase())
+            || fullName.toLowerCase().contains(query.toLowerCase());
+        })
+        .collect(java.util.stream.Collectors.toList());
+
+    JsonArray jsonArr = filteredAirport.stream()
         .map(v -> v.toJson())
         .collect(JsonCollectors.toJsonArray());
-    // JsonArray arr = flightSvc.getAllAirports();
-    // try {
-    //   List<Airport> airportList = flightSvc.getAirports(query);
-
-    //       JsonArray arr = airportList.stream()
-    //           .map(v -> v.toJson())
-    //           .collect(JsonCollectors.toJsonArray());
-    //   return ResponseEntity.ok(arr.toString());
-    // } catch (Exception ex) {
-    //   ex.printStackTrace();
-    //   return null;
-    // }
-
-
+    
     return ResponseEntity.ok(jsonArr.toString());
   }
 
