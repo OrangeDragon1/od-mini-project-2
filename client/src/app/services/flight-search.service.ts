@@ -31,7 +31,7 @@ export class FlightSearchService {
       }
     }
     return firstValueFrom<PartialOffer>(
-      this.http.post<PartialOffer>('https://bewildered-stitch-production.up.railway.app/api/v1/search/offers', data, { headers })
+      this.http.post<PartialOffer>('/api/v1/search/offers', data, { headers })
     )
     .then(results => {
       this.onSearchResults.next(results);
@@ -44,7 +44,7 @@ export class FlightSearchService {
         .set('partialOfferRequestId', data.partialOfferRequestId)
         .set('selectedPartialOffer', data.selectedPartialOffer)
     return firstValueFrom<PartialOffer>(
-      this.http.get<PartialOffer>('https://bewildered-stitch-production.up.railway.app/api/v1/search/fullFare', { params })
+      this.http.get<PartialOffer>('/api/v1/search/fullFare', { params })
     )
     .then(results => {
       this.onFullFareOfferResults.next(results);
@@ -59,7 +59,7 @@ export class FlightSearchService {
         .set('Authorization', `Bearer ${token}`);
 
     return firstValueFrom<any>(
-      this.http.post<any>('https://bewildered-stitch-production.up.railway.app/api/v1/order/create', data, { headers })
+      this.http.post<any>('/api/v1/order/create', data, { headers })
     )
     .then(results => {
       this.offerCreated.next(results);
@@ -76,7 +76,7 @@ export class FlightSearchService {
         .set('query', data);
 
     return firstValueFrom<any>(
-      this.http.get<any>('https://bewildered-stitch-production.up.railway.app/api/v1/search/airports', { params, headers })
+      this.http.get<any>('/api/v1/search/airports', { params, headers })
     )
   }
 
@@ -86,7 +86,7 @@ export class FlightSearchService {
         .set('Accept','application/json')
         .set('Authorization', `Bearer ${token}`);
     return firstValueFrom<any>(
-      this.http.get<any>('https://bewildered-stitch-production.up.railway.app/api/v1/order/getAllByUserId', { headers })
+      this.http.get<any>('/api/v1/order/getAllByUserId', { headers })
     )
   }
 
@@ -98,7 +98,7 @@ export class FlightSearchService {
         .set('bookingRef', data);
 
     return firstValueFrom<any>(
-      this.http.get<any>('https://bewildered-stitch-production.up.railway.app/api/v1/order/getByBookingRef', { params, headers })
+      this.http.get<any>('/api/v1/order/getByBookingRef', { params, headers })
     )
   }
 
@@ -111,7 +111,7 @@ export class FlightSearchService {
         .set('bookingRef', data);
 
     return firstValueFrom<any>(
-      this.http.delete<any>('https://bewildered-stitch-production.up.railway.app/api/v1/order/delete', { params, headers })
+      this.http.delete<any>('/api/v1/order/delete', { params, headers })
     )
   } 
 

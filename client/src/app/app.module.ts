@@ -38,7 +38,6 @@ import { StyleDirective } from './style.directive';
 import { FindBookingComponent } from './components/find-booking.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
-import { CorsInterceptor } from './cors.interceptor';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -105,8 +104,7 @@ const appRoutes: Routes = [
     UserService,
     MessageService,
     BookingService,
-    ConfirmationService,
-    { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true}
+    ConfirmationService
   ],
   bootstrap: [AppComponent]
 })
