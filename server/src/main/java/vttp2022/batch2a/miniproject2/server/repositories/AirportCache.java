@@ -22,7 +22,7 @@ public class AirportCache {
   public void cache(String query, String payload) {
     ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
     LOGGER.info("In [cache]: caching {}", query);
-    valueOps.set(query, payload, Duration.ofMinutes(20));
+    valueOps.set(query, payload, Duration.ofDays(1));
   }
 
   public String get(String query) {

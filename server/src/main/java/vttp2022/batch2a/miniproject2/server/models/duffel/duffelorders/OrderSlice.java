@@ -1,5 +1,10 @@
 package vttp2022.batch2a.miniproject2.server.models.duffel.duffelorders;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +26,8 @@ public class OrderSlice {
   private String destinationName;
   private String destinationIataCountryCode;
   private String destinationIataCode;
+  private Integer plusDays;
+  private List<OrderSliceLayover> layovers;
 
   public List<OrderSliceSegment> getSegments() { return segments; }
   public void setSegments(List<OrderSliceSegment> segments) { this.segments = segments; }
@@ -42,6 +49,10 @@ public class OrderSlice {
   public void setDestinationIataCountryCode(String destinationIataCountryCode) { this.destinationIataCountryCode = destinationIataCountryCode; }
   public String getDestinationIataCode() { return destinationIataCode; }
   public void setDestinationIataCode(String destinationIataCode) { this.destinationIataCode = destinationIataCode; }
+  public Integer getPlusDays() { return plusDays; }
+  public void setPlusDays(Integer plusDays) { this.plusDays = plusDays; }
+  public List<OrderSliceLayover> getLayovers() { return layovers; }
+  public void setLayovers(List<OrderSliceLayover> layovers) { this.layovers = layovers; }
 
   public static OrderSlice create(JsonObject jo) {
     OrderSlice s = new OrderSlice();
@@ -55,10 +66,16 @@ public class OrderSlice {
     s.setId(jo.getString("id"));
     if (!jo.isNull("fare_brand_name"))
       s.setFareBrandName(jo.getString("fare_brand_name"));
-    s.setDuration(jo.getString("duration"));
+    if (!jo.isNull("duration"))
+      s.setDuration(jo.getString("duration"));
     s.setDestinationName(jo.getJsonObject("destination").getString("name"));
     s.setDestinationIataCountryCode(jo.getJsonObject("destination").getString("iata_country_code"));
     s.setDestinationIataCode(jo.getJsonObject("destination").getString("iata_code"));
+
+    String dateDepartingAt = s.getSegments().get(0).getDepartingAt();
+    String dateArrivingAt = s.getSegments().get(s.getSegments().size() - 1).getArrivingAt();
+    s.setPlusDays(ifPlusDays(dateDepartingAt, dateArrivingAt));
+    s.setLayovers(ifLayovers(s.getSegments(), s.getDestinationIataCode()));
 
     return s;
   }
@@ -95,21 +112,64 @@ public class OrderSlice {
     else
       objBuilder.addNull("fareBrandName");
 
+    if (null != duration)
+      objBuilder.add("duration", getDuration());
+    else
+      objBuilder.addNull("duration");
+    
     objBuilder
-        .add("duration", getDuration())
         .add("destinationName", getDestinationName())
         .add("destinationIataCountryCode", getDestinationIataCountryCode())
-        .add("destinationIataCode", getDestinationIataCode());
+        .add("destinationIataCode", getDestinationIataCode())
+        .add("plusDays", getPlusDays())
+        .add("layovers", getLayovers().stream()
+            .map(v -> v.toJson())
+            .collect(JsonCollectors.toJsonArray())
+        );
 
     return objBuilder.build();
   }
-  
+
+  public static Integer ifPlusDays(String departure, String arrival) {
+    String departingDate = departure.split("T")[0];
+    String arrivalDate = arrival.split("T")[0];
+    long departingMilli = LocalDate.parse(departingDate).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+    long arrivingMilli = LocalDate.parse(arrivalDate).atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli();
+    long dayMilli = 24 * 60 * 60 * 1000;
+    int dayDiff = (int) ((arrivingMilli - departingMilli) / dayMilli);
+    return dayDiff;
+  }
+
+  public static List<OrderSliceLayover> ifLayovers(
+    List<OrderSliceSegment> segments,
+    String destination
+  ) {
+    List<OrderSliceLayover> layovers = new LinkedList<>();
+    for (int i = 0; i < segments.size(); i++) {
+      if (!segments.get(i).getDestinationIataCode().equals(destination)) {
+        OrderSliceLayover l = new OrderSliceLayover();
+        String arrivalDT = segments.get(i).getArrivingAt();
+        String departingDT = segments.get(i+1).getDepartingAt();
+        long arrivingMilli = Instant.parse(arrivalDT + "Z").toEpochMilli();
+        long departingMilli = Instant.parse(departingDT + "Z").toEpochMilli();
+        long diff = departingMilli - arrivingMilli;
+
+        l.setDuration(Duration.ofMillis(diff).toString());
+        l.setLayoverName(segments.get(i).getDestinationName());
+        l.setLayoverIataCode(segments.get(i).getDestinationIataCode());
+        layovers.add(l);
+      }
+    }
+    return layovers;
+  }
+
   @Override
   public String toString() {
     return "OrderSlice [segments=" + segments + ", originName=" + originName + ", originIataCountryCode="
         + originIataCountryCode + ", originIataCode=" + originIataCode + ", id=" + id + ", fareBrandName="
         + fareBrandName + ", duration=" + duration + ", destinationName=" + destinationName
         + ", destinationIataCountryCode=" + destinationIataCountryCode + ", destinationIataCode=" + destinationIataCode
-        + "]";
+        + ", plusDays=" + plusDays + ", layovers=" + layovers + "]";
   }
+  
 }

@@ -161,4 +161,7 @@ public class Queries {
   public static final String FIND_ORDER_BY_BOOKING_REFERENCE = """
     SELECT * FROM orders WHERE booking_reference = ?
       """;
+  public static final String DELETE_ORDER_BY_BOOKING_REFERENCE = """
+    DELETE FROM orders WHERE booking_reference = ?
+      """;
 }

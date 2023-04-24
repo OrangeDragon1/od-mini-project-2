@@ -435,7 +435,7 @@
                       <div class="text-sm font-medium">
                         Title *
                       </div>
-                      <p-dropdown [options]="titles"  optionLabel="title" optionValue="value" [(ngModel)]="t" formControlName="title">
+                      <p-dropdown [options]="titles"  optionLabel="t" optionValue="value" formControlName="title" [(ngModel)]="titlePlaceholder[idx]">
                       </p-dropdown>
                     </div>
                     
@@ -502,7 +502,7 @@
                       <div class="text-sm font-medium">
                         Gender *
                       </div>
-                      <p-dropdown [style]="{ width: '120px'}" [options]="genders" optionLabel="gender" optionValue="value" formControlName="gender" [(ngModel)]="g">
+                      <p-dropdown [style]="{ width: '120px'}" [options]="genders" optionLabel="g" optionValue="value" formControlName="gender" [(ngModel)]="genderPlaceholder[idx]">
                       </p-dropdown>
                     </div>
   

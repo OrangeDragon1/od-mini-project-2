@@ -27,13 +27,17 @@ public class Utils {
   public static final String EMAIL_VERIFICATION_TEMPLATE = """
       \n
       Awaiting verification for user: %s\n
-      Verification link: %s
+      Verification string: verify?verificationString=%s
+      \n\n
+      Please add the string to the end of the homepage's url. 
       """;
 
   public static final String EMAIL_RESET_PASSWORD_TEMPLATE = """
       \n
       Password reset requested from user: %s\n
-      Reset password link: %s
+      Reset password string: reset-password?resetPwdString=%s
+      \n\n
+      Please add the string to the end of the homepage's url. 
       """;
 
   public static final String EMAIL_PASSWORD_RESETTED_TEMPLATE = """

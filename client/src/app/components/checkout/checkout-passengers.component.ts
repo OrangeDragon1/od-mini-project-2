@@ -23,6 +23,8 @@ export class CheckoutPassengersComponent implements OnInit, OnDestroy{
   passengers!: FormArray;
   order!: FormGroup;
   identityDocuments!: FormArray;
+  titlePlaceholder: string[] = [];
+  genderPlaceholder: string[] = [];
   
   titles: any[] = [];
   genders: any[] = [];
@@ -38,14 +40,14 @@ export class CheckoutPassengersComponent implements OnInit, OnDestroy{
     private checkoutSvc: CheckoutService
   ) {
     this.titles = [
-      {title:'Mr.', value:'mr'}, 
-      {title:'Ms.', value:'ms'},
-      {title:'Mrs.', value:'mrs'},
-      {title:'Miss', value:'miss'}
+      {t:'Mr.', value:'mr'}, 
+      {t:'Ms.', value:'ms'},
+      {t:'Mrs.', value:'mrs'},
+      {t:'Miss.', value:'miss'}
     ];
     this.genders = [
-      {gender: 'Male', value:'m'},
-      {gender: 'Female', value:'f'}
+      {g: 'Male', value:'m'},
+      {g: 'Female', value:'f'}
     ];
   }
 
@@ -79,6 +81,8 @@ export class CheckoutPassengersComponent implements OnInit, OnDestroy{
       return this.fb.group([])
     }
     let numPassengers = results?.passengers.length ?? 0;
+    this.titlePlaceholder = this.createArray(numPassengers);
+    this.genderPlaceholder = this.createArray(numPassengers);
     let selectedOffer = results?.offers.find(offer => offer.id === off) as PartialOfferOffer;
     this.passengers = this.fb.array([]);
     for(let i = 0; i < numPassengers; i++) {
@@ -102,12 +106,12 @@ export class CheckoutPassengersComponent implements OnInit, OnDestroy{
     let id = selectedOffer.passengers[idx].id;
     return this.fb.group({
       type: type,
-      title: this.fb.control(''),
+      title: this.fb.control('', [ Validators.required ]),
       phoneNumber: this.fb.control('', [ Validators.required, Validators.minLength(14) ]),
       identityDocuments: this.identityDocuments,
       id: id,
       givenName: this.fb.control('', [ Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-z\- 'À-ÖØ-öø-ÿ]+$/) ]),
-      gender: this.fb.control(''),
+      gender: this.fb.control('', [ Validators.required ]),
       familyName: this.fb.control('', [ Validators.required, Validators.minLength(2), Validators.pattern(/^[A-Za-z\- 'À-ÖØ-öø-ÿ]+$/) ]),
       email: this.fb.control('', [ Validators.required, Validators.minLength(5), Validators.maxLength(256), Validators.email ]),
       bornOn: this.fb.control('', [ Validators.required ]),
@@ -123,4 +127,12 @@ export class CheckoutPassengersComponent implements OnInit, OnDestroy{
     })
   }
 
+  createArray(n: number) {
+    const arrayOfArrays = [];
+    let a = 'a';
+    for (let i = 0; i < n; i++) {
+      arrayOfArrays.push(a);
+    }
+    return arrayOfArrays;
+  }
 }

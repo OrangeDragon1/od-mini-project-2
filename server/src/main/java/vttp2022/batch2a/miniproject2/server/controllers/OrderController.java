@@ -1,5 +1,7 @@
 package vttp2022.batch2a.miniproject2.server.controllers;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import vttp2022.batch2a.miniproject2.server.Utils;
 import vttp2022.batch2a.miniproject2.server.services.AuthenticationService;
@@ -48,14 +52,42 @@ public class OrderController {
     return ResponseEntity.ok(orderObj.toString());
   }
 
-  @GetMapping(path = "/get")
+  @GetMapping(path = "/getByBookingRef")
   @ResponseBody
-  public ResponseEntity<String> getOrder() {
-    return null;
+  public ResponseEntity<String> getOrder(@RequestParam Optional<String> bookingRef) {
+    
+    if (bookingRef.isEmpty()) {
+      // return empty
+    }
+
+    String bookingRefStr = bookingRef.get();
+    JsonObject orderObj = flightSvc.getOrderByBookingRef(bookingRefStr);
+    if (orderObj.containsKey("error")) {
+      return ResponseEntity.badRequest().body(orderObj.toString());
+    }
+    
+    return ResponseEntity.ok(orderObj.toString());
   }
 
   @DeleteMapping(path = "/delete")
-  public ResponseEntity<String> deleteOrder() {
-    return null;
+  public ResponseEntity<String> deleteOrder(@RequestParam String bookingRef) {
+
+    JsonObject respObj = flightSvc.deleteOrderByBookingRef(bookingRef);
+    if (respObj.containsKey("error")) {
+      return ResponseEntity.badRequest().body(respObj.toString());
+    }
+
+    return ResponseEntity.ok(respObj.toString());
+  }
+
+  @GetMapping(path = "/getAllByUserId")
+  @ResponseBody
+  public ResponseEntity<String> getAllOrders() {
+    
+    JsonObject userObj = authSvc.getUser();
+    JsonArray ordersArr = flightSvc.getOrdersByUserId(userObj.getString("id"));
+    // System.out.println(ordersArr.toString());
+    
+    return ResponseEntity.ok(ordersArr.toString());
   }
 }

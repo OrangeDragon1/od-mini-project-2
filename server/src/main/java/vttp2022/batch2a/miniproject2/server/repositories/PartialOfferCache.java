@@ -1,5 +1,7 @@
 package vttp2022.batch2a.miniproject2.server.repositories;
 
+import java.time.Duration;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,14 @@ public class PartialOfferCache {
     HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
     LOGGER.info("In [cache]: caching {}", query);
     hashOps.put(PARTIAL_OFFER_KEY, query, payload);
+    redisTemplate.expire(PARTIAL_OFFER_KEY + ":" + query, Duration.ofMinutes(20));
   }
 
   public void cacheOff(String query, String payload) {
     HashOperations<String, String, String> hashOps = redisTemplate.opsForHash();
     LOGGER.info("In [cacheOff]: caching {}", query);
     hashOps.put(PARTIAL_OFFER_OFFER_KEY, query, payload);
+    redisTemplate.expire(PARTIAL_OFFER_OFFER_KEY + ":" + query, Duration.ofMinutes(20));
   }
 
   public String get(String query) {

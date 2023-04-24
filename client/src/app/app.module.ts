@@ -32,6 +32,12 @@ import { ForgetPasswordVerifyComponent } from './components/login/forget-passwor
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { BookingService } from './services/booking.service';
 import { ChangePasswordComponent } from './components/user/change-password.component';
+import { MyTripsComponent } from './components/user/my-trips.component';
+import { BookingComponent } from './components/booking.component';
+import { StyleDirective } from './style.directive';
+import { FindBookingComponent } from './components/find-booking.component';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -48,6 +54,9 @@ const appRoutes: Routes = [
   { path: 'reset-password', component: ForgetPasswordVerifyComponent },
   { path: 'login', component: LoginComponent },
   { path: 'change-password', component: ChangePasswordComponent },
+  { path: 'my-trips', component: MyTripsComponent },
+  { path: 'booking/:ref', component: BookingComponent },
+  { path: 'find-booking', component: FindBookingComponent },
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
@@ -72,7 +81,11 @@ const appRoutes: Routes = [
     ForgetPasswordComponent,
     RegisterVerifyComponent,
     ForgetPasswordVerifyComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    MyTripsComponent,
+    BookingComponent,
+    StyleDirective,
+    FindBookingComponent
   ],
   imports: [
     BrowserModule,
@@ -82,14 +95,16 @@ const appRoutes: Routes = [
     HttpClientModule,
     RouterModule.forRoot(appRoutes, { useHash: true }),
     BrowserAnimationsModule,
-    AutoCompleteModule
+    AutoCompleteModule,
+    ConfirmPopupModule
   ],
   providers: [
     FlightSearchService,
     CheckoutService,
     UserService,
     MessageService,
-    BookingService
+    BookingService,
+    ConfirmationService
   ],
   bootstrap: [AppComponent]
 })

@@ -100,8 +100,10 @@ public class OrderSliceSegment {
     s.setDestinationIataCode(jo.getJsonObject("destination").getString("iata_code"));
     s.setDepartingAt(jo.getString("departing_at"));
     s.setArrivingAt(jo.getString("arriving_at"));
-    if (!jo.isNull("aircraft"))
+    if (!jo.isNull("aircraft")) {
+
       s.setAircraft(Aircraft.create(jo.getJsonObject("aircraft")));
+    }
     return s;
   }
 

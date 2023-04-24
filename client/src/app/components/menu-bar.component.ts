@@ -40,14 +40,15 @@ export class MenubarComponent {
             this.router.navigate(['/']);
             setTimeout(() => {
               location.reload();
-            }, 1000);
+            }, 100);
           }
         })
     } else {
         this.items = [
             {label: 'Login', routerLink: '/login'},
             {label: 'Register', routerLink: '/register' },
-            {label: 'Forgot password', routerLink: '/forget-password'}
+            {label: 'Forgot password', routerLink: '/forget-password'},
+            {label: 'Find booking', routerLink: '/find-booking'}
         ];
     }
   }
@@ -58,6 +59,6 @@ export class MenubarComponent {
     this.user = undefined;
     setTimeout(() => {
         location.reload();
-      }, 1000);
+      }, 100);
   }
 }

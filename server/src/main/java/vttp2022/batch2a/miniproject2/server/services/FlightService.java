@@ -21,6 +21,7 @@ import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import jakarta.json.stream.JsonCollectors;
 import vttp2022.batch2a.miniproject2.server.Utils;
 import vttp2022.batch2a.miniproject2.server.models.duffel.duffelairports.Airport;
 import vttp2022.batch2a.miniproject2.server.models.duffel.duffelorderrequests.OrderRequest;
@@ -247,16 +248,32 @@ public class FlightService {
    }
 
    public JsonArray getOrdersByUserId(String userId) {
-    orderRepo.getOrdersByUserId(userId);
-    return null;
+    List<Order> orders = orderRepo.getOrdersByUserId(userId);
+    JsonArray ordersArr = orders.stream()
+        .map(v -> v.toJson())
+        .collect(JsonCollectors.toJsonArray());
+
+    return ordersArr;
    }
 
-   public JsonObject createOrder() {
+   public JsonObject getOrderByBookingRef(String bookingRef) {
+    Order o = orderRepo.getOrdersByBookingRef(bookingRef);
 
-    return null;
+    if (null == o) {
+      return Utils.createError("Order not found");
+    }
+    
+    return o.toJson();
    }
 
-   public JsonObject createOrder(SqlRowSet rs) {
-    return null;
-   }
+   public JsonObject deleteOrderByBookingRef(String bookingRef) {
+    boolean deleted = orderRepo.deleteOrderByBookingRef(bookingRef);
+
+    if (deleted) {
+      return Utils.createSuccess(bookingRef + " deleted");
+    } else {
+      return Utils.createError("Order not found");
+    }
+
+  }
 }

@@ -47,7 +47,7 @@ export class CheckoutPaymentComponent implements OnInit, OnDestroy{
             this.router.navigate(['/']);
             setTimeout(() => {
               location.reload();
-            }, 1000);
+            }, 100);
           }
         })
     }

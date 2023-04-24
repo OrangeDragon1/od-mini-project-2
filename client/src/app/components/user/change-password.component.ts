@@ -37,14 +37,14 @@ export class ChangePasswordComponent implements OnInit {
             this.router.navigate(['/']);
             setTimeout(() => {
               location.reload();
-            }, 1000);
+            }, 100);
           }
         })
     } else {
       this.router.navigate(['/']);
         setTimeout(() => {
           location.reload();
-        }, 1000);
+        }, 100);
     }
     this.form = this.createForm();
   }
@@ -56,7 +56,7 @@ export class ChangePasswordComponent implements OnInit {
       password: oldpassword,
       newPassword: password
     }
-    console.log(data);
+    // console.log(data);
     this.userSvc.putChangePassword(data, token)
     .then(results => {
       this.messageService.add({severity:'success', summary: 'Success', detail: results.success});

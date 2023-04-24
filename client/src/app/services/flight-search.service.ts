@@ -80,6 +80,41 @@ export class FlightSearchService {
     )
   }
 
+  getAllOrdersByUserId(token: any): Promise<any> {
+    const headers = new HttpHeaders()
+        .set('Content-Type','application/json')
+        .set('Accept','application/json')
+        .set('Authorization', `Bearer ${token}`);
+    return firstValueFrom<any>(
+      this.http.get<any>('/api/v1/order/getAllByUserId', { headers })
+    )
+  }
+
+  getOrderByBookingRef(data: any): Promise<any> {
+    const headers = new HttpHeaders()
+        .set('Content-Type','application/json')
+        .set('Accept','application/json');
+    let params = new HttpParams()
+        .set('bookingRef', data);
+
+    return firstValueFrom<any>(
+      this.http.get<any>('/api/v1/order/getByBookingRef', { params, headers })
+    )
+  }
+
+  deleteOrder(data: any, token: any): Promise<any> {
+    const headers = new HttpHeaders()
+        .set('Content-Type','application/json')
+        .set('Accept','application/json')
+        .set('Authorization', `Bearer ${token}`);
+    let params = new HttpParams()
+        .set('bookingRef', data);
+
+    return firstValueFrom<any>(
+      this.http.delete<any>('api/v1/order/delete', { params, headers })
+    )
+  } 
+
 }
 
 

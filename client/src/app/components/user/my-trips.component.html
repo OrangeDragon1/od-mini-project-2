@@ -1,0 +1,77 @@
+<div class="flex flex-row justify-content-center mt-4">
+  <div class="bg-white p-2" style="width: 900px; border: 2px solid #dee2e6; border-radius: 0.75rem;">
+    <div class="flex flex-column justify-content-start">
+      <div class="grid my-1" style="border-bottom: 2px solid #dee2e6;">
+        <div class="col-2 flex justify-content-center text-xs font-baseline">
+          AIRLINE
+        </div>
+        <div class="col-2 flex justify-content-center text-xs font-baseline">
+          BOOKING REFERENCE
+        </div>
+        <div class="col-2 flex justify-content-center text-xs font-baseline">
+          STATUS
+        </div>
+        <div class="col-2 flex justify-content-center text-xs font-baseline">
+          No. PASSENGERS
+        </div>
+        <div class="col-2 flex justify-content-center text-xs font-baseline">
+          DEPARTURE
+        </div>
+        <div class="col-2 flex justify-content-center text-xs font-baseline">
+          PRICE PAID
+        </div>
+      </div>
+      <div *ngIf="orders?.length > 0; else nothing">
+        <div class="grid my-1 booking" *ngFor="let o of orders; let idx = index" (click)="onClick(o)">
+          <div class="col-2 flex justify-content-center text-baseline font-semibold">
+            <div class="flex align-items-center h-2rem w-2rem" *ngIf="o?.owner.logoSymbolUrl; else Lockup">
+              <img [src]="o?.owner.logoSymbolUrl" style="max-width: 100%; max-height: 100%;">
+            </div>
+            <ng-template #Lockup>
+              <div class="flex align-items-center h-2rem w-2rem">
+                <img [src]="o?.owner.logoLockupUrl" style="max-width: 100%; max-height: 100%;">
+              </div>
+            </ng-template>
+            <div class="flex align-items-center ml-2">
+              {{ o.owner.iataCode }}
+            </div>
+          </div>
+          <div class="col-2 flex justify-content-center text-baseline font-semibold">
+            <div class="flex align-items-center ml-2">
+              {{ o.bookingReference }}
+            </div>
+          </div>
+          <div class="col-2 flex justify-content-center text-baseline font-semibold">
+            <div class="flex align-items-center ml-2">
+              <div class="bg-gray-300 border-round-xl w-max">
+                <div class="flex flex-column justify-content-center text-sm p-1 mx-2">
+                  Confirmed
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 flex justify-content-center text-baseline font-semibold">
+            <div class="flex align-items-center ml-2">
+              {{ o.passengers.length }}
+            </div>
+          </div>
+          <div class="col-2 flex justify-content-center text-baseline font-semibold">
+            <div class="flex align-items-center ml-2">
+              {{ o.slices[0]?.segments[0]?.departingAt | date: 'dd/MM/yyyy' }}
+            </div>
+          </div>
+          <div class="col-2 flex justify-content-center text-baseline font-semibold">
+            <div class="flex align-items-center ml-2">
+              {{ o.totalCurrency }} {{ o.totalAmount | currency: o.totalCurrency }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #nothing>
+        <div class="text-center my-5 font-bold text-xl">
+          No bookings found.
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,312 @@
+<p-confirmPopup></p-confirmPopup>
+<p-toast></p-toast>
+<div class="flex flex-row justify-content-center mt-4">
+  <div class="p-2 bg-white" style="width: 900px; border-radius: 0.75rem; border: 2px solid #dee2e6;">
+    <div *ngIf="order; else doNotExist">
+      <div class="flex flex-column">
+        <div class="text-3xl font-bold ml-4 mt-3 flex flex-row">
+          <div>
+            {{ order.bookingReference }}
+          </div>
+          <div class="ml-3">
+            <button pButton pRipple type="button" label="Cancel Booking" class="p-button-danger" (click)="confirm($event)" [disabled]="buttonDisabled" icon="pi pi-times"></button>
+          </div>
+        </div>
+        <div class="mt-5 ml-4 font-medium text-lg">
+          Flight details
+        </div>
+        <div>
+          <div class="bg-white border-round-xl p-4 mt-2" style="padding: 1rem;">
+            <!-- slices or selectedOffers -->
+            <div class="mt-2">
+              <div class="flex flex-column flex-wrap">
+                <div class="flex flex-row gap-4 h-3rem">
+                  <div class="flex">
+                    <div class="flex align-items-center h-3rem w-3rem" *ngIf="order?.owner?.logoSymbolUrl; else Lockup">
+                      <img [src]="order?.owner?.logoSymbolUrl" style="max-width: 100%; max-height: 100%;">
+                    </div>
+                    <ng-template #Lockup>
+                      <div class="flex align-items-center h-3rem w-3rem">
+                        <img [src]="order?.owner?.logoLockupUrl" style="max-width: 100%; max-height: 100%;">
+                      </div>
+                    </ng-template>
+                  </div>
+                  
+                  <div class="flex flex-column align-items-left justify-content-center" style="width: 480px;">
+                    <div class="text-lg font-bold">
+                      {{ order?.slices[0]?.segments[0]?.departingAt | date: "HH:mm" }} - 
+                      {{ order?.slices[0]?.segments[order?.slices[0]?.segments.length - 1]?.arrivingAt | date: "HH:mm"}}
+                      <sub class="vertical-align-super" *ngIf="order?.slices[0]?.plusDays > 0" >
+                        +{{ order?.slices[0]?.plusDays }}
+                      </sub>
+                    </div>
+                    <div class="font-light text-sm">
+                      {{ order?.owner?.name }} · 
+                      <span *ngFor="let seg of order?.slices[0]?.segments">
+                        {{ seg?.marketingCarrier?.iataCode + seg?.marketingCarrierFlightNumber }}
+                      </span>
+                      <span class="capitalize">
+                        · {{ order?.slices[0]?.fareBrandName.toLowerCase() }}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div class="flex flex-column align-items-left justify-content-center w-8rem">
+                    <div class="text-lg font-bold">
+                      <div *ngIf="order?.slices[0]?.duration">
+                        {{ order?.slices[0]?.duration | duration }}
+                      </div>
+                    </div>
+                    <div class="font-light text-sm">
+                      {{ order?.slices[0]?.originIataCode }} - {{ order?.slices[0]?.destinationIataCode }}
+                    </div>
+                  </div>
+                  
+                  <div class="flex flex-row justify-content-center">
+                    <div class="flex flex-column align-items-left justify-content-center w-max">
+                      <div class="text-lg font-bold">
+                        <span *ngIf="order?.slices[0]?.segments?.length > 1; else nonStop">
+                          {{ order?.slices[0]?.segments?.length - 1 }} stop
+                        </span>
+                        <ng-template #nonStop>
+                          Direct
+                        </ng-template>
+                      </div>
+                      <div>
+                        <!-- for stops -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-3 mb-2">
+              <div class="flex flex-column" *ngFor="let seg of order?.slices[0]?.segments; let idx = index">
+                <div class="flex flex-row">
+                  <!-- <div class="flex flex-column justify-content-center">
+                  </div> -->
+                  <div class="flex flex-column">
+                    <div class="flex flex-column m-2" >
+                      <div class="flex flex-row gap-3">
+                        <div class="flex flex-column justify-content-center mr-4">
+                          <i class="pi pi-circle"></i>
+                        </div>
+                        <div class="flex flex-column justify-content-center font-bold w-13rem">
+                          {{ seg.departingAt | date: "EEE, dd MMM YYYY, HH:mm" }} 
+                        </div>
+                        <div class="flex flex-column justify-content-center w-29rem">
+                          Depart from {{ seg.originName }} ({{ seg.originIataCode }}) {{ '- Terminal ' + seg.originTerminal }}
+                        </div>
+                      </div>
+                      
+                      <div class="flex flex-row">
+                        <div class="flex flex-column justify-content-center  mr-4">
+                          <i class="pi pi-ellipsis-v"></i>
+                          <i class="pi pi-angle-double-down"></i>
+                        </div>
+                        <div class="flex flex-column justify-content-center m-3 ml-4 font-normal text-sm">
+                          Flight duration: {{ seg.duration | duration }}
+                        </div>
+                      </div>
+                      
+                      <div class="flex flex-row gap-3">
+                        <div class="flex flex-column justify-content-center  mr-4">
+                          <i class="pi pi-circle-fill"></i>
+                        </div>
+                        <div class="flex flex-column justify-content-center font-bold w-13rem">
+                          {{ seg.arrivingAt | date: "EEE, dd MMM YYYY, HH:mm" }} 
+                        </div>
+                        <div class="flex flex-column justify-content-center w-29rem">
+                          Arrive at {{ seg.destinationName }} ({{ seg.destinationIataCode }}) {{ '- Terminal ' + seg.destinationTerminal }}
+                        </div>
+                      </div>
+                      
+                      <div class="flex flex-row gap-3 mt-3">
+                        <div class="flex flex-column justify-content-center  mr-4">
+                          <i class="pi pi-info"></i>
+                        </div>
+      
+                        <div class="flex flex-column justify-content-center capitalize font-light text-xs">
+                          {{ seg.passengers[0]?.cabinClass }}
+                        </div>
+      
+                        <div class="flex flex-column justify-content-center">
+                          <div *ngIf="seg.operatingCarrier?.name === order.owner.name; else operatedBy">
+                            <div class="capitalize font-light text-xs">
+                              {{ seg.operatingCarrier?.name }}
+                            </div>
+                          </div>
+                        </div>
+      
+                        <div class="flex flex-column justify-content-center">
+                          <ng-template #operatedBy>
+                            <div class="flex flex-row font-light text-xs">
+                              <span>Operated by 
+                                <span class="capitalize">
+                                  {{ seg.operatingCarrier?.name }}
+                                </span>
+                              </span>
+                            </div>
+                          </ng-template>
+                        </div>
+      
+                        <div class="flex flex-column justify-content-center">
+                          <div class="flex flex-row font-light text-xs">
+                            {{ seg.aircraft?.name }}
+                          </div>
+                        </div>
+      
+                        <div class="flex flex-column justify-content-center">
+                          <div class="flex flex-row font-light text-xs gap-4" *ngIf="order?.slices[idx]?.segments[0]?.passengers[0].baggages">
+                            <div *ngFor="let b of order.slices[idx]?.segments[0]?.passengers[0].baggages"> 
+                              <div class="flex flex-row gap-1" *ngIf="b.quantity > 0" >
+                                <div class="flex flex-column justify-content-center">
+                                  <i class="pi pi-briefcase" style="font-size: 0.8rem"></i>
+                                </div>
+                                <div class="flex flex-column justify-content-center">
+                                  <span *ngIf="b.type == 'checked'">
+                                    <span *ngIf="b.quantity == 1">
+                                      Includes {{ b.quantity }} checked bag
+                                    </span>
+                                    <span *ngIf="b.quantity > 1">
+                                      Includes {{ b.quantity }} checked bags
+                                    </span>
+                                  </span>
+                                  
+                                  <span *ngIf="b.type == 'carry_on'">
+                                    <span *ngIf="b.quantity == 1">
+                                      Includes {{ b.quantity }} carry-on bag
+                                    </span>
+                                    <span *ngIf="b.quantity > 1">
+                                      Includes {{ b.quantity }} carry-on bags
+                                    </span>
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="flex flex-column bg-gray-300 border-round-xl w-max my-3" *ngIf="order?.slices[0]?.layovers[idx]?.duration">
+                  <div class="text-sm p-1 ml-2 mr-2">
+                    {{ order?.slices[0]?.layovers[idx]?.duration | duration }} layover at {{ order?.slices[0]?.layovers[idx]?.layoverName }} ({{ order?.slices[0]?.layovers[idx]?.layoverIataCode }})
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end of slices or selectedOffers -->
+          </div>
+        </div>
+      </div>
+      <div class=" ml-4 font-medium text-lg">
+        Passengers
+      </div>
+      <div *ngFor="let p of order.passengers; let idx = index">
+        <div class="ml-3 flex flex-column">
+          <div class="bg-gray-300 border-round-xl w-max my-3">
+            <div class="flex flex-column justify-content-center text-sm p-1 mx-2 capitalize">
+              {{ order?.passengers[idx]?.type }} - Passenger {{ idx + 1}}
+            </div>
+          </div>
+          <div class="ml-2 flex flex-row gap-8">
+            <div class="flex flex-column justify-content-center">
+              <div class="capitalize font-light text-3xl">
+                {{ p.title }}. {{ p.givenName }} {{ p.familyName }}
+              </div>
+              <div>
+                {{ p.phoneNumber }}
+              </div>
+            </div>
+            <div class="flex flex-column justify-content-center">
+              <div>
+                DOB
+              </div>
+              <div class="font-light text-3xl">
+                {{ p.bornOn }}
+              </div>
+            </div>
+            <div class="flex flex-column justify-content-center">
+              <div>
+                GENDER
+              </div>
+              <div class="capitalize font-light text-3xl">
+                {{ p.gender }}
+              </div>
+            </div>
+          </div>
+          <div class="ml-2 flex flex-row gap-8 mt-3">
+            <div class="flex flex-column justify-content-center">
+              <div>
+                EMAIL
+              </div>
+              <div class="font-light text-3xl">
+                {{ p.email }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p-divider type="solid"></p-divider>
+      </div>
+
+      <div class="ml-4 font-medium text-lg">
+        Billing summary
+      </div>
+      <div class="flex flex-column gap-2 ml-4 mr-4 mt-3 mb-3">
+        <div class="flex flex-row justify-content-between">
+          <div class="font-bold text-sm">
+            Description
+          </div>
+          <div class="font-bold text-sm">
+            Price
+          </div>
+        </div>
+        <div class="flex flex-row justify-content-between">
+          <div class="font-light text-sm">
+            Fare
+          </div>
+          <div class="font-light text-sm">
+            {{ order.baseCurrency }} {{ order.baseAmount | currency: order.baseCurrency }}
+          </div>
+        </div>
+        <div class="flex flex-row justify-content-between">
+          <div class="font-light text-sm">
+            Airport taxes, fuel surcharges and service fees:
+          </div>
+          <div class="font-light text-sm">
+            {{ order.taxCurrency }} {{ order.taxAmount | currency: order.taxCurrency }}
+          </div>
+        </div>
+        <div class="flex flex-row justify-content-between">
+          <div class="font-bold text-2xl">
+            Total
+          </div>
+          <div class="font-bold text-2xl">
+            {{ order.totalCurrency }} {{ order.totalAmount | currency: order.totalCurrency }}
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <ng-template #doNotExist>
+      <div class="flex flex-row justify-content-center">
+        <div class="flex flex-column just-content-start">
+          <div class="font-bold text-4xl">
+            Invalid booking reference  
+          </div>
+          <div class="font-medium text-sm">
+            No such booking reference found. Please check your booking reference and try again.
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

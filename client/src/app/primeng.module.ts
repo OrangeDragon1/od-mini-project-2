@@ -27,6 +27,7 @@ import { MenuModule } from 'primeng/menu';
 import { BadgeModule } from 'primeng/badge';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TableModule } from 'primeng/table';
 
 const primengModules: any[] = [
   MenubarModule,
@@ -55,7 +56,8 @@ const primengModules: any[] = [
   MenuModule,
   BadgeModule,
   OverlayPanelModule,
-  InputNumberModule
+  InputNumberModule,
+  TableModule
 ]
 
 @NgModule({

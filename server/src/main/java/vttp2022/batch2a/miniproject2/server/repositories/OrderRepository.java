@@ -116,7 +116,7 @@ public class OrderRepository {
   }
 
   @Transactional
-  public void getOrdersByUserId(String userId) {
+  public List<Order> getOrdersByUserId(String userId) {
 
     List<Order> orders = new LinkedList<>();
     SqlRowSet ordersRS = jdbcTemplate.queryForRowSet(Queries.FIND_ORDER_BY_USER_ID, userId);
@@ -176,8 +176,16 @@ public class OrderRepository {
           }
 
           segments.add(seg);
+
         }
         slice.setSegments(segments);
+
+        String dateDepartingAt = slice.getSegments().get(0).getDepartingAt();
+        String dateArrivingAt = slice.getSegments().get(slice.getSegments().size() - 1).getArrivingAt();
+        
+        slice.setPlusDays(OrderSlice.ifPlusDays(dateDepartingAt, dateArrivingAt));
+        slice.setLayovers(OrderSlice.ifLayovers(slice.getSegments(), slice.getDestinationIataCode()));
+
         slices.add(slice);
       }
 
@@ -218,10 +226,12 @@ public class OrderRepository {
       order.setSlices(slices);
       orders.add(order);
     }
+
+    return orders;
   }
 
   @Transactional
-  public void getOrdersByBookingRef(String bookingRef) {
+  public Order getOrdersByBookingRef(String bookingRef) {
 
     List<Order> orders = new LinkedList<>();
     SqlRowSet ordersRS = jdbcTemplate.queryForRowSet(Queries.FIND_ORDER_BY_BOOKING_REFERENCE, bookingRef);
@@ -283,6 +293,13 @@ public class OrderRepository {
           segments.add(seg);
         }
         slice.setSegments(segments);
+
+        String dateDepartingAt = slice.getSegments().get(0).getDepartingAt();
+        String dateArrivingAt = slice.getSegments().get(slice.getSegments().size() - 1).getArrivingAt();
+        
+        slice.setPlusDays(OrderSlice.ifPlusDays(dateDepartingAt, dateArrivingAt));
+        slice.setLayovers(OrderSlice.ifLayovers(slice.getSegments(), slice.getDestinationIataCode()));
+
         slices.add(slice);
       }
 
@@ -323,7 +340,18 @@ public class OrderRepository {
       order.setSlices(slices);
       orders.add(order);
     }
+
+    if (orders.size() < 1) {
+      return null;
+    }
     
+    return orders.get(0);
+  }
+
+  @Transactional
+  public boolean deleteOrderByBookingRef(String bookingRef) {
+    int rowsAffected = jdbcTemplate.update(Queries.DELETE_ORDER_BY_BOOKING_REFERENCE, bookingRef);
+    return rowsAffected > 0;
   }
 
 }

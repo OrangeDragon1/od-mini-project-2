@@ -17,8 +17,8 @@ public class RedisConfig {
   @Value("${spring.redis.host}")private String redisHost;
   @Value("${spring.redis.port}")private Integer redisPort;
   @Value("${spring.redis.database}")private Integer redisDatabase;
-  // @Value("${spring.redis.user}")private String redisUser;
-  // @Value("${spring.redis.password}")private String redisPassword;
+  @Value("${spring.redis.user}")private String redisUser;
+  @Value("${spring.redis.password}")private String redisPassword;
 
   @Bean(CACHE)
   public RedisTemplate<String, String> createRedisTemplate() {
@@ -27,8 +27,8 @@ public class RedisConfig {
     redisConfig.setHostName(redisHost);
     redisConfig.setPort(redisPort);
     redisConfig.setDatabase(redisDatabase);
-    // redisConfig.setUsername(redisUser);
-    // redisConfig.setPassword(redisPassword);
+    redisConfig.setUsername(redisUser);
+    redisConfig.setPassword(redisPassword);
 
     final JedisClientConfiguration jedisClient = JedisClientConfiguration
         .builder().build();
