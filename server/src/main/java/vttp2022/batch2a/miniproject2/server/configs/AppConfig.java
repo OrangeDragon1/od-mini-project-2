@@ -14,10 +14,10 @@ public class AppConfig {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/api/**")
-					.allowedOrigins("*")
-					.allowedMethods("GET", "POST", "PUT", "DELETE")
-					.allowedHeaders("Authorization", "Content-Type")
-					.exposedHeaders("Authorization")
+					.allowedOrigins("https://od-mini-project-2.vercel.app")
+					.allowedHeaders("*")
+					.allowedMethods("*")
+					.allowedOriginPatterns("*")
 					.allowCredentials(true);
 			}
 		};

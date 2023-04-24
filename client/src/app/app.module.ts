@@ -10,7 +10,7 @@ import { PrimeNGModule } from './primeng.module';
 import { FlightSearchComponent } from './components/home/flight-search.component';
 import { HomeComponent } from './components/home/home.component';
 import { FlightSearchService } from './services/flight-search.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { ResultsComponent } from './components/results/results.component';
 import { OffersComponent } from './components/results/offers.component';
 import { FullFareOffersComponent } from './components/results/full-fare-offers.component';
@@ -38,6 +38,7 @@ import { StyleDirective } from './style.directive';
 import { FindBookingComponent } from './components/find-booking.component';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+import { CorsInterceptor } from './cors.interceptor';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
@@ -104,7 +105,8 @@ const appRoutes: Routes = [
     UserService,
     MessageService,
     BookingService,
-    ConfirmationService
+    ConfirmationService,
+    { provide: HTTP_INTERCEPTORS, useClass: CorsInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })
