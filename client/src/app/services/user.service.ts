@@ -13,7 +13,7 @@ export class UserService {
         .set('Accept','application/json');
 
     return firstValueFrom<any>(
-      this.http.post<any>('/api/v1/auth/register', data, { headers })
+      this.http.post<any>('https://bewildered-stitch-production.up.railway.app/api/v1/auth/register', data, { headers })
     );
   }
 
@@ -24,7 +24,7 @@ export class UserService {
     let params = new HttpParams()
         .set('verificationString', data);
     return firstValueFrom<any>(
-      this.http.get<any>('/api/v1/auth/verify', { params, headers })
+      this.http.get<any>('https://bewildered-stitch-production.up.railway.app/api/v1/auth/verify', { params, headers })
     )
   }
 
@@ -33,7 +33,7 @@ export class UserService {
         .set('Content-Type','application/json')
         .set('Accept','application/json');
 
-    this.http.post<void>('/api/v1/auth/forgotPassword', data, { headers }).subscribe();
+    this.http.post<void>('https://bewildered-stitch-production.up.railway.app/api/v1/auth/forgotPassword', data, { headers }).subscribe();
   }
 
   putResetPassword(data: any): Promise<any>{
@@ -44,7 +44,7 @@ export class UserService {
     let params = new HttpParams()
         .set('resetPwdString', data);
     return firstValueFrom<any>(
-      this.http.put<any>('/api/v1/auth/resetPassword', {}, { params, headers })
+      this.http.put<any>('https://bewildered-stitch-production.up.railway.app/api/v1/auth/resetPassword', {}, { params, headers })
     )
   }
 
@@ -53,7 +53,7 @@ export class UserService {
         .set('Content-Type','application/json')
         .set('Accept','application/json');
     return firstValueFrom<any>(
-      this.http.post<any>('/api/v1/auth/authenticate', data, { headers })
+      this.http.post<any>('https://bewildered-stitch-production.up.railway.app/api/v1/auth/authenticate', data, { headers })
     )
   }
 
@@ -63,7 +63,7 @@ export class UserService {
   //       .set('Accept','application/json')
   //       .set('Authorization', `Bearer ${token}`);
   //   return firstValueFrom<any>(
-  //     this.http.get<any>('/api/v1/user/getUser', { headers })
+  //     this.http.get<any>('https://bewildered-stitch-production.up.railway.app/api/v1/user/getUser', { headers })
   //   )
   // }
 
@@ -73,7 +73,7 @@ export class UserService {
         .set('Accept','application/json')
         .set('Authorization', `Bearer ${token}`);
     return firstValueFrom<any>(
-      this.http.get<any>('/api/v1/auth/getUser', { headers })
+      this.http.get<any>('https://bewildered-stitch-production.up.railway.app/api/v1/auth/getUser', { headers })
     )
   }
 
@@ -83,7 +83,7 @@ export class UserService {
         .set('Accept','application/json')
         .set('Authorization', `Bearer ${token}`);
     return firstValueFrom<any>(
-      this.http.put('/api/v1/auth/changePassword', data, { headers })
+      this.http.put('https://bewildered-stitch-production.up.railway.app/api/v1/auth/changePassword', data, { headers })
     )
   }
 }

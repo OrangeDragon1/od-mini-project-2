@@ -13,12 +13,8 @@ public class AppConfig {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/api/**");
-					// .allowedOrigins("https://od-mini-project-2.vercel.app")
-					// .allowedHeaders("*")
-					// .allowedMethods("*")
-					// .allowedOriginPatterns("*")
-					// .allowCredentials(true);
+				registry.addMapping("/api/**")
+					.allowedOrigins("*");
 			}
 		};
 	}

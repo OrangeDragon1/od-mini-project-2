@@ -13,7 +13,7 @@ import vttp2022.batch2a.miniproject2.server.services.AuthenticationService;
 
 @Controller
 @RequestMapping(path = "/api/v1/user")
-@CrossOrigin(origins="https://od-mini-project-2.vercel.app")
+@CrossOrigin(origins="https://od-mini-project-2-2nd-user-link.vercel.app/")
 public class UserController {
   
   @Autowired 
