@@ -15,7 +15,7 @@ import vttp2022.batch2a.miniproject2.server.services.AuthenticationService;
 
 @RestController
 @RequestMapping(path = "/api/v1/demo-controller")
-@CrossOrigin(origins="https://od-mini-project-2-2nd-user-link.vercel.app/")
+@CrossOrigin(origins="*")
 public class DemoController {
 
   @Autowired private AuthenticationService authSvc;

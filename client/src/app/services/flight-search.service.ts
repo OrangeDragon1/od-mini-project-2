@@ -76,7 +76,7 @@ export class FlightSearchService {
         .set('query', data);
 
     return firstValueFrom<any>(
-      this.http.get<any>('https://bewildered-stitch-production.up.railway.app/api/v1/searchhttps://bewildered-stitch-production.up.railway.app/airports', { params, headers })
+      this.http.get<any>('https://bewildered-stitch-production.up.railway.app/api/v1/search/airports', { params, headers })
     )
   }
 
