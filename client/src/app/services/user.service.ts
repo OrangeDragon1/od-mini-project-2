@@ -57,13 +57,23 @@ export class UserService {
     )
   }
 
+  // getUser(token: any): Promise<any>{
+  //   const headers = new HttpHeaders()
+  //       .set('Content-Type','application/json')
+  //       .set('Accept','application/json')
+  //       .set('Authorization', `Bearer ${token}`);
+  //   return firstValueFrom<any>(
+  //     this.http.get<any>('/api/v1/user/getUser', { headers })
+  //   )
+  // }
+
   getUser(token: any): Promise<any>{
     const headers = new HttpHeaders()
         .set('Content-Type','application/json')
         .set('Accept','application/json')
         .set('Authorization', `Bearer ${token}`);
     return firstValueFrom<any>(
-      this.http.get<any>('/api/v1/user/getUser', { headers })
+      this.http.get<any>('/api/v1/auth/getUser', { headers })
     )
   }
 

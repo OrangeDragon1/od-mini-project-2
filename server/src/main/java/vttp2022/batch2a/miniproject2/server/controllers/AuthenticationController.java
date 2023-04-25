@@ -23,7 +23,7 @@ import vttp2022.batch2a.miniproject2.server.services.AuthenticationService;
 
 @Controller
 @RequestMapping(path = "/api/v1/auth")
-// @CrossOrigin(origins="https://od-mini-project-2.vercel.app")
+@CrossOrigin(origins="https://od-mini-project-2.vercel.app")
 public class AuthenticationController {
 
   @Autowired private AuthenticationService authSvc;
@@ -177,6 +177,19 @@ public class AuthenticationController {
     }
 
     return ResponseEntity.ok(chgPwdObj.toString());
+  }
+
+  @GetMapping(path = "/getUser")
+  @ResponseBody
+  public ResponseEntity<String> getUser() {
+
+    /*
+     * Implement logout here 
+     */
+
+     JsonObject userObj = authSvc.getUser();
+
+    return ResponseEntity.ok(userObj.toString());
   }
 
   @DeleteMapping(path = "/deleteUser")
